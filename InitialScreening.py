@@ -6,7 +6,7 @@ options = [["1","2","3","4","5","6"], ["1","2","3","4","5","6","7","8"]]
 a = [4,5,1,2,6,3,6,2,1,3,5,4,2,6,1,2,1,3,5,6,4,3,4,5,8,2,3,8,7,4,5,1,7,6,1,2,3,4,3,7,8,6,5,4,1,2,5,6,7,6,8,2,1,5,2,4,1,6,3,5]
 class RPM:
     def __init__(self,master):
-        num = 6
+        self.master=master
         self.result = 0
         self.frame1= Frame(master,width=500, height=300)
         self.frame1.pack(side=TOP)
@@ -15,11 +15,9 @@ class RPM:
         self.frame2= Frame(master,width=500, height=100)
         self.frame2.pack(side=BOTTOM)
         self.opt_selected = IntVar()
-        self.qn = 0
+        self.qn = 23
         self.ques = self.create_q(self.frame1,self.qn)
-        if (self.qn>24):
-            num = 8
-        self.opts = self.create_options(self.frame2,num)
+        self.opts = self.create_options(self.frame2,6)
         self.display_q(self.qn)
         labelempty= Label(self.frame3,text="")
         labelempty.pack(side=TOP)
@@ -51,8 +49,20 @@ class RPM:
         self.render = ImageTk.PhotoImage(photo)
         self.opt_selected.set(0)
         self.ques['image'] = self.render
-        if (qn>24):
+        if (qn>=24):
             num = 1
+        if (qn==24):
+            self.frame2.destroy()
+            self.frame3.destroy()
+            self.frame3= Frame(self.master, width=500,height=100)
+            self.frame3.pack(side=BOTTOM)
+            self.frame2= Frame(self.master,width=500, height=100)
+            self.frame2.pack(side=BOTTOM)           
+            self.opts = self.create_options(self.frame2,8)
+            labelempty= Label(self.frame3,text="")
+            labelempty.pack(side=TOP)
+            self.button = Button(self.frame3,text="Next", command=self.next_btn)
+            self.button.pack(side=BOTTOM)
         for op in options[num]:
             self.opts[b_val]['text'] = op
             b_val = b_val + 1
