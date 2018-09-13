@@ -15,7 +15,7 @@ class RPM:
         self.frame2= Frame(master,width=500, height=100)
         self.frame2.pack(side=BOTTOM)
         self.opt_selected = IntVar()
-        self.qn = 23
+        self.qn = 0
         self.ques = self.create_q(self.frame1,self.qn)
         self.opts = self.create_options(self.frame2,6)
         self.display_q(self.qn)
@@ -84,5 +84,6 @@ class RPM:
 
 
 root = Tk()
+root.geometry("500x400")
 Rpm = RPM(root)
 root.mainloop()
