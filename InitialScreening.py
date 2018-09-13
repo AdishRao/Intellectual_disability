@@ -53,16 +53,9 @@ class RPM:
             num = 1
         if (qn==24):
             self.frame2.destroy()
-            self.frame3.destroy()
-            self.frame3= Frame(self.master, width=500,height=100)
-            self.frame3.pack(side=BOTTOM)
             self.frame2= Frame(self.master,width=500, height=100)
             self.frame2.pack(side=BOTTOM)           
             self.opts = self.create_options(self.frame2,8)
-            labelempty= Label(self.frame3,text="")
-            labelempty.pack(side=TOP)
-            self.button = Button(self.frame3,text="Next", command=self.next_btn)
-            self.button.pack(side=BOTTOM)
         for op in options[num]:
             self.opts[b_val]['text'] = op
             b_val = b_val + 1
