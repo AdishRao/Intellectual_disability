@@ -22,7 +22,7 @@ class RPM:
         self.opt_selected = IntVar()
         self.qn = 0
         self.ques = self.create_q(self.frame1,self.qn)
-        self.opts = self.create_options(self.frame2,8)
+        self.opts = self.create_options(self.frame2,6)
         self.display_q(self.qn)
         labelempty= Label(self.frame3,text="")
         labelempty.pack(side=TOP)
