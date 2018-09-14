@@ -32,9 +32,9 @@ class RPM:
     def next_btn(self):
         if self.check_q(self.qn):
             self.result+=1
-            print("correct")
+            print("correct "+str(self.qn+1))
         else:
-            print('wrong')
+            print('wrong '+str(self.qn+1))
         self.qn+=1
         if self.qn >= len(q):
             self.print_result()
