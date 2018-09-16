@@ -110,6 +110,7 @@ class BST:
         frame.pack(side=TOP)
         label = Label(frame,text=strid)
         label.place(x=250,y=150,anchor='center')
+        self.frame7.pack_forget()
 
     def create_options(self,frame,n):
         b_val = 0
