@@ -145,13 +145,8 @@ class BST:
             q.destroy()
         self.create_q()
 
-
-
-
-
-
-
 root = Tk()
 root.geometry("500x500")
+root.title("Binet Simon Test")
 Bst = BST(root)
 root.mainloop()
