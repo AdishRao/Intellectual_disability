@@ -94,10 +94,18 @@ class BST:
             self.frame[i].destroy()
         self.agelabel['text'] = "IQ is: "+str(self.iq)
         strid = ""
-        if self.iq < 90:
-            strid = "ID"
+        if self.iq <20:
+            strid = "Profound ID"
+        elif self.iq <34:
+            strid = "Severe ID"
+        elif self.iq <49:
+            strid = "Moderate ID"
+        elif self.iq < 69:
+            strid = "Mild ID"
+        elif self.iq <90:
+            strid = "Boderline ID"
         else:
-            strid = "Not ID"
+            strid = "NOT ID"
         frame = Frame(self.master,width = 500, height = 300)
         frame.pack(side=TOP)
         label = Label(frame,text=strid)
