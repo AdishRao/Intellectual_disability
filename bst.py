@@ -6,6 +6,7 @@ class BST:
     def __init__(self,master):
         self.df = pd.read_csv('bst1.csv')
         self.master=master
+        self.images = ["age3.png","age4.png","","age6.png","age7.png"]
         self.count = 3
         self.basalage = 2.0
         self.additive_age = 0.0
@@ -70,6 +71,14 @@ class BST:
         for i in range(0,5):
             q=self.question[i]
             q['text'] = X[i]
+        if self.images[self.q]!="":
+            self.root1 = Toplevel()
+            photo = Image.open(self.images[self.q])
+            photo = photo.resize((500, 500), Image.ANTIALIAS)
+            self.render1 = ImageTk.PhotoImage(photo)
+            photolabel = Label(self.root1,image=self.render1)
+            photolabel.image = self.render1
+            photolabel.pack()
         self.q+=1   
 
     def bs4(self,i):
@@ -78,6 +87,13 @@ class BST:
         for i in range(0,4):
             q=self.question[i]
             q['text'] = X[i]
+        self.root1 = Toplevel()
+        photo = Image.open(self.images[1])
+        photo = photo.resize((500, 300), Image.ANTIALIAS)
+        self.render = ImageTk.PhotoImage(photo)
+        photolabel = Label(self.root1,image=self.render)
+        photolabel.image = self.render
+        photolabel.pack()
         self.q+=1        
 
     
@@ -133,13 +149,17 @@ class BST:
                     self.basalage+=1
                 else:
                     self.additive_age+=2.4*self.questioncount
+                self.root1.destroy()
+
             if self.count == 4:
                 if self.questioncount == 4:
                     self.basalage+=1
                 else:
                     self.additive_age+=3*self.questioncount
+                self.root1.destroy()
             self.count+=1
             self.questioncount = 0
+        self.root1.destroy()
         for i in range(0,5):
             q=self.question[i]
             q.destroy()
