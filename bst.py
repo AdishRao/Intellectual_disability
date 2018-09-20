@@ -126,7 +126,15 @@ class BST:
         frame.pack(side=TOP)
         label = Label(frame,text=strid)
         label.place(x=250,y=150,anchor='center')
-        self.frame7.pack_forget()
+        self.frame7.destroy()
+        self.frame8 = Frame(self.master, width=500, height=75)
+        self.frame8.pack(side=BOTTOM)
+        self.qui = Button(self.frame8,text="quit",command=self.des)
+        self.qui.place(x=250, y =25, anchor="center")
+
+    def des(self):
+        self.master.destroy()
+        self.master.quit()
 
     def create_options(self,frame,n):
         b_val = 0
