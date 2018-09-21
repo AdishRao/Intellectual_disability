@@ -57,10 +57,23 @@ class Question:
         askQuestion()
 
 def askQuestion():
-    global questions, window, index, button, yes, no,might, number_of_questions
+    global questions, window, index, button, yes, no,might, number_of_questions,social_quotient
     if(len(questions) == index + 1):
         #Label(window, text="Thank you for answering the questions. 1. yes " + str(yes) +" 2. no " +str(no) + " 3.might"+str(might) + " of " + str(number_of_questions) + " questions answered right||basal_age =  "+str(basal_age),font=('15')).pack()
         Label(window,text="Thank you for answering the questions.\n basal_age = " + str(basal_age)).pack()
+        social_quotient=(basal_age/(10*12))*100#chrono age taken as 10 as all question included are till 9-10 yearsold
+        Label(window, text="social quotient = " + str(social_quotient)).pack()
+        if(social_quotient<20):
+            Label(window, text="Profound Intelletual disability").pack()
+        elif((social_quotient>=20) and(social_quotient<35)):
+            Label(window, text="Severe Intelletual disability").pack()
+        elif((social_quotient>=35) and (social_quotient<50)):
+            Label(window, text="Moderate Intelletual disability").pack()
+        elif((social_quotient>=50) and (social_quotient<70)):
+            Label(window, text="Mild Intelletual disability").pack()
+        else:
+            Label(window, text="Normal IQ").pack()
+
         return
     button.pack_forget()
     label_des.pack_forget()
@@ -75,7 +88,7 @@ line = file.readline()
 while(line != ""):
     questionString = line
     answers = []
-    for i in range (3):###3
+    for i in range (3):
         answers.append(file.readline())
 
     questions.append(Question(questionString, answers))
