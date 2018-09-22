@@ -1,18 +1,55 @@
+"""
+store
+Name,Age
+RPM score
+Forward DST score
+Backward DST score
+BST individual responses and final IQ
+Vineland individual responses and final IQ
+GDT (TODO) individual responses(?) and **FINAL IQ**
+"""
+import mysql.connector
 from tkinter import *
 from PIL import ImageTk,Image  
 import pandas as pd
 import random
 from tkinter import ttk
 cage = 6.5
-i = 0
+cname =""
+i = -1
 #global variables for RPM
 q= ["A1.png", "A2.png", "A3.png", "A4.png", "A5.png", "A6.png", "A7.png", "A8.png", "A9.png", "A10.png", "A11.png", "A12.png", "A13.png", "A14.png", "A15.png", "A16.png", "A17.png", "A18.png", "A19.png", "A20.png", "A21.png", "A22.png", "A23.png", "A24.png", "A25.png", "A26.png", "A27.png", "A28.png", "A29.png", "A30.png", "A31.png", "A32.png", "A33.png", "A34.png", "A35.png", "A36.png", "A37.png", "A38.png", "A39.png", "A40.png", "A41.png", "A42.png", "A43.png", "A44.png", "A45.png", "A46.png", "A47.png", "A48.png", "A49.png", "A50.png", "A51.png", "A52.png", "A53.png", "A54.png", "A55.png", "A56.png", "A57.png", "A58.png", "A59.png", "A60.png"]
 options = [["1","2","3","4","5","6"], ["1","2","3","4","5","6","7","8"]]
 a = [4,5,1,2,6,3,6,2,1,3,5,4,2,6,1,2,1,3,5,6,4,3,4,5,8,2,3,8,7,4,5,1,7,6,1,2,3,4,3,7,8,6,5,4,1,2,5,6,7,6,8,2,1,5,2,4,1,6,3,5]
 result = 0
 
+class AN: #Finished
+    def __init__(self,master):
+        self.master=master
+        self.agelabel = Label(master,text="Enter Age:")
+        self.agelabel.place(x=180,y=235,anchor="center")
+        self.namelabel = Label(master,text="Enter Name:")
+        self.namelabel.place(x=144,y=180)
+        self.eage= Entry(master)
+        self.ename= Entry(master)
+        self.eage.place(x=230,y=220)
+        self.ename.place(x=230,y=180)
+        self.buttonget = Button(master,text="Begin Tests",command=self.getdetails)
+        self.buttonget.place(x=250,y=450,anchor="center")
+
+    def getdetails(self):
+        global cname,cage
+        cname = self.ename.get()
+        cage = float(self.eage.get())
+        print("Age:"+str(cage))
+        print("Name:"+cname)
+        global i
+        i = 0
+        self.master.destroy()
+        self.master.quit()
+
 #RPM test class
-class RPM:
+class RPM:  #TODO Make for age 7 & 7.5 as well
     def __init__(self,master):
         self.master=master
         self.result = 0
@@ -45,10 +82,17 @@ class RPM:
         else:
             self.display_q(self.qn)
 
+    def mapvalue(self):
+        global cage
+        if cage>=6 and cage<=6.5:
+            self.map=0
+
+
     def print_result(self):
         df = pd.read_csv('RPM1.csv')
         X = df.iloc[:,1:2]
-        result = X.iloc[self.result,0]
+        self.mapvalue()
+        result = X.iloc[self.result,self.map] #TODO map, with the input age
         print(result)
         self.frame1.destroy()
         self.frame2.destroy()
@@ -63,6 +107,10 @@ class RPM:
         else:
             printid = Label(self.frame1, text="Normal")
             printid.place(x=250,y=260,anchor="center")
+        self.nexttest = Button(self.frame1,text="Next Test",command=self.next)
+        self.nexttest.place(x=250,y=490,anchor="center")
+
+    def next(self):
         global i
         i = 1
         self.master.destroy()
@@ -163,7 +211,8 @@ class DST:
         return num
 
     def disable_func(self):
-        self.btn['state'] = DISABLED
+        #self.btn['state'] = DISABLED
+        self.btn['command'] = self.next
         self.clicked1.set(0)
         self.clicked2.set(0)
         self.check_btn_2['state'] = DISABLED
@@ -176,15 +225,16 @@ class DST:
         self.score_val['relief'] = "groove"
         print(self.test_type , " = " , self.total)
         self.final_score = self.total
-        global i
-        if i == 1:
-            i = 2
-        else:
-            i = 3
-        self.ar.quit()
-        self.ar.destroy()
-        
 
+    def next(self):
+        global i
+        if i==1:
+            i=2
+        else:
+            i=3
+        self.ar.destroy()
+        self.ar.quit()
+        
     def on_btn_click(self):
         global items
         global span
@@ -386,6 +436,12 @@ class BST:
 
     
 #creating root and creating objects to classes 
+while i==-1:
+    root = Tk()
+    root.geometry("500x500")
+    an = AN(root)
+    root.mainloop()
+
 while i==0:   
     root = Tk()
     root.geometry("500x500")

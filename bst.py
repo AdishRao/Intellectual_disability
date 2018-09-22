@@ -1,7 +1,18 @@
 from tkinter import *
 from PIL import ImageTk,Image  
 import pandas as pd
+import mysql.connector
 cage = 6.5
+mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="test")
+mycursor = mydb.cursor()
+uid = 2
+name = "xyz"
+ID = False
+sqlt1 = "INSERT into t1 (uid,name,ID,age) values (%s,%s,%s,%s)"
+valt1 = (uid,name,ID,cage)
+mycursor.execute(sqlt1, valt1)
+mydb.commit()
+
 class BST:
     def __init__(self,master):
         self.df = pd.read_csv('bst1.csv')
@@ -44,6 +55,15 @@ class BST:
         self.opts4 = self.create_options(self.frame5,3)
         self.opts5 = self.create_options(self.frame6,4)
         self.ques = self.create_q()
+        global cage,uid,mydb,mycursor
+        self.mydb = mydb
+        self.mycursor = mycursor
+        self.age=cage
+        qbst = "insert into BST(UID,BID) values (%s,%s)"
+        vbst = (uid,uid)
+        self.mycursor.execute(qbst,vbst)
+        self.bid=uid
+        self.queries = ["insert into BST3(BID,q1,q2,q3,q4,q5) values(%s,%s,%s,%s,%s,%s)", "insert into BST4(BID,q1,q2,q3,q4) values(%s,%s,%s,%s,%s)","insert into BST5(BID,q1,q2,q3,q4,q5) values(%s,%s,%s,%s,%s,%s)","insert into BST6(BID,q1,q2,q3,q4,q5) values(%s,%s,%s,%s,%s,%s)","insert into BST7(BID,q1,q2,q3,q4,q5) values(%s,%s,%s,%s,%s,%s)"]
 
     def create_q(self):
         for i in range(0,5):
@@ -122,6 +142,14 @@ class BST:
             strid = "Boderline ID"
         else:
             strid = "NOT ID"
+        if self.iq<90:
+            ID = True
+        else:
+            ID = False
+        bstcmd = "update BST SET ID=%s, IQ=%s,ID_Type=%s where UID=%s"
+        bstval =(ID,self.iq,strid,self.bid)
+        self.mycursor.execute(bstcmd,bstval)
+        self.mydb.commit()
         frame = Frame(self.master,width = 500, height = 300)
         frame.pack(side=TOP)
         label = Label(frame,text=strid)
@@ -145,14 +173,20 @@ class BST:
         return b
 
     def next_btn(self):
+        ans = []
         for i in range(0,5):
             if self.opt_selected[i].get() == 1:
                 self.questioncount+=1
                 print(str(self.questioncount))
+                ans.append(1)
+            else:
+                ans.append(0)
         if self.questioncount == 0:
             self.count = 8
         else:
             if self.count != 4:
+                cmd = self.queries[self.q-1]
+                val = (self.bid,ans[0],ans[1],ans[2],ans[3],ans[4])
                 if self.questioncount == 5:
                     self.basalage+=1
                 else:
@@ -160,11 +194,15 @@ class BST:
                 self.root1.destroy()
 
             if self.count == 4:
+                cmd = self.queries[self.q-1]
+                val = (self.bid,ans[0],ans[1],ans[2],ans[3])
                 if self.questioncount == 4:
                     self.basalage+=1
                 else:
                     self.additive_age+=3*self.questioncount
                 self.root1.destroy()
+            self.mycursor.execute(cmd,val)
+            self.mydb.commit()    
             self.count+=1
             self.questioncount = 0
         self.root1.destroy()
@@ -178,3 +216,5 @@ root.geometry("500x500")
 root.title("Binet Simon Test")
 Bst = BST(root)
 root.mainloop()
+
+
