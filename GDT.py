@@ -55,11 +55,16 @@ class GDT:
         if self.qn>= len(self.q):
             #self.result()
             print()
-        #self.dispq(self.qn)   
+        self.opt_selected11.set(0) 
+        self.qn+=1   
+        self.dispq(self.qn)   
 
     def dispq(self,n):
-        print()
-
+        photo = Image.open(self.q[n])
+        photo = photo.resize((500, 300), Image.ANTIALIAS)
+        self.render = ImageTk.PhotoImage(photo)
+        self.ques['image'] = self.render
+        
         
 
 
