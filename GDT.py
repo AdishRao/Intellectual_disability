@@ -37,6 +37,8 @@ class GDT:
         self.createq()
         self.q = [ "GDT/GDT1.png", "GDT/GDT2.png", "GDT/GDT3.png", "GDT/GDT4.png", "GDT/GDT5.png", "GDT/GDT6.png", "GDT/GDT7.png", "GDT/GDT8.png", "GDT/GDT9.png", "GDT/GDT10.png" ]
         self.qn =0
+        self.age = 3
+        self.agegroup = [3,6,8,11,13,17,20,27]
         
 
 
@@ -50,20 +52,47 @@ class GDT:
        return photolabel
 
     def checkans(self):
+        self.qn+=1
         if self.opt_selected11.get() == 1:
             self.count+=1
-        if self.qn>= len(self.q):
-            #self.result()
-            print()
-        self.opt_selected11.set(0) 
-        self.qn+=1   
-        self.dispq(self.qn)   
+        if self.qn>= self.agegroup[self.age-3]:
+            self.result()
+        else:
+            self.opt_selected11.set(0) 
+            self.dispq(self.qn)   
 
     def dispq(self,n):
         photo = Image.open(self.q[n])
         photo = photo.resize((500, 300), Image.ANTIALIAS)
         self.render = ImageTk.PhotoImage(photo)
         self.ques['image'] = self.render
+        
+    def result(self):
+        df = pd.read_csv("GDT.csv")   
+        X =df.iloc[:, 0:8]
+        result = X.iloc[self.count, self.age-3]
+        print(str(result))
+        if result<=10:
+            strid = "Definitely below"
+            ID = True
+        elif result<=20:
+            strid = "below"
+            ID = True
+        else:
+            strid = "Normal"
+            ID =False     
+        self.frame1.destroy()
+        self.frame1 = Frame(self.master,width=500,height=450)
+        self.frame1.pack(side=TOP)
+        labelid = Label(self.frame1, text = strid)
+        labelid.place(x= 250, y =225, anchor = "center" )
+        self.nextbtn['command'] = self.nexttest
+
+    def nexttest(self):
+        self.master.destroy()
+        self.master.quit()
+        i = 5
+           
         
         
 
