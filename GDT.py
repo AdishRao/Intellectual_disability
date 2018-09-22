@@ -2,6 +2,8 @@ from tkinter import *
 from PIL import ImageTk,Image  
 import pandas as pd
 
+i=0
+
 class GDT:
     def __init__(self,master):
         self.master=master
@@ -91,6 +93,7 @@ class GDT:
     def nexttest(self):
         self.master.destroy()
         self.master.quit()
+        global i
         i = 5
            
         
