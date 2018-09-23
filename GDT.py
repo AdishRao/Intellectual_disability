@@ -37,9 +37,9 @@ class GDT:
         self.opts9 = self.create_options(self.frame1,8)
         self.opts10 = self.create_options(self.frame1,9)
         self.createq()
-        self.q = [ "GDT/GDT1.png", "GDT/GDT2.png", "GDT/GDT3.png", "GDT/GDT4.png", "GDT/GDT5.png", "GDT/GDT6.png", "GDT/GDT7.png", "GDT/GDT8.png", "GDT/GDT9.png", "GDT/GDT10.png" ]
+        self.q = [ "GDT/GDT1.png", "GDT/GDT2.png", "GDT/GDT3.png", "GDT/GDT4.png", "GDT/GDT5.png", "GDT/GDT6.png", "GDT/GDT7.png", "GDT/GDT8.png", "GDT/GDT9.png", "GDT/GDT10.png", "GDT/GDT11.png", "GDT/GDT12.png", "GDT/GDT13.png", "GDT/GDT14.png", "GDT/GDT15.png", "GDT/GDT16.png", "GDT/GDT17.png", "GDT/GDT18.png", "GDT/GDT19.png", "GDT/GDT20.png", "GDT/GDT21.png", "GDT/GDT22.png", "GDT/GDT23.png", "GDT/GDT24.png"  ]
         self.qn =0
-        self.age = 3
+        self.age = 10
         self.agegroup = [3,6,8,11,13,17,20,27]
         
 
@@ -73,7 +73,7 @@ class GDT:
         df = pd.read_csv("GDT.csv")   
         X =df.iloc[:, 0:8]
         result = X.iloc[self.count, self.age-3]
-        print(str(result))
+        print(str(result)) #printing percentile
         if result<=10:
             strid = "Definitely below"
             ID = True
@@ -131,6 +131,7 @@ class GDT:
         n+=1
         q1 = Label(self.frame1,text="Traces outline of objects/ palm on paper:")
         q1.place(x=0,y=23.5+23.5*2*n,anchor="w")
+        
 
     def create_options(self,frame,n):
         b_val = 0
