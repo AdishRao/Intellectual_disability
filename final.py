@@ -810,8 +810,6 @@ def askQuestion():
         return
     button.pack_forget()
     label_des.pack_forget()
-    label_entry.pack_forget()
-    entry.pack_forget()
     index += 1
     questions[index].getView(window).pack()
 
