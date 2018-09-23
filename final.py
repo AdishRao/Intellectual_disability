@@ -1,10 +1,4 @@
 """
-store
-Name,Age
-RPM score
-Forward DST score
-Backward DST score
-BST individual responses and final IQ
 Vineland individual responses and final IQ
 GDT (TODO) individual responses(?) and **FINAL IQ**
 """
@@ -14,7 +8,12 @@ from PIL import ImageTk,Image
 import pandas as pd
 import random
 from tkinter import ttk
-cage = 6.5
+import mysql.connector
+mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="Intellectual_disability")
+mycursor = mydb.cursor()
+uid = 0
+ID = True
+cage = 0
 cname =""
 i = -1
 bscore = 0
@@ -38,11 +37,17 @@ class AN: #Finished
         self.ename.place(x=230,y=180)
         self.buttonget = Button(master,text="Begin Tests",command=self.getdetails)
         self.buttonget.place(x=250,y=450,anchor="center")
+        self.agelabel = Label(master,text="Enter UID:")
+        self.agelabel.place(x=181,y=275,anchor="center")
+        self.euid = Entry(master)
+        self.euid.place(x=230,y=260)
 
     def getdetails(self):
-        global cname,cage
+        global cname,cage,uid
+        uid = self.euid.get()
         cname = self.ename.get()
         cage = int(self.eage.get())
+
         print("Age:"+str(cage))
         print("Name:"+cname)
         global i
@@ -51,7 +56,7 @@ class AN: #Finished
         self.master.quit()
 
 #RPM test class
-class RPM:  #TODO Make for age 7 & 7.5 as well
+class RPM:  
     def __init__(self,master):
         self.master=master
         self.result = 0
@@ -62,9 +67,9 @@ class RPM:  #TODO Make for age 7 & 7.5 as well
         self.frame2= Frame(master,width=500, height=100)
         self.frame2.pack(side=BOTTOM)
         self.opt_selected = IntVar()
-        self.qn = 58
+        self.qn = 0
         self.ques = self.create_q(self.frame1,self.qn)
-        self.opts = self.create_options(self.frame2,8)
+        self.opts = self.create_options(self.frame2,6)
         self.display_q(self.qn)
         labelempty= Label(self.frame3,text="")
         labelempty.pack(side=TOP)
@@ -86,13 +91,21 @@ class RPM:  #TODO Make for age 7 & 7.5 as well
 
     def mapvalue(self):
         global cage
-        if cage>=6 and cage<=6.5:
+        if cage>=6 and cage<7:
             self.map=0
+        elif cage>=7 and cage<8:
+            self.map=1
+        elif cage>=8 and cage<9:
+            self.map=3
+        elif cage>=9 and cage<10:
+            self.map=4
+        elif cage>=10 and cage<11:
+            self.map = 5
 
 
     def print_result(self):
         df = pd.read_csv('RPM1.csv')
-        X = df.iloc[:,1:2]
+        X = df.iloc[:,1:6]
         self.mapvalue()
         result = X.iloc[self.result,self.map] #TODO map, with the input age
         print(result)
@@ -104,13 +117,20 @@ class RPM:  #TODO Make for age 7 & 7.5 as well
         printresult = Label(self.frame1, text="Score is "+str(self.result))
         printresult.place(x=250,y=240,anchor="center")
         if(result<26):
+            ID = True
             printid = Label(self.frame1, text="Intellectual Disability")
             printid.place(x=250,y=260,anchor="center")
         else:
+            ID = False
             printid = Label(self.frame1, text="Normal")
             printid.place(x=250,y=260,anchor="center")
         self.nexttest = Button(self.frame1,text="Next Test",command=self.next)
         self.nexttest.place(x=250,y=490,anchor="center")
+        global uid,mydb,mycursor
+        rpmq = "insert into RPM(UID,Score,ID) values (%s,%s,%s)"
+        rpmv = (uid,self.result,ID)
+        mycursor.execute(rpmq,rpmv)
+        mydb.commit()
 
     def next(self):
         global i
@@ -307,6 +327,16 @@ class BST:
         self.opts4 = self.create_options(self.frame5,3)
         self.opts5 = self.create_options(self.frame6,4)
         self.ques = self.create_q()
+        global cage,uid,mydb,mycursor
+        self.cage = cage
+        self.uid = uid
+        self.mydb = mydb
+        self.mycursor = mycursor
+        qbst = "insert into BST(UID,BID) values (%s,%s)"
+        vbst = (uid,uid)
+        self.mycursor.execute(qbst,vbst)
+        self.bid=uid
+        self.queries = ["insert into BST3(BID,q1,q2,q3,q4,q5) values(%s,%s,%s,%s,%s,%s)", "insert into BST4(BID,q1,q2,q3,q4) values(%s,%s,%s,%s,%s)","insert into BST5(BID,q1,q2,q3,q4,q5) values(%s,%s,%s,%s,%s,%s)","insert into BST6(BID,q1,q2,q3,q4,q5) values(%s,%s,%s,%s,%s,%s)","insert into BST7(BID,q1,q2,q3,q4,q5) values(%s,%s,%s,%s,%s,%s)","insert into BST8(BID,q1,q2,q3,q4,q5) values(%s,%s,%s,%s,%s,%s)","insert into BST9(BID,q1,q2,q3,q4,q5) values(%s,%s,%s,%s,%s,%s)","insert into BST10(BID,q1,q2,q3,q4,q5) values(%s,%s,%s,%s,%s,%s)"]
 
     def create_q(self):
         for i in range(0,5):
@@ -366,8 +396,7 @@ class BST:
             self.basalage+=1
             self.additive_age-=12
         self.basalage+=(self.additive_age/100.0)
-        global cage
-        self.iq = ((self.basalage)/(cage))*100
+        self.iq = ((self.basalage)/(self.cage))*100
         print(self.iq)
         for i in range (1,6):
             self.frame[i].destroy()
@@ -385,6 +414,14 @@ class BST:
             strid = "Boderline ID"
         else:
             strid = "NOT ID"
+        if self.iq<90:
+            ID = True
+        else:
+            ID = False
+        bstcmd = "update BST SET ID=%s, IQ=%s,ID_Type=%s where UID=%s"
+        bstval =(ID,self.iq,strid,self.bid)
+        self.mycursor.execute(bstcmd,bstval)
+        self.mydb.commit()
         frame = Frame(self.master,width = 500, height = 300)
         frame.pack(side=TOP)
         label = Label(frame,text=strid)
@@ -411,14 +448,20 @@ class BST:
         return b
 
     def next_btn(self):
+        ans = []
         for i in range(0,5):
             if self.opt_selected[i].get() == 1:
                 self.questioncount+=1
                 print(str(self.questioncount))
+                ans.append(1)
+            else:
+                ans.append(0)
         if self.questioncount == 0:
             self.count = 11
         else:
             if self.count != 4:
+                cmd = self.queries[self.q-1]
+                val = (self.bid,ans[0],ans[1],ans[2],ans[3],ans[4])
                 if self.questioncount == 5:
                     self.basalage+=1
                 else:
@@ -426,11 +469,15 @@ class BST:
                 self.root1.destroy()
 
             if self.count == 4:
+                cmd = self.queries[self.q-1]
+                val = (self.bid,ans[0],ans[1],ans[2],ans[3])
                 if self.questioncount == 4:
                     self.basalage+=1
                 else:
                     self.additive_age+=3*self.questioncount
                 self.root1.destroy()
+            self.mycursor.execute(cmd,val)
+            self.mydb.commit()
             self.count+=1
             self.questioncount = 0
         self.root1.destroy()
@@ -439,6 +486,44 @@ class BST:
             q.destroy()
         self.create_q()
 
+class dispdst:
+
+    def __init__(self,master):
+        global cage,uid,mydb,mycursor
+        self.master=master
+        global rawscore,fscore,bscore
+        rawscore = fscore + bscore
+        stdscore = 0
+        dstper = 0
+        if rawscore <= 3:
+            ID=True
+            dstlabel = Label(master,text="ID")
+        else:
+            df = pd.read_csv('DST.csv')
+            stdscore=df[str(cage)][rawscore-4]
+            df = pd.read_csv('P_Score.csv')
+            dstper=df.loc[df['SS']==stdscore]['PE'].iloc[0]
+            if dstper < 26:
+                ID=True
+                dstlabel = Label(master,text="ID")
+            else:
+                ID=False
+                dstlabel = Label(master,text="Not ID")
+        dstlabel.place(x=250,y=250,anchor="center")
+        dstbutton = Button(master,text="Next Test",command=self.nexttest)
+        dstbutton.pack(side=BOTTOM)
+        dstq = "insert into DST(UID,Forward_Score,Backward_Score,Raw_score,ID,Std_score,Per_score) values (%s,%s,%s,%s,%s,%s,%s)"
+        dstv = (uid,int(fscore),int(bscore),int(rawscore),ID,float(stdscore),float(dstper))
+        mycursor.execute(dstq,dstv)
+        mydb.commit()
+
+
+
+    def nexttest(self):
+        global i
+        i=4
+        self.master.destroy()
+        self.master.quit()
 
     
 #creating root and creating objects to classes 
@@ -447,6 +532,11 @@ while i==-1:
     root.geometry("500x500")
     an = AN(root)
     root.mainloop()
+
+childquery = "insert into Child(UID,Name,Age,ID) VALUES (%s,%s,%s,%s)"
+childvalues = (uid,cname,cage,ID)
+mycursor.execute(childquery,childvalues)
+mydb.commit()
 
 while i==0:   
     root = Tk()
@@ -478,16 +568,19 @@ while i==2:
     ft = DST(root,frame2, "Backward Score")
     root.mainloop()
 
-"""rawscore = fscore + bscore
-df = pd.read_csv('DST.csv')
-stdscore=df[cage][rawscore-4]
-df = pd.read_csv('P_score.csv')
-"""
+
+
 while i==3:
+    rootdst = Tk()
+    rootdst.geometry("500x500")
+    Dispdst= dispdst(rootdst)
+    root.mainloop()
+
+
+while i==4:
     root = Tk()
     root.geometry("500x500")
     root.title("Binet Simon Test")
     Bst = BST(root)
     root.mainloop()
 
-#TODO
