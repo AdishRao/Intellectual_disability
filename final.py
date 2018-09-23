@@ -17,6 +17,8 @@ from tkinter import ttk
 cage = 6.5
 cname =""
 i = -1
+bscore = 0
+fscore = 0
 #global variables for RPM
 q= ["A1.png", "A2.png", "A3.png", "A4.png", "A5.png", "A6.png", "A7.png", "A8.png", "A9.png", "A10.png", "A11.png", "A12.png", "A13.png", "A14.png", "A15.png", "A16.png", "A17.png", "A18.png", "A19.png", "A20.png", "A21.png", "A22.png", "A23.png", "A24.png", "A25.png", "A26.png", "A27.png", "A28.png", "A29.png", "A30.png", "A31.png", "A32.png", "A33.png", "A34.png", "A35.png", "A36.png", "A37.png", "A38.png", "A39.png", "A40.png", "A41.png", "A42.png", "A43.png", "A44.png", "A45.png", "A46.png", "A47.png", "A48.png", "A49.png", "A50.png", "A51.png", "A52.png", "A53.png", "A54.png", "A55.png", "A56.png", "A57.png", "A58.png", "A59.png", "A60.png"]
 options = [["1","2","3","4","5","6"], ["1","2","3","4","5","6","7","8"]]
@@ -40,7 +42,7 @@ class AN: #Finished
     def getdetails(self):
         global cname,cage
         cname = self.ename.get()
-        cage = float(self.eage.get())
+        cage = int(self.eage.get())
         print("Age:"+str(cage))
         print("Name:"+cname)
         global i
@@ -229,9 +231,13 @@ class DST:
     def next(self):
         global i
         if i==1:
+            global fscore
+            fscore = self.total
             i=2
         else:
             i=3
+            global bscore
+            bscore = self.total
         self.ar.destroy()
         self.ar.quit()
         
@@ -263,7 +269,7 @@ class BST:
     def __init__(self,master):
         self.df = pd.read_csv('bst1.csv')
         self.master=master
-        self.images = ["age3.png","age4.png","","age6.png","age7.png"]
+        self.images = ["age3.png","age4.png","","age6.png","age7.png","age8.png","",""]
         self.count = 3
         self.basalage = 2.0
         self.additive_age = 0.0
@@ -316,7 +322,7 @@ class BST:
         self.displayquestion5= Label(self.frame6,text="",wraplength=450,justify="left")
         self.displayquestion5.place(x=2,y=25)
         self.question = [self.displayquestion1,self.displayquestion2,self.displayquestion3,self.displayquestion4,self.displayquestion5]
-        agecase = {3:self.bs,4:self.bs4,5:self.bs,6:self.bs,7:self.bs,8:self.finish}
+        agecase = {3:self.bs,4:self.bs4,5:self.bs,6:self.bs,7:self.bs,8:self.bs,9:self.bs,10:self.bs,11:self.finish}
         self.agelabel['text'] = "Age test: "+str(self.count)
         if self.count==5:
             self.frame6.pack(side=TOP)
@@ -410,7 +416,7 @@ class BST:
                 self.questioncount+=1
                 print(str(self.questioncount))
         if self.questioncount == 0:
-            self.count = 8
+            self.count = 11
         else:
             if self.count != 4:
                 if self.questioncount == 5:
@@ -472,6 +478,11 @@ while i==2:
     ft = DST(root,frame2, "Backward Score")
     root.mainloop()
 
+"""rawscore = fscore + bscore
+df = pd.read_csv('DST.csv')
+stdscore=df[cage][rawscore-4]
+df = pd.read_csv('P_score.csv')
+"""
 while i==3:
     root = Tk()
     root.geometry("500x500")
