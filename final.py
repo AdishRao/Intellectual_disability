@@ -1,6 +1,5 @@
 """
-Vineland individual responses and final IQ
-GDT (TODO) individual responses(?) and **FINAL IQ**
+TODO connect vineland to DB and quit vineland if no question in an age is marked as correct
 """
 import mysql.connector
 from tkinter import *
@@ -23,7 +22,15 @@ q= ["A1.png", "A2.png", "A3.png", "A4.png", "A5.png", "A6.png", "A7.png", "A8.pn
 options = [["1","2","3","4","5","6"], ["1","2","3","4","5","6","7","8"]]
 a = [4,5,1,2,6,3,6,2,1,3,5,4,2,6,1,2,1,3,5,6,4,3,4,5,8,2,3,8,7,4,5,1,7,6,1,2,3,4,3,7,8,6,5,4,1,2,5,6,7,6,8,2,1,5,2,4,1,6,3,5]
 result = 0
-
+#global for vinelad
+index = -1
+yes =0
+no=0
+might=0
+basal_age=0
+vli=0
+index_arr = [0] * 90
+agetoadd = 0
 class AN: #Finished
     def __init__(self,master):
         self.master=master
@@ -526,7 +533,304 @@ class dispdst:
         self.master.quit()
 
     
-#creating root and creating objects to classes 
+class GDT:
+    def __init__(self,master):
+        self.master=master
+        self.count = 0
+        self.frame1 = Frame(self.master,width=500,height=475)
+        self.frame1.pack(side=TOP)
+        self.frame2 = Frame(self.master,height=25,width=500)
+        self.frame2.pack(side=BOTTOM)
+        self.nextbtn = Button(self.frame2, text= "Next", command = self.next)
+        self.nextbtn.place(x= 250, y= 12.5, anchor= "center")
+        self.opt_selected1 = IntVar()
+        self.opt_selected2 = IntVar()
+        self.opt_selected3 = IntVar()
+        self.opt_selected4 = IntVar()
+        self.opt_selected5 = IntVar()
+        self.opt_selected6 = IntVar()
+        self.opt_selected7 = IntVar()
+        self.opt_selected8 = IntVar()
+        self.opt_selected9 = IntVar()
+        self.opt_selected10 = IntVar()
+        self.opt_selected11 = IntVar()
+        self.opt_selected = [self.opt_selected1,self.opt_selected2, self.opt_selected3, self.opt_selected4,self.opt_selected5, self.opt_selected6, self.opt_selected7, self.opt_selected8, self.opt_selected9, self.opt_selected10]
+        self.opts1 = self.create_options(self.frame1,0)
+        self.opts2 = self.create_options(self.frame1,1)
+        self.opts3 = self.create_options(self.frame1,2)
+        self.opts4 = self.create_options(self.frame1,3)
+        self.opts5 = self.create_options(self.frame1,4)
+        self.opts6 = self.create_options(self.frame1,5)
+        self.opts7 = self.create_options(self.frame1,6)
+        self.opts8 = self.create_options(self.frame1,7)
+        self.opts9 = self.create_options(self.frame1,8)
+        self.opts10 = self.create_options(self.frame1,9)
+        self.createq()
+        self.q = [ "GDT/GDT1.png", "GDT/GDT2.png", "GDT/GDT3.png", "GDT/GDT4.png", "GDT/GDT5.png", "GDT/GDT6.png", "GDT/GDT7.png", "GDT/GDT8.png", "GDT/GDT9.png", "GDT/GDT10.png", "GDT/GDT11.png", "GDT/GDT12.png", "GDT/GDT13.png", "GDT/GDT14.png", "GDT/GDT15.png", "GDT/GDT16.png", "GDT/GDT17.png", "GDT/GDT18.png", "GDT/GDT19.png", "GDT/GDT20.png", "GDT/GDT21.png", "GDT/GDT22.png", "GDT/GDT23.png", "GDT/GDT24.png"  ]
+        self.qn =0
+        global cage
+        self.age = cage
+        self.agegroup = [3,6,8,11,13,17,20,24]
+        
+
+
+    def create_q(self,frame1,qn):
+       photo = Image.open(self.q[qn])
+       photo = photo.resize((500, 300), Image.ANTIALIAS)
+       self.render = ImageTk.PhotoImage(photo)
+       photolabel = Label(frame1,image=self.render)
+       photolabel.image = self.render
+       photolabel.pack()
+       return photolabel
+
+    def checkans(self):
+        self.qn+=1
+        if self.opt_selected11.get() == 1:
+            self.count+=1
+        if self.qn>= self.agegroup[self.age-3]:
+            self.result()
+        else:
+            self.opt_selected11.set(0) 
+            self.dispq(self.qn)   
+
+    def dispq(self,n):
+        photo = Image.open(self.q[n])
+        photo = photo.resize((500, 300), Image.ANTIALIAS)
+        self.render = ImageTk.PhotoImage(photo)
+        self.ques['image'] = self.render
+        
+    def result(self):
+        df = pd.read_csv("GDT.csv")   
+        X =df.iloc[:, 0:8]
+        result = X.iloc[self.count, self.age-3]
+        print(str(result)) #printing percentile
+        if result<=10:
+            strid = "Definitely below"
+            ID = True
+        elif result<=20:
+            strid = "below"
+            ID = True
+        else:
+            strid = "Normal"
+            ID =False     
+        self.frame1.destroy()
+        self.frame1 = Frame(self.master,width=500,height=450)
+        self.frame1.pack(side=TOP)
+        labelid = Label(self.frame1, text = strid)
+        labelid.place(x= 250, y =225, anchor = "center" )
+        self.nextbtn['command'] = self.nexttest
+        global mydb,mycursor,uid
+        GDTq = "insert into GDT values (%s,%s,%s,%s)"
+        GDTv= (uid,uid,result,ID)
+        mycursor.execute(GDTq,GDTv)
+        mydb.commit()
+
+    def nexttest(self):
+        self.master.destroy()
+        self.master.quit()
+        global i
+        i = 6
+           
+        
+        
+
+
+    def createq(self):
+        n = 0
+        q1 = Label(self.frame1,text="Palmer hold on writing instruments:")
+        q1.place(x=0,y=23.5+23.5*2*n,anchor="w")
+        n+=1
+        q2 = Label(self.frame1,text="Spontaneous scribble:")
+        q2.place(x=0,y=23.5+23.5*2*n,anchor="w")
+        n+=1
+        q3 = Label(self.frame1,text="Purposive horizontal scribble:")
+        q3.place(x=0,y=23.5+23.5*2*n,anchor="w")
+        n+=1
+        q1 = Label(self.frame1,text="Makes dots:")
+        q1.place(x=0,y=23.5+23.5*2*n,anchor="w")
+        n+=1
+        q1 = Label(self.frame1,text="Tripod hold on writing instruments:")
+        q1.place(x=0,y=23.5+23.5*2*n,anchor="w")
+        n+=1
+        q1 = Label(self.frame1,text="Purposive vertical scribble:")
+        q1.place(x=0,y=23.5+23.5*2*n,anchor="w")
+        n+=1
+        q1 = Label(self.frame1,text="Imitates vertical strokes:")
+        q1.place(x=0,y=23.5+23.5*2*n,anchor="w")
+        n+=1
+        q1 = Label(self.frame1,text="Extends tail to dots in different directions:")
+        q1.place(x=0,y=23.5+23.5*2*n,anchor="w")
+        n+=1
+        q1 = Label(self.frame1,text="Imitates horizontal strokes:")
+        q1.place(x=0,y=23.5+23.5*2*n,anchor="w")
+        n+=1
+        q1 = Label(self.frame1,text="Traces outline of objects/ palm on paper:")
+        q1.place(x=0,y=23.5+23.5*2*n,anchor="w")
+        
+
+    def create_options(self,frame,n):
+        b_val = 0
+        b = []
+        btn = Radiobutton(frame, text="Yes",variable=self.opt_selected[n],value=b_val+1)
+        b.append(btn)
+        btn.place(x=490,y=(23.5+23.5*2*n),anchor="e")
+        return b       
+
+    def next(self):
+        for i in range(0,9):
+            if self.opt_selected[i].get() == 1:
+                self.count+=1
+        self.frame1.destroy()
+        self.frame3 = Frame(self.master, width =500, height=25 )
+        self.frame3.pack(side = BOTTOM)
+        self.frame1 = Frame(self.master,width=500,height=450)
+        self.frame1.pack(side=TOP)
+        self.nextbtn['command'] = self.checkans
+        btn = Radiobutton(self.frame3, text="Yes",variable=self.opt_selected11,value=1)
+        btn.place(y= 10, x =250, anchor = "center")
+        self.ques = self.create_q(self.frame1, self.qn)
+
+
+class Question:
+    def __init__(self, question, answers):
+        self.question = question
+        self.answers = answers
+        global vli
+        vli = 0
+
+ #       self.c_age=0
+ #    def onok(self):
+ #       self.c_age= entry.get()
+
+    def check(self, letter, view):
+        global yes
+        global no
+        global might
+        global basal_age
+        global index_arr
+        global vli
+        global agetoadd
+        agemap = {0:0.7, 34:1.2, 44:2, 56:2.4, 61:3, 65:2.4, 70:3, 74:4, 77:3}
+        for (k, v) in agemap.items():
+            if vli == k:
+                agetoadd = v
+
+        if(letter == "A"):
+            label = Label(view, text="yes")
+            yes += 1
+            basal_age+=agetoadd
+            vli += 1
+            index_arr[vli] = 1
+        elif(letter == "B"):
+            label = Label(view, text="no")
+            no +=1
+            vli += 1
+            index_arr[vli] = 0
+        else:
+            label = Label(view, text="could have passed")
+            might +=1
+            basal_age += agetoadd/2.0
+            vli += 1
+            index_arr[vli] = 2
+
+        if (index_arr[vli]==1 and index_arr[(vli)-2]==1 and index_arr[(vli)-1]==2):
+            current=self.mapmaybeage(vli)
+            previous=self.mapmaybeage(vli-1)
+            if current == previous:
+                basal_age += agetoadd/2.0
+            else:
+                basal_age+= agemap[previous]/2.0
+        print("current basal age is ")
+        print(basal_age, " months")
+
+        label.pack()
+        view.after(10, lambda *args: self.unpackView(view))
+
+    def mapmaybeage(self,vli):
+        if vli < 34:
+            return 0
+        elif vli<44:
+            return 34
+        elif vli<56:
+            return 44
+        elif vli<61:
+            return 56
+        elif vli<65:
+            return 61
+        elif vli<70:
+            return 65
+        elif vli<74:
+            return 70
+        elif vli<77:
+            return 74
+        elif vli<81:
+            return 77
+
+
+
+    def getView(self, window):
+        view = Frame(window)
+        Label(view, text=self.question).pack()
+        Button(view, text=self.answers[0], command=lambda *args: self.check("A", view),width=50).pack()
+        Button(view, text=self.answers[1], command=lambda *args: self.check("B", view),width=50).pack()
+        Button(view, text=self.answers[2], command=lambda *args: self.check("C", view),width=50).pack()
+
+        return view
+
+    def unpackView(self, view):
+        view.pack_forget()
+        askQuestion()
+
+def askQuestion():
+    global questions, window, index, button, yes, no,might, number_of_questions,social_quotient,index_arr
+    if(len(questions) == index + 1):
+        #Label(window, text="Thank you for answering the questions. 1. yes " + str(yes) +" 2. no " +str(no) + " 3.might"+str(might) + " of " + str(number_of_questions) + " questions answered right||basal_age =  "+str(basal_age),font=('15')).pack()
+        Label(window,text="Thank you for answering the questions.\n basal_age = " + str(basal_age)).pack()
+        global cage
+        social_quotient=(basal_age/(cage*12))*100#chrono age taken as 10 as all question included are till 9-10 yearsold
+        Label(window, text="social quotient = " + str(social_quotient)).pack()
+        if(social_quotient<20):
+            ID = True
+            Label(window, text="Profound Intelletual disability").pack()
+        elif((social_quotient>=20) and(social_quotient<35)):
+            ID = True
+            Label(window, text="Severe Intelletual disability").pack()
+        elif((social_quotient>=35) and (social_quotient<50)):
+            ID = True
+            Label(window, text="Moderate Intelletual disability").pack()
+        elif((social_quotient>=50) and (social_quotient<70)):
+            ID = True
+            Label(window, text="Mild Intelletual disability").pack()
+        else:
+            ID = False
+            Label(window, text="Normal IQ").pack()
+        print(index_arr)
+
+
+        return
+    button.pack_forget()
+    label_des.pack_forget()
+    label_entry.pack_forget()
+    entry.pack_forget()
+    index += 1
+    questions[index].getView(window).pack()
+
+questions = []
+file = open("vineland2questions.txt", "r",encoding='windows-1252')
+line = file.readline()
+while(line != ""):
+    questionString = line
+    answers = []
+    for vli in range (3):
+        answers.append(file.readline())
+
+    questions.append(Question(questionString, answers))
+    line = file.readline()
+file.close()
+number_of_questions = len(questions)
+
+
+
 while i==-1:
     root = Tk()
     root.geometry("500x500")
@@ -584,3 +888,21 @@ while i==4:
     Bst = BST(root)
     root.mainloop()
 
+
+while i==5:
+    root = Tk()
+    root.geometry("500x500")
+    Gdt = GDT(root)
+    root.mainloop()
+
+
+while i==6:
+    window = Tk()
+    window.geometry("600x300")
+    label_heading = Label(window, text="VINELAND SOCIAL MATURITY TEST",bg="black",fg="white",font=('Helvetica', '20'))
+    label_heading.pack()
+    label_des = Label(window, text="\n\nThe Vineland Social Maturity Scale (VSMS) measures the differential social\ncapacities of an individual. It provides an estimate of Social Age (SA) and Social\nQuotient (SQ), and shows high correlation (0.80) with intelligence. It is designed to\nmeasure social maturation in eight social areas: Self-help General (SHG), Self-help\nEating (SHE), Self-help Dressing (SHD), Self direction (SD), Occupation (OCC),\nCommunication (COM), Locomotion (LOM), and Socialization (SOC).",fg="blue",font=('15'))
+    label_des.pack()
+    button = Button(window, text="Start", command=askQuestion)
+    button.pack()
+    window.mainloop()
