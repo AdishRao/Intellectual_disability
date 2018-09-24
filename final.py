@@ -805,8 +805,57 @@ def askQuestion():
             ID = False
             Label(window, text="Normal IQ").pack()
         print(index_arr)
-
-
+        global mydb,mycursor,uid
+        vlq = "insert into Vineland values (%s,%s,%s)"
+        vlv = (uid,uid,ID)
+        mycursor.execute(vlq,vlv)
+        mydb.commit()
+        vlq = "insert into VL0 values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        vlv = (uid,index_arr[1],index_arr[2],index_arr[3],index_arr[4],index_arr[5],index_arr[6],index_arr[7],index_arr[8],index_arr[9],index_arr[10],index_arr[11],index_arr[12],index_arr[13],index_arr[14],index_arr[15],index_arr[16],index_arr[17])
+        mycursor.execute(vlq,vlv)
+        mydb.commit()
+        vlq = "insert into VL1 values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        vlv = (uid,index_arr[18],index_arr[19],index_arr[20],index_arr[21],index_arr[22],index_arr[23],index_arr[24],index_arr[25],index_arr[26],index_arr[27],index_arr[28],index_arr[29],index_arr[30],index_arr[31],index_arr[32],index_arr[33],index_arr[34])
+        mycursor.execute(vlq,vlv)
+        mydb.commit()
+        vlq = "insert into VL1 values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        vlv = (uid,index_arr[35],index_arr[36],index_arr[37],index_arr[38],index_arr[39],index_arr[40],index_arr[41],index_arr[42],index_arr[43],index_arr[44])
+        mycursor.execute(vlq,vlv)
+        mydb.commit()
+        vlq = "insert into VL2 values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        vlv = (uid,index_arr[35],index_arr[36],index_arr[37],index_arr[38],index_arr[39],index_arr[40],index_arr[41],index_arr[42],index_arr[43],index_arr[44])
+        vlq = "insert into VL3 values (%s,%s,%s,%s,%s,%s,%s)"
+        vlv = (uid,index_arr[45],index_arr[46],index_arr[47],index_arr[48],index_arr[49],index_arr[50])
+        mycursor.execute(vlq,vlv)
+        mydb.commit()
+        vlq = "insert into VL4 values (%s,%s,%s,%s,%s,%s,%s)"
+        vlv = (uid,index_arr[51],index_arr[52],index_arr[53],index_arr[54],index_arr[55],index_arr[56])
+        mycursor.execute(vlq,vlv)
+        mydb.commit()
+        vlq = "insert into VL5 values (%s,%s,%s,%s,%s,%s)"
+        vlv = (uid,index_arr[57],index_arr[58],index_arr[59],index_arr[60],index_arr[61])
+        mycursor.execute(vlq,vlv)
+        mydb.commit()
+        vlq = "insert into VL6 values (%s,%s,%s,%s,%s)"
+        vlv = (uid,index_arr[62],index_arr[63],index_arr[64],index_arr[65])
+        mycursor.execute(vlq,vlv)
+        mydb.commit()
+        vlq = "insert into VL7 values (%s,%s,%s,%s,%s,%s)"
+        vlv = (uid,index_arr[66],index_arr[67],index_arr[68],index_arr[69],index_arr[70])
+        mycursor.execute(vlq,vlv)
+        mydb.commit()
+        vlq = "insert into VL8 values (%s,%s,%s,%s,%s)"
+        vlv = (uid,index_arr[71],index_arr[72],index_arr[73],index_arr[74])
+        mycursor.execute(vlq,vlv)
+        mydb.commit()
+        vlq = "insert into VL9 values (%s,%s,%s,%s)"
+        vlv = (uid,index_arr[75],index_arr[76],index_arr[77])
+        mycursor.execute(vlq,vlv)
+        mydb.commit()
+        vlq = "insert into VL10 values (%s,%s,%s,%s,%s)"
+        vlv = (uid,index_arr[78],index_arr[79],index_arr[80],index_arr[81])
+        mycursor.execute(vlq,vlv)
+        mydb.commit()
         return
     button.pack_forget()
     label_des.pack_forget()
