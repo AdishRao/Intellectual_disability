@@ -462,6 +462,7 @@ CREATE TABLE `VL1` (
   `q14` int(11) NOT NULL,
   `q15` int(11) NOT NULL,
   `q16` int(11) NOT NULL,
+  `q17` int(11) DEFAULT NULL,
   KEY `vk1` (`VID`),
   CONSTRAINT `vk1` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -521,6 +522,7 @@ CREATE TABLE `VL2` (
   `q7` int(11) NOT NULL,
   `q8` int(11) NOT NULL,
   `q9` int(11) NOT NULL,
+  `q10` int(11) DEFAULT NULL,
   KEY `vk2` (`VID`),
   CONSTRAINT `vk2` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -549,6 +551,7 @@ CREATE TABLE `VL3` (
   `q3` int(11) NOT NULL,
   `q4` int(11) NOT NULL,
   `q5` int(11) NOT NULL,
+  `q6` int(11) DEFAULT NULL,
   KEY `vk3` (`VID`),
   CONSTRAINT `vk3` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -737,4 +740,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-09-24  2:54:52
+-- Dump completed on 2018-09-24 10:06:27
