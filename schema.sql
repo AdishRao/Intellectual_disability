@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `BST`;
 CREATE TABLE `BST` (
   `UID` int(11) NOT NULL,
   `BID` int(11) NOT NULL,
-  `ID` tinyint(1) DEFAULT NULL,
+  `IDB` tinyint(1) DEFAULT NULL,
   `IQ` float DEFAULT NULL,
   `ID_Type` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`BID`),
@@ -186,18 +186,56 @@ CREATE TABLE `BST9` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `Child`
+-- Temporary view structure for view `c`
 --
 
-DROP TABLE IF EXISTS `Child`;
+DROP TABLE IF EXISTS `c`;
+/*!50001 DROP VIEW IF EXISTS `c`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8mb4;
+/*!50001 CREATE VIEW `c` AS SELECT 
+ 1 AS `UID`,
+ 1 AS `Name`,
+ 1 AS `Age`,
+ 1 AS `ID`,
+ 1 AS `Gender`,
+ 1 AS `Score`,
+ 1 AS `IDR`,
+ 1 AS `Forward_Score`,
+ 1 AS `Backward_Score`,
+ 1 AS `Raw_score`,
+ 1 AS `IDD`,
+ 1 AS `Std_score`,
+ 1 AS `Per_score`,
+ 1 AS `BID`,
+ 1 AS `IDB`,
+ 1 AS `IQ`,
+ 1 AS `ID_Type`,
+ 1 AS `GID`,
+ 1 AS `Percentile`,
+ 1 AS `IDG`,
+ 1 AS `VID`,
+ 1 AS `IDV`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `child`
+--
+
+DROP TABLE IF EXISTS `child`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `Child` (
+CREATE TABLE `child` (
   `UID` int(11) NOT NULL,
   `Name` varchar(50) DEFAULT NULL,
   `Age` float NOT NULL,
   `ID` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`UID`)
+  `Gender` char(1) DEFAULT NULL,
+  `DateOfTest` date DEFAULT NULL,
+  `RID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`UID`),
+  KEY `refer` (`RID`),
+  CONSTRAINT `refer` FOREIGN KEY (`RID`) REFERENCES `child` (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -213,7 +251,7 @@ CREATE TABLE `DST` (
   `Forward_Score` int(11) DEFAULT NULL,
   `Backward_Score` int(11) DEFAULT NULL,
   `Raw_score` int(11) DEFAULT NULL,
-  `ID` tinyint(1) DEFAULT NULL,
+  `IDD` tinyint(1) DEFAULT NULL,
   `Std_score` float DEFAULT NULL,
   `Per_score` float DEFAULT NULL,
   KEY `fk2` (`UID`),
@@ -232,7 +270,7 @@ CREATE TABLE `GDT` (
   `UID` int(11) DEFAULT NULL,
   `GID` int(11) DEFAULT NULL,
   `Percentile` int(11) DEFAULT NULL,
-  `ID` tinyint(1) DEFAULT NULL,
+  `IDG` tinyint(1) DEFAULT NULL,
   KEY `gfk` (`UID`),
   CONSTRAINT `gfk` FOREIGN KEY (`UID`) REFERENCES `child` (`uid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -248,7 +286,7 @@ DROP TABLE IF EXISTS `RPM`;
 CREATE TABLE `RPM` (
   `UID` int(11) NOT NULL,
   `Score` int(11) NOT NULL,
-  `ID` tinyint(1) DEFAULT NULL,
+  `IDR` tinyint(1) DEFAULT NULL,
   KEY `fk1` (`UID`),
   CONSTRAINT `fk1` FOREIGN KEY (`UID`) REFERENCES `child` (`uid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -264,7 +302,7 @@ DROP TABLE IF EXISTS `Vineland`;
 CREATE TABLE `Vineland` (
   `UID` int(11) NOT NULL,
   `VID` int(11) NOT NULL,
-  `ID` tinyint(1) DEFAULT NULL,
+  `IDV` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`VID`),
   KEY `vl` (`UID`),
   CONSTRAINT `vl` FOREIGN KEY (`UID`) REFERENCES `child` (`uid`) ON DELETE CASCADE
@@ -505,6 +543,24 @@ CREATE TABLE `VL9` (
   CONSTRAINT `vk9` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Final view structure for view `c`
+--
+
+/*!50001 DROP VIEW IF EXISTS `c`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `c` AS select `C`.`UID` AS `UID`,`C`.`Name` AS `Name`,`C`.`Age` AS `Age`,`C`.`ID` AS `ID`,`C`.`Gender` AS `Gender`,`R`.`Score` AS `Score`,`R`.`IDR` AS `IDR`,`D`.`Forward_Score` AS `Forward_Score`,`D`.`Backward_Score` AS `Backward_Score`,`D`.`Raw_score` AS `Raw_score`,`D`.`IDD` AS `IDD`,`D`.`Std_score` AS `Std_score`,`D`.`Per_score` AS `Per_score`,`B`.`BID` AS `BID`,`B`.`IDB` AS `IDB`,`B`.`IQ` AS `IQ`,`B`.`ID_Type` AS `ID_Type`,`gdt`.`GID` AS `GID`,`gdt`.`Percentile` AS `Percentile`,`gdt`.`IDG` AS `IDG`,`V`.`VID` AS `VID`,`V`.`IDV` AS `IDV` from (`child` `C` join (`rpm` `R` join (`dst` `D` join (`bst` `B` join (`gdt` join `vineland` `V` on((`gdt`.`UID` = `V`.`UID`))) on((`B`.`UID` = `gdt`.`UID`))) on((`D`.`UID` = `B`.`UID`))) on((`R`.`UID` = `D`.`UID`))) on((`C`.`UID` = `R`.`UID`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -515,4 +571,4 @@ CREATE TABLE `VL9` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-04 18:16:35
+-- Dump completed on 2018-10-09 16:38:52
