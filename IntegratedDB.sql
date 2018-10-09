@@ -111,7 +111,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `child` WRITE;
 /*!40000 ALTER TABLE `child` DISABLE KEYS */;
-INSERT INTO `child` VALUES (1,'Lalith _10',9,1,'M'),(5,'Deekshit',9,1,'M'),(6,'Jeevan',9,1,'M'),(23,'Jaslene _12',9,1,'F'),(50,'Dhanush _8',8,1,'M'),(52,'Tanav _06',6,0,'M'),(54,'Akhilan1.0 _6',6,0,'M'),(56,'Guna _06',6,0,'M'),(57,'Gautam _07',7,0,'M'),(58,'Swarnima _07',7,0,'F'),(59,'Dheeraj _11',9,1,'M'),(60,'yashas_9',9,0,'M'),(61,'Naren _09',9,0,'M'),(62,'Atharv _10',9,0,'M'),(63,'Janani _10',9,1,'F'),(70,'Paridhi _6',6,0,'F'),(71,'Anuj _6',6,0,'M'),(72,'Charu _6',6,0,'F'),(73,'Likith _7',7,0,'M'),(74,'Anukalp _8',8,0,'M'),(75,'Anagha _8',8,0,'F'),(76,'Suhas _9',9,0,'M'),(77,'Devarchita _9',9,0,'F');
+INSERT INTO `child` VALUES (1,'Lalith _10',9,1,'M','2018-09-24',1),(5,'Deekshit',9,1,'M','2018-09-24',5),(6,'Jeevan',9,1,'M','2018-09-24',6),(23,'Jaslene _12',9,1,'F','2018-09-24',23),(50,'Dhanush _8',8,1,'M','2018-09-24',50),(52,'Tanav _06',6,0,'M','2018-09-26',52),(54,'Akhilan1.0 _6',6,0,'M','2018-09-26',54),(56,'Guna _06',6,0,'M','2018-09-26',56),(57,'Gautam _07',7,0,'M','2018-09-26',57),(58,'Swarnima _07',7,0,'F','2018-09-26',58),(59,'Dheeraj _11',9,1,'M','2018-09-24',59),(60,'yashas_9',9,0,'M','2018-09-26',60),(61,'Naren _09',9,0,'M','2018-09-26',61),(62,'Atharv _10',9,0,'M','2018-09-26',62),(63,'Janani _10',9,1,'F','2018-09-24',63),(70,'Paridhi _6',6,0,'F','2018-09-26',70),(71,'Anuj _6',6,0,'M','2018-09-26',71),(72,'Charu _6',6,0,'F','2018-09-26',72),(73,'Likith _7',7,0,'M','2018-09-26',73),(74,'Anukalp _8',8,0,'M','2018-09-26',74),(75,'Anagha _8',8,0,'F','2018-09-26',75),(76,'Suhas _9',9,0,'M','2018-09-26',76),(77,'Devarchita _9',9,0,'F','2018-09-26',77);
 /*!40000 ALTER TABLE `child` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,7 +151,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `Vineland` WRITE;
 /*!40000 ALTER TABLE `Vineland` DISABLE KEYS */;
-INSERT INTO `Vineland` VALUES (1,1,1,NULL),(5,5,0,NULL),(6,6,0,NULL),(23,23,0,NULL),(50,50,0,NULL),(52,52,0,NULL),(54,54,0,NULL),(56,56,0,NULL),(57,57,0,NULL),(58,58,0,NULL),(59,59,1,NULL),(60,60,0,NULL),(61,61,0,NULL),(62,62,0,NULL),(63,63,1,NULL),(70,70,0,NULL),(71,71,0,NULL),(72,72,0,NULL),(73,73,0,NULL),(74,74,0,NULL),(75,75,0,NULL),(76,76,0,NULL),(77,77,0,NULL);
+INSERT INTO `Vineland` VALUES (1,1,1),(5,5,0),(6,6,0),(23,23,0),(50,50,0),(52,52,0),(54,54,0),(56,56,0),(57,57,0),(58,58,0),(59,59,1),(60,60,0),(61,61,0),(62,62,0),(63,63,1),(70,70,0),(71,71,0),(72,72,0),(73,73,0),(74,74,0),(75,75,0),(76,76,0),(77,77,0);
 /*!40000 ALTER TABLE `Vineland` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -273,4 +273,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-05 15:09:07
+-- Dump completed on 2018-10-09  6:48:58

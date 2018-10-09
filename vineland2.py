@@ -1,10 +1,20 @@
 from tkinter import Tk, Frame, Label, Button ,Entry
 #from time import sleep
-
+index = -1
+yes =0
+no=0
+might=0
+basal_age=0
+vli=0
+index_arr = [0] * 90
+agetoadd = 0
 class Question:
     def __init__(self, question, answers):
         self.question = question
         self.answers = answers
+        global vli
+        vli = 0
+
  #       self.c_age=0
  #    def onok(self):
  #       self.c_age= entry.get()
@@ -15,32 +25,64 @@ class Question:
         global might
         global basal_age
         global index_arr
-        global i
+        global vli
+        global agetoadd
+        agemap = {0:0.7, 34:1.2, 44:2, 56:2.4, 61:3, 65:2.4, 70:3, 74:4, 77:3}
+        for (k, v) in agemap.items():
+            if vli == k:
+                agetoadd = v
+
         if(letter == "A"):
             label = Label(view, text="yes")
             yes += 1
-            basal_age+=0.7
-            i += 1
-            index_arr[i] = 1
+            basal_age+=agetoadd
+            vli += 1
+            index_arr[vli] = 1
         elif(letter == "B"):
             label = Label(view, text="no")
             no +=1
-            i += 1
-            index_arr[i] = 2
+            vli += 1
+            index_arr[vli] = 0
         else:
             label = Label(view, text="could have passed")
             might +=1
-            basal_age += 0.35
-            i += 1
-            index_arr[i] = 3
+            basal_age += agetoadd/2.0
+            vli += 1
+            index_arr[vli] = 2
 
-        if (index_arr[i]==1 and index_arr[(i)-2]==1 and index_arr[(i)-1]==3):
-            basal_age += 0.35
+        if (index_arr[vli]==1 and index_arr[(vli)-2]==1 and index_arr[(vli)-1]==2):
+            current=self.mapmaybeage(vli)
+            previous=self.mapmaybeage(vli-1)
+            if current == previous:
+                basal_age += agetoadd/2.0
+            else:
+                basal_age+= agemap[previous]/2.0
         print("current basal age is ")
         print(basal_age, " months")
 
         label.pack()
-        view.after(1000, lambda *args: self.unpackView(view))
+        view.after(10, lambda *args: self.unpackView(view))
+
+    def mapmaybeage(self,vli):
+        if vli < 34:
+            return 0
+        elif vli<44:
+            return 34
+        elif vli<56:
+            return 44
+        elif vli<61:
+            return 56
+        elif vli<65:
+            return 61
+        elif vli<70:
+            return 65
+        elif vli<74:
+            return 70
+        elif vli<77:
+            return 74
+        elif vli<81:
+            return 77
+
 
 
     def getView(self, window):
@@ -57,22 +99,29 @@ class Question:
         askQuestion()
 
 def askQuestion():
-    global questions, window, index, button, yes, no,might, number_of_questions,social_quotient
+    global questions, window, index, button, yes, no,might, number_of_questions,social_quotient,index_arr
     if(len(questions) == index + 1):
         #Label(window, text="Thank you for answering the questions. 1. yes " + str(yes) +" 2. no " +str(no) + " 3.might"+str(might) + " of " + str(number_of_questions) + " questions answered right||basal_age =  "+str(basal_age),font=('15')).pack()
         Label(window,text="Thank you for answering the questions.\n basal_age = " + str(basal_age)).pack()
         social_quotient=(basal_age/(10*12))*100#chrono age taken as 10 as all question included are till 9-10 yearsold
         Label(window, text="social quotient = " + str(social_quotient)).pack()
         if(social_quotient<20):
+            ID = True
             Label(window, text="Profound Intelletual disability").pack()
         elif((social_quotient>=20) and(social_quotient<35)):
+            ID = True
             Label(window, text="Severe Intelletual disability").pack()
         elif((social_quotient>=35) and (social_quotient<50)):
+            ID = True
             Label(window, text="Moderate Intelletual disability").pack()
         elif((social_quotient>=50) and (social_quotient<70)):
+            ID = True
             Label(window, text="Mild Intelletual disability").pack()
         else:
+            ID = False
             Label(window, text="Normal IQ").pack()
+        print(index_arr)
+
 
         return
     button.pack_forget()
@@ -83,24 +132,17 @@ def askQuestion():
     questions[index].getView(window).pack()
 
 questions = []
-file = open("vineland2questions.txt", "r")
+file = open("vineland2questions.txt", "r",encoding='windows-1252')
 line = file.readline()
 while(line != ""):
     questionString = line
     answers = []
-    for i in range (3):
+    for vli in range (3):
         answers.append(file.readline())
 
     questions.append(Question(questionString, answers))
     line = file.readline()
 file.close()
-index = -1
-yes =0
-no=0
-might=0
-basal_age=0
-i=0
-index_arr = [0] * 90
 number_of_questions = len(questions)
 
 window = Tk()

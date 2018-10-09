@@ -1,14 +1,33 @@
-"""
-TODO connect vineland to DB and quit vineland if no question in an age is marked as correct
-"""
 import mysql.connector
 from tkinter import *
-from PIL import ImageTk,Image  
+from PIL import ImageTk,Image
 import pandas as pd
 import random
 from tkinter import ttk
 import mysql.connector
-mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="Intellectual_disability")
+import pandas as pd
+from random import randint 
+from sklearn import preprocessing
+from sklearn.preprocessing import MinMaxScaler
+import keras
+from keras import backend as K
+from keras.models import Sequential
+from keras.layers import Activation
+from keras.layers.core import Dense
+from keras.optimizers import Adam
+from keras.metrics import categorical_crossentropy
+from keras.models import model_from_json
+import os
+import datetime
+# load json and create model
+json_file = open('model.json', 'r')
+loaded_model_json = json_file.read()
+json_file.close()
+loaded_model = model_from_json(loaded_model_json)
+# load weights into new model
+loaded_model.load_weights("model.h5")
+print("Loaded model from disk")
+mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="ID")
 mycursor = mydb.cursor()
 uid = 0
 ID = True
@@ -29,8 +48,10 @@ no=0
 might=0
 basal_age=0
 vli=0
+vlf=0
 index_arr = [0] * 90
 agetoadd = 0
+age_range = {6:[45,65],7:[51,70],8:[57,74],9:[62,77]}
 class AN: #Finished
     def __init__(self,master):
         self.master=master
@@ -50,7 +71,7 @@ class AN: #Finished
         self.euid.place(x=230,y=260)
 
     def getdetails(self):
-        global cname,cage,uid
+        global cname,cage,uid,basal_age
         uid = self.euid.get()
         cname = self.ename.get()
         cage = int(self.eage.get())
@@ -58,12 +79,24 @@ class AN: #Finished
         print("Age:"+str(cage))
         print("Name:"+cname)
         global i
+        global vli
+        global vlf
+        global age_range
+        global index_arr
+        vli = age_range[cage][0]
+        vlf = age_range[cage][1]
+        for arrq in range(vli):
+            index_arr[arrq]=1
+            print (index_arr[arrq])
+            print (arrq)
         i = 0
+        vli-=1
+        basal_age = (cage-3)*12.0
         self.master.destroy()
         self.master.quit()
 
 #RPM test class
-class RPM:  
+class RPM:
     def __init__(self,master):
         self.master=master
         self.result = 0
@@ -80,8 +113,10 @@ class RPM:
         self.display_q(self.qn)
         labelempty= Label(self.frame3,text="")
         labelempty.pack(side=TOP)
+        self.button1 = Button(self.frame3,text="Skip", command=self.print_result)
+        self.button1.pack(side=BOTTOM)
         self.button = Button(self.frame3,text="Next", command=self.next_btn)
-        self.button.pack(side=BOTTOM)
+        self.button.pack(side=LEFT)
 
     def next_btn(self):
         if self.check_q(self.qn):
@@ -92,7 +127,7 @@ class RPM:
         self.qn+=1
         if self.qn >= len(q):
             self.print_result()
-            
+
         else:
             self.display_q(self.qn)
 
@@ -103,11 +138,11 @@ class RPM:
         elif cage>=7 and cage<8:
             self.map=1
         elif cage>=8 and cage<9:
-            self.map=3
+            self.map=2
         elif cage>=9 and cage<10:
-            self.map=4
+            self.map=3
         elif cage>=10 and cage<11:
-            self.map = 5
+            self.map = 4
 
 
     def print_result(self):
@@ -134,7 +169,7 @@ class RPM:
         self.nexttest = Button(self.frame1,text="Next Test",command=self.next)
         self.nexttest.place(x=250,y=490,anchor="center")
         global uid,mydb,mycursor
-        rpmq = "insert into RPM(UID,Score,ID) values (%s,%s,%s)"
+        rpmq = "insert into RPM(UID,Score,IDR) values (%s,%s,%s)"
         rpmv = (uid,self.result,ID)
         mycursor.execute(rpmq,rpmv)
         mydb.commit()
@@ -144,7 +179,7 @@ class RPM:
         i = 1
         self.master.destroy()
         self.master.quit()
-        
+
     def check_q(self,qn):
         if self.opt_selected.get() == a[qn] :
             return True
@@ -163,7 +198,7 @@ class RPM:
         if (qn==24):
             self.frame2.destroy()
             self.frame2= Frame(self.master,width=500, height=100)
-            self.frame2.pack(side=BOTTOM)           
+            self.frame2.pack(side=BOTTOM)
             self.opts = self.create_options(self.frame2,8)
         for op in options[num]:
             self.opts[b_val]['text'] = op
@@ -212,7 +247,7 @@ class DST:
         self.check_btn_2 = self.create_check_btn(root, self.clicked2, NORMAL, 2, 2)
         #buttons
         self.btn = self.create_btn(root, "NEXT", 5, self.on_btn_click, NORMAL, 3, 1)
-        
+
     def create_label(self, root, label_txt, value_txt, label_row, label_col, val_row, val_col, w, bw, r):
         label = Label(root, text = label_txt, width = w)
         label.grid(row = label_row, column = label_col, sticky = 'E')
@@ -267,7 +302,7 @@ class DST:
             bscore = self.total
         self.ar.destroy()
         self.ar.quit()
-        
+
     def on_btn_click(self):
         global items
         global span
@@ -365,7 +400,7 @@ class BST:
             self.frame6.pack(side=TOP)
         agecase[self.count](self.q)
 
-                
+
     def bs(self,i):
         X = self.df.iloc[:,i]
         for i in range(0,5):
@@ -379,7 +414,7 @@ class BST:
             photolabel = Label(self.root1,image=self.render1)
             photolabel.image = self.render1
             photolabel.pack()
-        self.q+=1   
+        self.q+=1
 
     def bs4(self,i):
         X = self.df.iloc[:,i]
@@ -394,9 +429,9 @@ class BST:
         photolabel = Label(self.root1,image=self.render)
         photolabel.image = self.render
         photolabel.pack()
-        self.q+=1        
+        self.q+=1
 
-    
+
 
     def finish(self,i):
         while self.additive_age >= 12:
@@ -425,7 +460,7 @@ class BST:
             ID = True
         else:
             ID = False
-        bstcmd = "update BST SET ID=%s, IQ=%s,ID_Type=%s where UID=%s"
+        bstcmd = "update BST SET IDB=%s, IQ=%s,ID_Type=%s where UID=%s"
         bstval =(ID,self.iq,strid,self.bid)
         self.mycursor.execute(bstcmd,bstval)
         self.mydb.commit()
@@ -441,10 +476,10 @@ class BST:
 
     def des(self):
         global i
-        i = 4
+        i = 5
         self.master.destroy()
         self.master.quit()
-        
+
 
     def create_options(self,frame,n):
         b_val = 0
@@ -519,7 +554,7 @@ class dispdst:
         dstlabel.place(x=250,y=250,anchor="center")
         dstbutton = Button(master,text="Next Test",command=self.nexttest)
         dstbutton.pack(side=BOTTOM)
-        dstq = "insert into DST(UID,Forward_Score,Backward_Score,Raw_score,ID,Std_score,Per_score) values (%s,%s,%s,%s,%s,%s,%s)"
+        dstq = "insert into DST(UID,Forward_Score,Backward_Score,Raw_score,IDD,Std_score,Per_score) values (%s,%s,%s,%s,%s,%s,%s)"
         dstv = (uid,int(fscore),int(bscore),int(rawscore),ID,float(stdscore),float(dstper))
         mycursor.execute(dstq,dstv)
         mydb.commit()
@@ -532,7 +567,7 @@ class dispdst:
         self.master.destroy()
         self.master.quit()
 
-    
+
 class GDT:
     def __init__(self,master):
         self.master=master
@@ -571,7 +606,7 @@ class GDT:
         global cage
         self.age = cage
         self.agegroup = [3,6,8,11,13,17,20,24]
-        
+
 
 
     def create_q(self,frame1,qn):
@@ -590,17 +625,17 @@ class GDT:
         if self.qn>= self.agegroup[self.age-3]:
             self.result()
         else:
-            self.opt_selected11.set(0) 
-            self.dispq(self.qn)   
+            self.opt_selected11.set(0)
+            self.dispq(self.qn)
 
     def dispq(self,n):
         photo = Image.open(self.q[n])
         photo = photo.resize((500, 300), Image.ANTIALIAS)
         self.render = ImageTk.PhotoImage(photo)
         self.ques['image'] = self.render
-        
+
     def result(self):
-        df = pd.read_csv("GDT.csv")   
+        df = pd.read_csv("GDT.csv")
         X =df.iloc[:, 0:8]
         result = X.iloc[self.count, self.age-3]
         print(str(result)) #printing percentile
@@ -612,7 +647,7 @@ class GDT:
             ID = True
         else:
             strid = "Normal"
-            ID =False     
+            ID =False
         self.frame1.destroy()
         self.frame1 = Frame(self.master,width=500,height=450)
         self.frame1.pack(side=TOP)
@@ -621,7 +656,7 @@ class GDT:
         self.nextbtn['command'] = self.nexttest
         global mydb,mycursor,uid
         GDTq = "insert into GDT values (%s,%s,%s,%s)"
-        GDTv= (uid,uid,result,ID)
+        GDTv= (uid,uid,int(result),int(ID))
         mycursor.execute(GDTq,GDTv)
         mydb.commit()
 
@@ -630,9 +665,9 @@ class GDT:
         self.master.quit()
         global i
         i = 6
-           
-        
-        
+
+
+
 
 
     def createq(self):
@@ -666,7 +701,7 @@ class GDT:
         n+=1
         q1 = Label(self.frame1,text="Traces outline of objects/ palm on paper:")
         q1.place(x=0,y=23.5+23.5*2*n,anchor="w")
-        
+
 
     def create_options(self,frame,n):
         b_val = 0
@@ -674,7 +709,7 @@ class GDT:
         btn = Radiobutton(frame, text="Yes",variable=self.opt_selected[n],value=b_val+1)
         b.append(btn)
         btn.place(x=490,y=(23.5+23.5*2*n),anchor="e")
-        return b       
+        return b
 
     def next(self):
         for i in range(0,9):
@@ -696,7 +731,10 @@ class Question:
         self.question = question
         self.answers = answers
         global vli
-        vli = 0
+        global vlf
+        global age_range
+
+
 
  #       self.c_age=0
  #    def onok(self):
@@ -709,6 +747,7 @@ class Question:
         global basal_age
         global index_arr
         global vli
+        global vlf
         global agetoadd
         agemap = {0:0.7, 34:1.2, 44:2, 56:2.4, 61:3, 65:2.4, 70:3, 74:4, 77:3}
         for (k, v) in agemap.items():
@@ -744,7 +783,7 @@ class Question:
         print(basal_age, " months")
 
         label.pack()
-        view.after(10, lambda *args: self.unpackView(view))
+        view.after(1, lambda *args: self.unpackView(view))
 
     def mapmaybeage(self,vli):
         if vli < 34:
@@ -782,8 +821,8 @@ class Question:
         askQuestion()
 
 def askQuestion():
-    global questions, window, index, button, yes, no,might, number_of_questions,social_quotient,index_arr
-    if(len(questions) == index + 1):
+    global questions, window, index, button, yes, no,might, number_of_questions,social_quotient,index_arr,vlf,vli
+    if(vli == vlf):
         #Label(window, text="Thank you for answering the questions. 1. yes " + str(yes) +" 2. no " +str(no) + " 3.might"+str(might) + " of " + str(number_of_questions) + " questions answered right||basal_age =  "+str(basal_age),font=('15')).pack()
         Label(window,text="Thank you for answering the questions.\n basal_age = " + str(basal_age)).pack()
         global cage
@@ -804,7 +843,8 @@ def askQuestion():
         else:
             ID = False
             Label(window, text="Normal IQ").pack()
-        print(index_arr)
+        global i
+        i = 7
         global mydb,mycursor,uid
         vlq = "insert into Vineland values (%s,%s,%s)"
         vlv = (uid,uid,ID)
@@ -816,10 +856,6 @@ def askQuestion():
         mydb.commit()
         vlq = "insert into VL1 values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         vlv = (uid,index_arr[18],index_arr[19],index_arr[20],index_arr[21],index_arr[22],index_arr[23],index_arr[24],index_arr[25],index_arr[26],index_arr[27],index_arr[28],index_arr[29],index_arr[30],index_arr[31],index_arr[32],index_arr[33],index_arr[34])
-        mycursor.execute(vlq,vlv)
-        mydb.commit()
-        vlq = "insert into VL1 values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        vlv = (uid,index_arr[35],index_arr[36],index_arr[37],index_arr[38],index_arr[39],index_arr[40],index_arr[41],index_arr[42],index_arr[43],index_arr[44])
         mycursor.execute(vlq,vlv)
         mydb.commit()
         vlq = "insert into VL2 values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
@@ -859,8 +895,7 @@ def askQuestion():
         return
     button.pack_forget()
     label_des.pack_forget()
-    index += 1
-    questions[index].getView(window).pack()
+    questions[vli].getView(window).pack()
 
 questions = []
 file = open("vineland2questions.txt", "r",encoding='windows-1252')
@@ -874,6 +909,7 @@ while(line != ""):
     questions.append(Question(questionString, answers))
     line = file.readline()
 file.close()
+
 number_of_questions = len(questions)
 
 
@@ -884,12 +920,13 @@ while i==-1:
     an = AN(root)
     root.mainloop()
 
-childquery = "insert into Child(UID,Name,Age,ID) VALUES (%s,%s,%s,%s)"
-childvalues = (uid,cname,cage,ID)
+childquery = "insert into Child(UID,Name,Age,ID,DateOfTest) VALUES (%s,%s,%s,%s,%s)"
+dateoftest = datetime.datetime.today().strftime('%Y-%m-%d')
+childvalues = (uid,cname,cage,ID,dateoftest)
 mycursor.execute(childquery,childvalues)
 mydb.commit()
 
-while i==0:   
+while i==0:
     root = Tk()
     root.geometry("500x500")
     Rpm = RPM(root)
@@ -953,3 +990,5 @@ while i==6:
     button = Button(window, text="Start", command=askQuestion)
     button.pack()
     window.mainloop()
+
+#loaded_model.predict(Y.reshape(1,12))

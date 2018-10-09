@@ -5,7 +5,7 @@ import mysql.connector
 cage = 6.5
 mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="test")
 mycursor = mydb.cursor()
-uid = 2
+uid = 100
 name = "xyz"
 ID = False
 sqlt1 = "INSERT into t1 (uid,name,ID,age) values (%s,%s,%s,%s)"
