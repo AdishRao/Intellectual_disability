@@ -30,28 +30,39 @@ config = {
     "storageBucket": "intellectualdisability-a9894.appspot.com",
     "messagingSenderId": "255261471519"
 }
+firebase = pyrebase.initialize_app(config)
+auth =firebase.auth()
+
 # load json and create model
 json_file = open('model.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 loaded_model = model_from_json(loaded_model_json)
+
 # load weights into new model
 loaded_model.load_weights("model.h5")
 print("Loaded model from disk")
+
 mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="ID")
 mycursor = mydb.cursor()
 uid = 0
+rid = 0
 ID = True
 cage = 0
 cname =""
-i = -1
+gender=""
+i = -4
+
 bscore = 0
 fscore = 0
+
 #global variables for RPM
 q= ["A1.png", "A2.png", "A3.png", "A4.png", "A5.png", "A6.png", "A7.png", "A8.png", "A9.png", "A10.png", "A11.png", "A12.png", "A13.png", "A14.png", "A15.png", "A16.png", "A17.png", "A18.png", "A19.png", "A20.png", "A21.png", "A22.png", "A23.png", "A24.png", "A25.png", "A26.png", "A27.png", "A28.png", "A29.png", "A30.png", "A31.png", "A32.png", "A33.png", "A34.png", "A35.png", "A36.png", "A37.png", "A38.png", "A39.png", "A40.png", "A41.png", "A42.png", "A43.png", "A44.png", "A45.png", "A46.png", "A47.png", "A48.png", "A49.png", "A50.png", "A51.png", "A52.png", "A53.png", "A54.png", "A55.png", "A56.png", "A57.png", "A58.png", "A59.png", "A60.png"]
 options = [["1","2","3","4","5","6"], ["1","2","3","4","5","6","7","8"]]
 a = [4,5,1,2,6,3,6,2,1,3,5,4,2,6,1,2,1,3,5,6,4,3,4,5,8,2,3,8,7,4,5,1,7,6,1,2,3,4,3,7,8,6,5,4,1,2,5,6,7,6,8,2,1,5,2,4,1,6,3,5]
 result = 0
+
+
 #global for vinelad
 index = -1
 yes =0
@@ -63,6 +74,108 @@ vlf=0
 index_arr = [0] * 90
 agetoadd = 0
 age_range = {6:[45,65],7:[51,70],8:[57,74],9:[62,77]}
+
+class login:
+    def __init__(self,master):
+        self.master = master
+        self.email = Label(master,text="Enter Email:")
+        self.email.place(x=200,y=195,anchor="center")
+        self.password = Label(master,text="Enter Password:")
+        self.password.place(x=135,y=225)
+        self.emailid= Entry(self.master)
+        self.psswd= Entry(self.master)
+        self.emailid.place(x=250,y=180)
+        self.psswd.place(x=250,y=220)
+        self.login = Button(master,text="Login",command=self.login)
+        self.login.place(x=250,y=450,anchor="center")
+
+
+    def login(self):
+        try:
+            email = self.emailid.get()
+            password = self.psswd.get()
+            print(email)
+            print(password)
+            user = auth.sign_in_with_email_and_password(email,password)
+            global uid, i, rid
+            info=auth.get_account_info(user['idToken'])
+            uid=str(info['users'][0]['localId'])
+            rid=str(info['users'][0]['localId'])
+            i=-1
+            self.master.destroy()
+            self.master.quit()
+        except:
+            self.errorlabel = Label(self.master, text = "Wrong email or password, try again!")
+            self.errorlabel.pack(side=BOTTOM)
+            self.emailid.destroy()
+            self.psswd.destroy()
+            self.emailid= Entry(self.master)
+            self.psswd= Entry(self.master)
+            self.emailid.place(x=230,y=180)
+            self.psswd.place(x=230,y=220)
+
+
+class signup:
+    def __init__(self,master):
+        self.master = master
+        self.email = Label(master,text="Enter Email:")
+        self.email.place(x=200,y=195,anchor="center")
+        self.password = Label(master,text="Enter Password:")
+        self.password.place(x=135,y=225)
+        self.emailid= Entry(master)
+        self.psswd= Entry(master)
+        self.emailid.place(x=250,y=180)
+        self.psswd.place(x=250,y=220)
+        self.login = Button(master,text="Sign Up",command=self.signup)
+        self.login.place(x=250,y=450,anchor="center")
+
+
+    def signup(self):
+        try:
+            email = self.emailid.get()
+            password = self.psswd.get()
+            print(email)
+            print(password)
+            user = auth.create_user_with_email_and_password(email,password)
+            global uid,rid,i
+            info=auth.get_account_info(user['idToken'])
+            rid=str(info['users'][0]['localId'])
+            uid=str(info['users'][0]['localId'])
+            i=-1
+            self.master.destroy()
+            self.master.quit()
+        except:
+            self.errorlabel = Label(self.master, text = "Email or password invalid, try again")
+            self.errorlabel.pack(side=BOTTOM)
+            self.emailid.destroy()
+            self.psswd.destroy()
+            self.emailid= Entry(self.master)
+            self.psswd= Entry(self.master)
+            self.emailid.place(x=230,y=180)
+            self.psswd.place(x=230,y=220)
+
+class logorsign:
+    def __init__(self,master):
+        self.master = master
+        self.displabel = Label(master,text="Please select Sign Up or Login")
+        self.displabel.place(x=250,y=250,anchor="center")
+        self.signup = Button(master,text="Sign Up", command=self.signup)
+        self.login = Button(master,text="Log In", command=self.login)
+        self.signup.place(x=180,y=290)
+        self.login.place(x=300,y=290)
+
+    def signup(self):
+        global i
+        i = -2
+        self.master.destroy()
+        self.master.quit()
+
+    def login(self):
+        global i
+        i = -3
+        self.master.destroy()
+        self.master.quit()
+
 class AN: #Finished
     def __init__(self,master):
         self.master=master
@@ -76,16 +189,16 @@ class AN: #Finished
         self.ename.place(x=230,y=180)
         self.buttonget = Button(master,text="Begin Tests",command=self.getdetails)
         self.buttonget.place(x=250,y=450,anchor="center")
-        self.agelabel = Label(master,text="Enter UID:")
-        self.agelabel.place(x=181,y=275,anchor="center")
-        self.euid = Entry(master)
-        self.euid.place(x=230,y=260)
+        self.gend = Label(master,text="Enter Gender:")
+        self.gend.place(x=181,y=275,anchor="center")
+        self.gender = Entry(master)
+        self.gender.place(x=230,y=260)
 
     def getdetails(self):
-        global cname,cage,uid,basal_age
-        uid = self.euid.get()
+        global cname,cage,basal_age,gender
         cname = self.ename.get()
         cage = int(self.eage.get())
+        gender = self.gender.get()
 
         print("Age:"+str(cage))
         print("Name:"+cname)
@@ -96,10 +209,6 @@ class AN: #Finished
         global index_arr
         vli = age_range[cage][0]
         vlf = age_range[cage][1]
-        for arrq in range(vli):
-            index_arr[arrq]=1
-            print (index_arr[arrq])
-            print (arrq)
         i = 0
         vli-=1
         basal_age = (cage-3)*12.0
@@ -923,6 +1032,23 @@ file.close()
 
 number_of_questions = len(questions)
 
+while i==-4:
+    root = Tk()
+    root.geometry("500x500")
+    an = logorsign(root)
+    root.mainloop()
+
+while i == -2:
+    root = Tk()
+    root.geometry("500x500")
+    an = signup(root)
+    root.mainloop()
+
+while i == -3:
+    root = Tk()
+    root.geometry("500x500")
+    an = login(root)
+    root.mainloop()
 
 
 while i==-1:
@@ -931,9 +1057,9 @@ while i==-1:
     an = AN(root)
     root.mainloop()
 
-childquery = "insert into Child(UID,Name,Age,ID,DateOfTest) VALUES (%s,%s,%s,%s,%s)"
+childquery = "insert into Child(UID,Name,Age,ID,DateOfTest,RID,Gender) VALUES (%s,%s,%s,%s,%s,%s,%s)"
 dateoftest = datetime.datetime.today().strftime('%Y-%m-%d')
-childvalues = (uid,cname,cage,ID,dateoftest)
+childvalues = (uid,cname,cage,ID,dateoftest,rid,gender)
 mycursor.execute(childquery,childvalues)
 mydb.commit()
 
