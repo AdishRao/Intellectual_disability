@@ -19,6 +19,17 @@ from keras.metrics import categorical_crossentropy
 from keras.models import model_from_json
 import os
 import datetime
+import pyrebase
+import json
+#firebase config
+config = {
+    "apiKey": "AIzaSyDc3JTW47RqgD1oAtbar5n4HZ6nDEVBXt4",
+    "authDomain": "intellectualdisability-a9894.firebaseapp.com",
+    "databaseURL": "https://intellectualdisability-a9894.firebaseio.com",
+    "projectId": "intellectualdisability-a9894",
+    "storageBucket": "intellectualdisability-a9894.appspot.com",
+    "messagingSenderId": "255261471519"
+}
 # load json and create model
 json_file = open('model.json', 'r')
 loaded_model_json = json_file.read()
@@ -333,7 +344,7 @@ class BST:
         self.master=master
         self.images = ["age3.png","age4.png","","age6.png","age7.png","age8.png","",""]
         self.count = 3
-        self.basalage = 2.0
+        self.basalage = 3.0
         self.additive_age = 0.0
         self.questioncount = 0
         self.i=0
@@ -846,8 +857,8 @@ def askQuestion():
         global i
         i = 7
         global mydb,mycursor,uid
-        vlq = "insert into Vineland values (%s,%s,%s)"
-        vlv = (uid,uid,ID)
+        vlq = "insert into Vineland values (%s,%s,%s,%s)"
+        vlv = (uid,uid,ID,social_quotient)
         mycursor.execute(vlq,vlv)
         mydb.commit()
         vlq = "insert into VL0 values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
