@@ -30,7 +30,7 @@ CREATE TABLE `BST` (
   `ID_Type` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`BID`),
   KEY `fkbst` (`UID`),
-  CONSTRAINT `fkbst` FOREIGN KEY (`UID`) REFERENCES `child` (`uid`) ON DELETE CASCADE
+  CONSTRAINT `fkbst` FOREIGN KEY (`UID`) REFERENCES `child` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -49,7 +49,7 @@ CREATE TABLE `BST10` (
   `q4` int(11) DEFAULT NULL,
   `q5` int(11) DEFAULT NULL,
   KEY `b10` (`BID`),
-  CONSTRAINT `b10` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE
+  CONSTRAINT `b10` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -68,7 +68,7 @@ CREATE TABLE `BST3` (
   `q4` int(11) NOT NULL,
   `q5` int(11) NOT NULL,
   KEY `fk3` (`BID`),
-  CONSTRAINT `fk3` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE
+  CONSTRAINT `fk3` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -86,7 +86,7 @@ CREATE TABLE `BST4` (
   `q3` int(11) NOT NULL,
   `q4` int(11) NOT NULL,
   KEY `fk4` (`BID`),
-  CONSTRAINT `fk4` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE
+  CONSTRAINT `fk4` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -105,7 +105,7 @@ CREATE TABLE `BST5` (
   `q4` int(11) NOT NULL,
   `q5` int(11) NOT NULL,
   KEY `fk5` (`BID`),
-  CONSTRAINT `fk5` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE
+  CONSTRAINT `fk5` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -124,7 +124,7 @@ CREATE TABLE `BST6` (
   `q4` int(11) NOT NULL,
   `q5` int(11) NOT NULL,
   KEY `fk6` (`BID`),
-  CONSTRAINT `fk6` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE
+  CONSTRAINT `fk6` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -143,7 +143,7 @@ CREATE TABLE `BST7` (
   `q4` int(11) NOT NULL,
   `q5` int(11) NOT NULL,
   KEY `fk7` (`BID`),
-  CONSTRAINT `fk7` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE
+  CONSTRAINT `fk7` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -162,7 +162,7 @@ CREATE TABLE `BST8` (
   `q4` int(11) DEFAULT NULL,
   `q5` int(11) DEFAULT NULL,
   KEY `b8` (`BID`),
-  CONSTRAINT `b8` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE
+  CONSTRAINT `b8` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -181,7 +181,7 @@ CREATE TABLE `BST9` (
   `q4` int(11) DEFAULT NULL,
   `q5` int(11) DEFAULT NULL,
   KEY `b9` (`BID`),
-  CONSTRAINT `b9` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE
+  CONSTRAINT `b9` FOREIGN KEY (`BID`) REFERENCES `bst` (`bid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -219,13 +219,13 @@ SET character_set_client = utf8mb4;
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `child`
+-- Table structure for table `Child`
 --
 
-DROP TABLE IF EXISTS `child`;
+DROP TABLE IF EXISTS `Child`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `child` (
+CREATE TABLE `Child` (
   `UID` varchar(30) NOT NULL,
   `Name` varchar(50) DEFAULT NULL,
   `Age` float NOT NULL,
@@ -235,7 +235,7 @@ CREATE TABLE `child` (
   `RID` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`UID`),
   KEY `refer` (`RID`),
-  CONSTRAINT `refer` FOREIGN KEY (`RID`) REFERENCES `child` (`uid`)
+  CONSTRAINT `refer` FOREIGN KEY (`RID`) REFERENCES `child` (`uid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -255,7 +255,7 @@ CREATE TABLE `DST` (
   `Std_score` float DEFAULT NULL,
   `Per_score` float DEFAULT NULL,
   KEY `fk2` (`UID`),
-  CONSTRAINT `fk2` FOREIGN KEY (`UID`) REFERENCES `child` (`uid`) ON DELETE CASCADE
+  CONSTRAINT `fk2` FOREIGN KEY (`UID`) REFERENCES `child` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -272,7 +272,7 @@ CREATE TABLE `GDT` (
   `Percentile` int(11) DEFAULT NULL,
   `IDG` tinyint(1) DEFAULT NULL,
   KEY `gfk` (`UID`),
-  CONSTRAINT `gfk` FOREIGN KEY (`UID`) REFERENCES `child` (`uid`) ON DELETE CASCADE
+  CONSTRAINT `gfk` FOREIGN KEY (`UID`) REFERENCES `child` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -288,7 +288,7 @@ CREATE TABLE `RPM` (
   `Score` int(11) NOT NULL,
   `IDR` tinyint(1) DEFAULT NULL,
   KEY `fk1` (`UID`),
-  CONSTRAINT `fk1` FOREIGN KEY (`UID`) REFERENCES `child` (`uid`) ON DELETE CASCADE
+  CONSTRAINT `fk1` FOREIGN KEY (`UID`) REFERENCES `child` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -306,7 +306,7 @@ CREATE TABLE `Vineland` (
   `IQV` float DEFAULT NULL,
   PRIMARY KEY (`VID`),
   KEY `vl` (`UID`),
-  CONSTRAINT `vl` FOREIGN KEY (`UID`) REFERENCES `child` (`uid`) ON DELETE CASCADE
+  CONSTRAINT `vl` FOREIGN KEY (`UID`) REFERENCES `child` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -337,7 +337,7 @@ CREATE TABLE `VL0` (
   `q16` int(11) NOT NULL,
   `q17` int(11) NOT NULL,
   KEY `vk0` (`VID`),
-  CONSTRAINT `vk0` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE
+  CONSTRAINT `vk0` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -368,7 +368,7 @@ CREATE TABLE `VL1` (
   `q16` int(11) NOT NULL,
   `q17` int(11) DEFAULT NULL,
   KEY `vk1` (`VID`),
-  CONSTRAINT `vk1` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE
+  CONSTRAINT `vk1` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -386,7 +386,7 @@ CREATE TABLE `VL10` (
   `q3` int(11) DEFAULT NULL,
   `q4` int(11) DEFAULT NULL,
   KEY `vk10` (`VID`),
-  CONSTRAINT `vk10` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE
+  CONSTRAINT `vk10` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -410,7 +410,7 @@ CREATE TABLE `VL2` (
   `q9` int(11) NOT NULL,
   `q10` int(11) DEFAULT NULL,
   KEY `vk2` (`VID`),
-  CONSTRAINT `vk2` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE
+  CONSTRAINT `vk2` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -430,7 +430,7 @@ CREATE TABLE `VL3` (
   `q5` int(11) NOT NULL,
   `q6` int(11) DEFAULT NULL,
   KEY `vk3` (`VID`),
-  CONSTRAINT `vk3` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE
+  CONSTRAINT `vk3` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -450,7 +450,7 @@ CREATE TABLE `VL4` (
   `q5` int(11) NOT NULL,
   `q6` int(11) NOT NULL,
   KEY `vk4` (`VID`),
-  CONSTRAINT `vk4` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE
+  CONSTRAINT `vk4` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -469,7 +469,7 @@ CREATE TABLE `VL5` (
   `q4` int(11) NOT NULL,
   `q5` int(11) NOT NULL,
   KEY `vk5` (`VID`),
-  CONSTRAINT `vk5` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE
+  CONSTRAINT `vk5` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -487,7 +487,7 @@ CREATE TABLE `VL6` (
   `q3` int(11) NOT NULL,
   `q4` int(11) NOT NULL,
   KEY `vk6` (`VID`),
-  CONSTRAINT `vk6` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE
+  CONSTRAINT `vk6` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -506,7 +506,7 @@ CREATE TABLE `VL7` (
   `q4` int(11) NOT NULL,
   `q5` int(11) NOT NULL,
   KEY `vk7` (`VID`),
-  CONSTRAINT `vk7` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE
+  CONSTRAINT `vk7` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -524,7 +524,7 @@ CREATE TABLE `VL8` (
   `q3` int(11) DEFAULT NULL,
   `q4` int(11) DEFAULT NULL,
   KEY `vk8` (`VID`),
-  CONSTRAINT `vk8` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE
+  CONSTRAINT `vk8` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -541,7 +541,7 @@ CREATE TABLE `VL9` (
   `q2` int(11) DEFAULT NULL,
   `q3` int(11) DEFAULT NULL,
   KEY `vk9` (`VID`),
-  CONSTRAINT `vk9` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE
+  CONSTRAINT `vk9` FOREIGN KEY (`VID`) REFERENCES `vineland` (`vid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -572,4 +572,4 @@ CREATE TABLE `VL9` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-10 21:09:31
+-- Dump completed on 2018-10-11  0:19:28
