@@ -23,8 +23,8 @@ DROP TABLE IF EXISTS `BST`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `BST` (
-  `UID` int(11) NOT NULL,
-  `BID` int(11) NOT NULL,
+  `UID` varchar(30) NOT NULL,
+  `BID` varchar(30) NOT NULL,
   `IDB` tinyint(1) DEFAULT NULL,
   `IQ` float DEFAULT NULL,
   `ID_Type` varchar(20) DEFAULT NULL,
@@ -42,7 +42,7 @@ DROP TABLE IF EXISTS `BST10`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `BST10` (
-  `BID` int(11) DEFAULT NULL,
+  `BID` varchar(30) DEFAULT NULL,
   `q1` int(11) DEFAULT NULL,
   `q2` int(11) DEFAULT NULL,
   `q3` int(11) DEFAULT NULL,
@@ -61,7 +61,7 @@ DROP TABLE IF EXISTS `BST3`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `BST3` (
-  `BID` int(11) NOT NULL,
+  `BID` varchar(30) NOT NULL,
   `q1` int(11) NOT NULL,
   `q2` int(11) NOT NULL,
   `q3` int(11) NOT NULL,
@@ -80,7 +80,7 @@ DROP TABLE IF EXISTS `BST4`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `BST4` (
-  `BID` int(11) NOT NULL,
+  `BID` varchar(30) NOT NULL,
   `q1` int(11) NOT NULL,
   `q2` int(11) NOT NULL,
   `q3` int(11) NOT NULL,
@@ -98,7 +98,7 @@ DROP TABLE IF EXISTS `BST5`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `BST5` (
-  `BID` int(11) NOT NULL,
+  `BID` varchar(30) NOT NULL,
   `q1` int(11) NOT NULL,
   `q2` int(11) NOT NULL,
   `q3` int(11) NOT NULL,
@@ -117,7 +117,7 @@ DROP TABLE IF EXISTS `BST6`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `BST6` (
-  `BID` int(11) NOT NULL,
+  `BID` varchar(30) NOT NULL,
   `q1` int(11) NOT NULL,
   `q2` int(11) NOT NULL,
   `q3` int(11) NOT NULL,
@@ -136,7 +136,7 @@ DROP TABLE IF EXISTS `BST7`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `BST7` (
-  `BID` int(11) NOT NULL,
+  `BID` varchar(30) NOT NULL,
   `q1` int(11) NOT NULL,
   `q2` int(11) NOT NULL,
   `q3` int(11) NOT NULL,
@@ -155,7 +155,7 @@ DROP TABLE IF EXISTS `BST8`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `BST8` (
-  `BID` int(11) DEFAULT NULL,
+  `BID` varchar(30) DEFAULT NULL,
   `q1` int(11) DEFAULT NULL,
   `q2` int(11) DEFAULT NULL,
   `q3` int(11) DEFAULT NULL,
@@ -174,7 +174,7 @@ DROP TABLE IF EXISTS `BST9`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `BST9` (
-  `BID` int(11) DEFAULT NULL,
+  `BID` varchar(30) DEFAULT NULL,
   `q1` int(11) DEFAULT NULL,
   `q2` int(11) DEFAULT NULL,
   `q3` int(11) DEFAULT NULL,
@@ -226,13 +226,13 @@ DROP TABLE IF EXISTS `child`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `child` (
-  `UID` int(11) NOT NULL,
+  `UID` varchar(30) NOT NULL,
   `Name` varchar(50) DEFAULT NULL,
   `Age` float NOT NULL,
   `ID` tinyint(1) DEFAULT NULL,
   `Gender` char(1) DEFAULT NULL,
   `DateOfTest` date DEFAULT NULL,
-  `RID` int(11) DEFAULT NULL,
+  `RID` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`UID`),
   KEY `refer` (`RID`),
   CONSTRAINT `refer` FOREIGN KEY (`RID`) REFERENCES `child` (`uid`)
@@ -247,7 +247,7 @@ DROP TABLE IF EXISTS `DST`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `DST` (
-  `UID` int(11) NOT NULL,
+  `UID` varchar(30) NOT NULL,
   `Forward_Score` int(11) DEFAULT NULL,
   `Backward_Score` int(11) DEFAULT NULL,
   `Raw_score` int(11) DEFAULT NULL,
@@ -267,8 +267,8 @@ DROP TABLE IF EXISTS `GDT`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `GDT` (
-  `UID` int(11) DEFAULT NULL,
-  `GID` int(11) DEFAULT NULL,
+  `UID` varchar(30) DEFAULT NULL,
+  `GID` varchar(30) DEFAULT NULL,
   `Percentile` int(11) DEFAULT NULL,
   `IDG` tinyint(1) DEFAULT NULL,
   KEY `gfk` (`UID`),
@@ -284,7 +284,7 @@ DROP TABLE IF EXISTS `RPM`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `RPM` (
-  `UID` int(11) NOT NULL,
+  `UID` varchar(30) NOT NULL,
   `Score` int(11) NOT NULL,
   `IDR` tinyint(1) DEFAULT NULL,
   KEY `fk1` (`UID`),
@@ -300,9 +300,10 @@ DROP TABLE IF EXISTS `Vineland`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `Vineland` (
-  `UID` int(11) NOT NULL,
-  `VID` int(11) NOT NULL,
+  `UID` varchar(30) NOT NULL,
+  `VID` varchar(30) NOT NULL,
   `IDV` tinyint(1) DEFAULT NULL,
+  `IQV` float DEFAULT NULL,
   PRIMARY KEY (`VID`),
   KEY `vl` (`UID`),
   CONSTRAINT `vl` FOREIGN KEY (`UID`) REFERENCES `child` (`uid`) ON DELETE CASCADE
@@ -317,7 +318,7 @@ DROP TABLE IF EXISTS `VL0`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `VL0` (
-  `VID` int(11) NOT NULL,
+  `VID` varchar(30) NOT NULL,
   `q1` int(11) NOT NULL,
   `q2` int(11) NOT NULL,
   `q3` int(11) NOT NULL,
@@ -348,7 +349,7 @@ DROP TABLE IF EXISTS `VL1`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `VL1` (
-  `VID` int(11) NOT NULL,
+  `VID` varchar(30) NOT NULL,
   `q1` int(11) NOT NULL,
   `q2` int(11) NOT NULL,
   `q3` int(11) NOT NULL,
@@ -379,7 +380,7 @@ DROP TABLE IF EXISTS `VL10`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `VL10` (
-  `VID` int(11) DEFAULT NULL,
+  `VID` varchar(30) DEFAULT NULL,
   `q1` int(11) DEFAULT NULL,
   `q2` int(11) DEFAULT NULL,
   `q3` int(11) DEFAULT NULL,
@@ -397,7 +398,7 @@ DROP TABLE IF EXISTS `VL2`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `VL2` (
-  `VID` int(11) NOT NULL,
+  `VID` varchar(30) NOT NULL,
   `q1` int(11) NOT NULL,
   `q2` int(11) NOT NULL,
   `q3` int(11) NOT NULL,
@@ -421,7 +422,7 @@ DROP TABLE IF EXISTS `VL3`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `VL3` (
-  `VID` int(11) NOT NULL,
+  `VID` varchar(30) NOT NULL,
   `q1` int(11) NOT NULL,
   `q2` int(11) NOT NULL,
   `q3` int(11) NOT NULL,
@@ -441,7 +442,7 @@ DROP TABLE IF EXISTS `VL4`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `VL4` (
-  `VID` int(11) NOT NULL,
+  `VID` varchar(30) NOT NULL,
   `q1` int(11) NOT NULL,
   `q2` int(11) NOT NULL,
   `q3` int(11) NOT NULL,
@@ -461,7 +462,7 @@ DROP TABLE IF EXISTS `VL5`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `VL5` (
-  `VID` int(11) NOT NULL,
+  `VID` varchar(30) NOT NULL,
   `q1` int(11) NOT NULL,
   `q2` int(11) NOT NULL,
   `q3` int(11) NOT NULL,
@@ -480,7 +481,7 @@ DROP TABLE IF EXISTS `VL6`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `VL6` (
-  `VID` int(11) NOT NULL,
+  `VID` varchar(30) NOT NULL,
   `q1` int(11) NOT NULL,
   `q2` int(11) NOT NULL,
   `q3` int(11) NOT NULL,
@@ -498,7 +499,7 @@ DROP TABLE IF EXISTS `VL7`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `VL7` (
-  `VID` int(11) NOT NULL,
+  `VID` varchar(30) NOT NULL,
   `q1` int(11) NOT NULL,
   `q2` int(11) NOT NULL,
   `q3` int(11) NOT NULL,
@@ -517,7 +518,7 @@ DROP TABLE IF EXISTS `VL8`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `VL8` (
-  `VID` int(11) DEFAULT NULL,
+  `VID` varchar(30) DEFAULT NULL,
   `q1` int(11) DEFAULT NULL,
   `q2` int(11) DEFAULT NULL,
   `q3` int(11) DEFAULT NULL,
@@ -535,7 +536,7 @@ DROP TABLE IF EXISTS `VL9`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `VL9` (
-  `VID` int(11) DEFAULT NULL,
+  `VID` varchar(30) DEFAULT NULL,
   `q1` int(11) DEFAULT NULL,
   `q2` int(11) DEFAULT NULL,
   `q3` int(11) DEFAULT NULL,
@@ -571,4 +572,4 @@ CREATE TABLE `VL9` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-09 16:38:52
+-- Dump completed on 2018-10-10 21:09:31
