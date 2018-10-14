@@ -22,6 +22,9 @@ import os
 import datetime
 import pyrebase
 import json
+from plotly.offline import iplot, init_notebook_mode
+import plotly.graph_objs as go
+import plotly.io as pio
 #firebase config
 config = {
     "apiKey": "AIzaSyDc3JTW47RqgD1oAtbar5n4HZ6nDEVBXt4",
@@ -43,11 +46,12 @@ loaded_model = model_from_json(loaded_model_json)
 # load weights into new model
 loaded_model.load_weights("model.h5")
 print("Loaded model from disk")
-#
+#network and graph
 NetworkValues=[]
-
+plotres = []
 #change database name and password accordingly
-mydb = mysql.connector.connect(host="localhost",user="root",passwd="",database="ID")
+
+mydb = mysql.connector.connect(host="localhost",user="root",passwd="",database="ID") #TODO change before pushing
 mycursor = mydb.cursor()
 uid = 0
 rid = 0
@@ -57,6 +61,7 @@ cname =""
 gender=""
 #variable to choose test to run
 i = -4
+st = 0
 
 bscore = 0
 fscore = 0
@@ -66,7 +71,6 @@ q= ["A1.png", "A2.png", "A3.png", "A4.png", "A5.png", "A6.png", "A7.png", "A8.pn
 options = [["1","2","3","4","5","6"], ["1","2","3","4","5","6","7","8"]]
 a = [4,5,1,2,6,3,6,2,1,3,5,4,2,6,1,2,1,3,5,6,4,3,4,5,8,2,3,8,7,4,5,1,7,6,1,2,3,4,3,7,8,6,5,4,1,2,5,6,7,6,8,2,1,5,2,4,1,6,3,5]
 result = 0
-
 
 #global for vinelad
 index = -1
@@ -79,6 +83,52 @@ vlf=0
 index_arr = [0] * 90
 agetoadd = 0
 age_range = {6:[45,65],7:[51,70],8:[57,74],9:[62,77]}
+
+class STR:
+    def __init__(self,master):
+        self.master=master
+        frame1 = Frame(master,width=500,height=50)
+        frame1.pack(side=TOP)
+        maxlabel = Label(frame1, text = "RPM min: 26| DST min: 26| BST min: 91| GDT min: 21",wraplength=500,justify="left")
+        maxlabel.pack()
+        frame2 = Frame(master,width=500,height=400)
+        frame2.pack(side=TOP)
+        photo = Image.open('Report/'+str(uid)+'.png')
+        photo = photo.resize((500, 400), Image.ANTIALIAS)
+        self.render = ImageTk.PhotoImage(photo)
+        photolabel = Label(frame2,image=self.render)
+        photolabel.image = self.render
+        photolabel.pack()
+        endb = Button(master,text="Finish",command = self.quitb)
+        endb.pack(side=BOTTOM)
+
+    def quitb(self):
+        global i
+        i = 8
+        self.master.destroy()
+        self.master.quit()
+
+class testorstat:
+    def __init__(self,master):
+        self.master = master
+        self.displabel = Label(master,text="Take the test or view statistics")
+        self.displabel.place(x=250,y=250,anchor="center")
+        self.signup = Button(master,text="Test", command=self.test)
+        self.login = Button(master,text="Statistics", command=self.stat)
+        self.signup.place(x=160,y=290)
+        self.login.place(x=280,y=290)
+
+    def stat(self):
+        global i
+        i = -6
+        self.master.destroy()
+        self.master.quit()
+
+    def test(self):
+        global i
+        i = -1
+        self.master.destroy()
+        self.master.quit()
 
 class login:
     def __init__(self,master):
@@ -104,9 +154,9 @@ class login:
             user = auth.sign_in_with_email_and_password(email,password)
             global uid, i, rid
             info=auth.get_account_info(user['idToken'])
-            uid=str(info['users'][0]['localId']) #TODO 
+            uid=str(1) #TODO 
             rid=str(info['users'][0]['localId'])
-            i=-1
+            i=-5
             self.master.destroy()
             self.master.quit()
         except:
@@ -116,9 +166,8 @@ class login:
             self.psswd.destroy()
             self.emailid= Entry(self.master)
             self.psswd= Entry(self.master)
-            self.emailid.place(x=230,y=180)
-            self.psswd.place(x=230,y=220)
-
+            self.emailid.place(x=250,y=180)
+            self.psswd.place(x=250,y=220)
 
 class signup:
     def __init__(self,master):
@@ -146,7 +195,7 @@ class signup:
             info=auth.get_account_info(user['idToken'])
             rid=str(info['users'][0]['localId'])
             uid=str(info['users'][0]['localId'])
-            i=-1
+            i=-5
             self.master.destroy()
             self.master.quit()
         except:
@@ -156,8 +205,8 @@ class signup:
             self.psswd.destroy()
             self.emailid= Entry(self.master)
             self.psswd= Entry(self.master)
-            self.emailid.place(x=230,y=180)
-            self.psswd.place(x=230,y=220)
+            self.emailid.place(x=250,y=180)
+            self.psswd.place(x=250,y=220)
 
 class logorsign:
     def __init__(self,master):
@@ -200,12 +249,15 @@ class AN: #Finished
         self.gender.place(x=230,y=260)
 
     def getdetails(self):
-        global cname,cage,basal_age,gender,NetworkValues
+        global cname,cage,basal_age,gender,NetworkValues,st
         cname = self.ename.get()
         cage = int(self.eage.get())
         gender = self.gender.get()
         NetworkValues.append(cage)
-        NetworkValues.append(gender)
+        if gender == 'M':
+            NetworkValues.append(1)
+        else:
+            NetworkValues.append(0)
         print("Age:"+str(cage))
         print("Name:"+cname)
         global i
@@ -213,6 +265,7 @@ class AN: #Finished
         global vlf
         global age_range
         global index_arr
+        st = 1
         vli = age_range[cage][0]
         vlf = age_range[cage][1]
         i = 0
@@ -299,7 +352,8 @@ class RPM:
         rpmv = (uid,self.result,ID)
         mycursor.execute(rpmq,rpmv)
         mydb.commit()
-        global NetworkValues
+        global NetworkValues, plotres
+        plotres.append(self.result)
         NetworkValues.append(self.result)
         NetworkValues.append(ID)
 
@@ -602,9 +656,10 @@ class BST:
         self.frame8.pack(side=BOTTOM)
         self.qui = Button(self.frame8,text="quit",command=self.des)
         self.qui.place(x=250, y =25, anchor="center")
-        global NetworkValues
+        global NetworkValues, plotres
         NetworkValues.append(ID)
         NetworkValues.append(self.iq)
+        plotres.append(self.iq)
 
     def des(self):
         global i
@@ -690,7 +745,8 @@ class dispdst:
         dstv = (uid,int(fscore),int(bscore),int(rawscore),ID,float(stdscore),float(dstper))
         mycursor.execute(dstq,dstv)
         mydb.commit()
-        global NetworkValues
+        global NetworkValues, plotres
+        plotres.append(dstper)
         NetworkValues.append(fscore)
         NetworkValues.append(bscore)
         NetworkValues.append(ID)
@@ -700,7 +756,6 @@ class dispdst:
         i=4
         self.master.destroy()
         self.master.quit()
-
 
 class GDT:
     def __init__(self,master):
@@ -793,19 +848,16 @@ class GDT:
         GDTv= (uid,uid,int(result),int(ID))
         mycursor.execute(GDTq,GDTv)
         mydb.commit()
-        global NetworkValues
+        global NetworkValues, plotres
         NetworkValues.append(result)
         NetworkValues.append(ID)
+        plotres.append(result)
 
     def nexttest(self):
         self.master.destroy()
         self.master.quit()
         global i
         i = 6
-
-
-
-
 
     def createq(self):
         n = 0
@@ -980,8 +1032,8 @@ def askQuestion():
         else:
             ID = False
             Label(window, text="Normal IQ").pack()
-        global i
-        i = 7
+        buttonn = Button(window,text="Next",command=quitf)
+        buttonn.pack(side=BOTTOM)
         global mydb,mycursor,uid
         vlq = "insert into Vineland values (%s,%s,%s,%s)"
         vlv = (uid,uid,ID,social_quotient)
@@ -1037,6 +1089,11 @@ def askQuestion():
     label_des.pack_forget()
     questions[vli].getView(window).pack()
 
+def quitf():
+    global i
+    i = 7
+    window.quit()
+    window.destroy()
 questions = []
 file = open("vineland2questions.txt", "r",encoding='windows-1252')
 line = file.readline()
@@ -1054,26 +1111,96 @@ number_of_questions = len(questions)
 
 while i==-4:
     root = Tk()
-    root.geometry("500x500")
+    w = 500 # width for the Tk root
+    h = 500 # height for the Tk root
+
+    # get screen width and height
+    ws = root.winfo_screenwidth() # width of the screen
+    hs = root.winfo_screenheight() # height of the screen
+
+    # calculate x and y coordinates for the Tk root window
+    x = (ws/2) - (w/2)
+    y = (hs/2) - (h/2)
+
+    # set the dimensions of the screen 
+    # and where it is placed
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     an = logorsign(root)
     root.mainloop()
 
 while i == -2:
     root = Tk()
-    root.geometry("500x500")
+    w = 500 # width for the Tk root
+    h = 500 # height for the Tk root
+
+    # get screen width and height
+    ws = root.winfo_screenwidth() # width of the screen
+    hs = root.winfo_screenheight() # height of the screen
+
+    # calculate x and y coordinates for the Tk root window
+    x = (ws/2) - (w/2)
+    y = (hs/2) - (h/2)
+
+    # set the dimensions of the screen 
+    # and where it is placed
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     an = signup(root)
     root.mainloop()
 
 while i == -3:
     root = Tk()
-    root.geometry("500x500")
+    w = 500 # width for the Tk root
+    h = 500 # height for the Tk root
+
+    # get screen width and height
+    ws = root.winfo_screenwidth() # width of the screen
+    hs = root.winfo_screenheight() # height of the screen
+
+    # calculate x and y coordinates for the Tk root window
+    x = (ws/2) - (w/2)
+    y = (hs/2) - (h/2)
+
+    # set the dimensions of the screen 
+    # and where it is placed
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     an = login(root)
     root.mainloop()
 
+while i==-5:
+    root = Tk()
+    w = 500 # width for the Tk root
+    h = 500 # height for the Tk root
+
+    # get screen width and height
+    ws = root.winfo_screenwidth() # width of the screen
+    hs = root.winfo_screenheight() # height of the screen
+
+    # calculate x and y coordinates for the Tk root window
+    x = (ws/2) - (w/2)
+    y = (hs/2) - (h/2)
+
+    # set the dimensions of the screen 
+    # and where it is placed
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+    tos = testorstat(root)
+    root.mainloop()
 
 while i==-1:
     root = Tk()
-    root.geometry("500x500")
+    w = 500 # width for the Tk root
+    h = 500 # height for the Tk root
+
+    # get screen width and height
+    ws = root.winfo_screenwidth() # width of the screen
+    hs = root.winfo_screenheight() # height of the screen
+
+    # calculate x and y coordinates for the Tk root window
+    x = (ws/2) - (w/2)
+    y = (hs/2) - (h/2)
+
+    # set the dimensions of the screen 
+    # and where it is placed
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     an = AN(root)
     root.mainloop()
 
@@ -1085,13 +1212,39 @@ mydb.commit()
 
 while i==0:
     root = Tk()
-    root.geometry("500x500")
+    w = 500 # width for the Tk root
+    h = 500 # height for the Tk root
+
+    # get screen width and height
+    ws = root.winfo_screenwidth() # width of the screen
+    hs = root.winfo_screenheight() # height of the screen
+
+    # calculate x and y coordinates for the Tk root window
+    x = (ws/2) - (w/2)
+    y = (hs/2) - (h/2)
+
+    # set the dimensions of the screen 
+    # and where it is placed
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     Rpm = RPM(root)
     root.mainloop()
 
 while i==1:
     root = Tk()
-    root.geometry("500x500")
+    w = 500 # width for the Tk root
+    h = 500 # height for the Tk root
+
+    # get screen width and height
+    ws = root.winfo_screenwidth() # width of the screen
+    hs = root.winfo_screenheight() # height of the screen
+
+    # calculate x and y coordinates for the Tk root window
+    x = (ws/2) - (w/2)
+    y = (hs/2) - (h/2)
+
+    # set the dimensions of the screen 
+    # and where it is placed
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     frame1 = Frame(root,width=500,height=100)
     frame1.pack(side=TOP)
     title = Label(frame1,text='Digit Span Test')
@@ -1103,7 +1256,20 @@ while i==1:
 
 while i==2:
     root = Tk()
-    root.geometry("500x500")
+    w = 500 # width for the Tk root
+    h = 500 # height for the Tk root
+
+    # get screen width and height
+    ws = root.winfo_screenwidth() # width of the screen
+    hs = root.winfo_screenheight() # height of the screen
+
+    # calculate x and y coordinates for the Tk root window
+    x = (ws/2) - (w/2)
+    y = (hs/2) - (h/2)
+
+    # set the dimensions of the screen 
+    # and where it is placed
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     frame1 = Frame(root,width=500,height=100)
     frame1.pack(side=TOP)
     title = Label(frame1,text='Digit Span Test')
@@ -1113,29 +1279,63 @@ while i==2:
     ft = DST(root,frame2, "Backward Score")
     root.mainloop()
 
-
-
 while i==3:
     rootdst = Tk()
-    rootdst.geometry("500x500")
+    w = 500 # width for the Tk root
+    h = 500 # height for the Tk root
+
+    # get screen width and height
+    ws = root.winfo_screenwidth() # width of the screen
+    hs = root.winfo_screenheight() # height of the screen
+
+    # calculate x and y coordinates for the Tk root window
+    x = (ws/2) - (w/2)
+    y = (hs/2) - (h/2)
+
+    # set the dimensions of the screen 
+    # and where it is placed
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     Dispdst= dispdst(rootdst)
     root.mainloop()
 
-
 while i==4:
     root = Tk()
-    root.geometry("500x500")
+    w = 500 # width for the Tk root
+    h = 500 # height for the Tk root
+
+    # get screen width and height
+    ws = root.winfo_screenwidth() # width of the screen
+    hs = root.winfo_screenheight() # height of the screen
+
+    # calculate x and y coordinates for the Tk root window
+    x = (ws/2) - (w/2)
+    y = (hs/2) - (h/2)
+
+    # set the dimensions of the screen 
+    # and where it is placed
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     root.title("Binet Simon Test")
     Bst = BST(root)
     root.mainloop()
 
-
 while i==5:
     root = Tk()
-    root.geometry("500x500")
+    w = 500 # width for the Tk root
+    h = 500 # height for the Tk root
+
+    # get screen width and height
+    ws = root.winfo_screenwidth() # width of the screen
+    hs = root.winfo_screenheight() # height of the screen
+
+    # calculate x and y coordinates for the Tk root window
+    x = (ws/2) - (w/2)
+    y = (hs/2) - (h/2)
+
+    # set the dimensions of the screen 
+    # and where it is placed
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     Gdt = GDT(root)
     root.mainloop()
-
 
 while i==6:
     window = Tk()
@@ -1147,7 +1347,39 @@ while i==6:
     button = Button(window, text="Start", command=askQuestion)
     button.pack()
     window.mainloop()
-NetworkValues=np.array(NetworkValues)
-NetworkValues=NetworkValues.reshape(1,13)
-NetAns=loaded_model.predict(NetworkValues)
-print(NetAns)
+
+if i==7:
+    NetworkValues=np.array(NetworkValues)
+    NetworkValues=NetworkValues.reshape(1,13)
+    NetAns=loaded_model.predict(NetworkValues)
+    print(NetAns)
+
+    if st == 1:
+        trace1 = go.Bar(
+        x=['Ravens','DST','BST','Drawing test'],
+        y=plotres,
+        name='Test on 23/08/97'
+        )
+        data = [trace1]
+        layout = go.Layout(
+            barmode='group'
+        )
+        fig = go.Figure(data=data, layout=layout)
+        pio.write_image(fig, 'Report/'+str(uid)+'.png')
+        root = Tk()
+        w = 500 # width for the Tk root
+        h = 500 # height for the Tk root
+
+        # get screen width and height
+        ws = root.winfo_screenwidth() # width of the screen
+        hs = root.winfo_screenheight() # height of the screen
+
+        # calculate x and y coordinates for the Tk root window
+        x = (ws/2) - (w/2)
+        y = (hs/2) - (h/2)
+
+        # set the dimensions of the screen 
+        # and where it is placed
+        root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+        singletestres = STR(root)
+        root.mainloop()   
