@@ -47,7 +47,7 @@ print("Loaded model from disk")
 NetworkValues=[]
 
 #change database name and password accordingly
-mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="ID")
+mydb = mysql.connector.connect(host="localhost",user="root",passwd="",database="ID")
 mycursor = mydb.cursor()
 uid = 0
 rid = 0
