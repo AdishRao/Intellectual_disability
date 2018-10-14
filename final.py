@@ -4,7 +4,6 @@ from PIL import ImageTk,Image
 import pandas as pd
 import random
 from tkinter import ttk
-import mysql.connector
 import pandas as pd
 from random import randint 
 from sklearn import preprocessing
@@ -17,6 +16,7 @@ from keras.layers.core import Dense
 from keras.optimizers import Adam
 from keras.metrics import categorical_crossentropy
 from keras.models import model_from_json
+import numpy as np
 import os
 import datetime
 import pyrebase
@@ -42,7 +42,10 @@ loaded_model = model_from_json(loaded_model_json)
 # load weights into new model
 loaded_model.load_weights("model.h5")
 print("Loaded model from disk")
+#
+NetworkValues=[]
 
+#change database name and password accordingly
 mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="ID")
 mycursor = mydb.cursor()
 uid = 0
@@ -51,6 +54,7 @@ ID = True
 cage = 0
 cname =""
 gender=""
+#variable to choose test to run
 i = -4
 
 bscore = 0
@@ -86,11 +90,11 @@ class login:
         self.psswd= Entry(self.master)
         self.emailid.place(x=250,y=180)
         self.psswd.place(x=250,y=220)
-        self.login = Button(master,text="Login",command=self.login)
+        self.login = Button(master,text="Login",command=self.loginb)
         self.login.place(x=250,y=450,anchor="center")
 
 
-    def login(self):
+    def loginb(self):
         try:
             email = self.emailid.get()
             password = self.psswd.get()
@@ -99,7 +103,7 @@ class login:
             user = auth.sign_in_with_email_and_password(email,password)
             global uid, i, rid
             info=auth.get_account_info(user['idToken'])
-            uid=str(info['users'][0]['localId'])
+            uid=str(info['users'][0]['localId']) #TODO 
             rid=str(info['users'][0]['localId'])
             i=-1
             self.master.destroy()
@@ -122,15 +126,15 @@ class signup:
         self.email.place(x=200,y=195,anchor="center")
         self.password = Label(master,text="Enter Password:")
         self.password.place(x=135,y=225)
-        self.emailid= Entry(master)
-        self.psswd= Entry(master)
+        self.emailid= Entry(self.master)
+        self.psswd= Entry(self.master)
         self.emailid.place(x=250,y=180)
         self.psswd.place(x=250,y=220)
-        self.login = Button(master,text="Sign Up",command=self.signup)
+        self.login = Button(master,text="Sign Up",command=self.signupb)
         self.login.place(x=250,y=450,anchor="center")
 
 
-    def signup(self):
+    def signupb(self):
         try:
             email = self.emailid.get()
             password = self.psswd.get()
@@ -159,18 +163,18 @@ class logorsign:
         self.master = master
         self.displabel = Label(master,text="Please select Sign Up or Login")
         self.displabel.place(x=250,y=250,anchor="center")
-        self.signup = Button(master,text="Sign Up", command=self.signup)
-        self.login = Button(master,text="Log In", command=self.login)
+        self.signup = Button(master,text="Sign Up", command=self.signupb)
+        self.login = Button(master,text="Log In", command=self.loginb)
         self.signup.place(x=180,y=290)
         self.login.place(x=300,y=290)
 
-    def signup(self):
+    def signupb(self):
         global i
         i = -2
         self.master.destroy()
         self.master.quit()
 
-    def login(self):
+    def loginb(self):
         global i
         i = -3
         self.master.destroy()
@@ -195,11 +199,12 @@ class AN: #Finished
         self.gender.place(x=230,y=260)
 
     def getdetails(self):
-        global cname,cage,basal_age,gender
+        global cname,cage,basal_age,gender,NetworkValues
         cname = self.ename.get()
         cage = int(self.eage.get())
         gender = self.gender.get()
-
+        NetworkValues.append(cage)
+        NetworkValues.append(gender)
         print("Age:"+str(cage))
         print("Name:"+cname)
         global i
@@ -293,6 +298,9 @@ class RPM:
         rpmv = (uid,self.result,ID)
         mycursor.execute(rpmq,rpmv)
         mydb.commit()
+        global NetworkValues
+        NetworkValues.append(self.result)
+        NetworkValues.append(ID)
 
     def next(self):
         global i
@@ -593,6 +601,9 @@ class BST:
         self.frame8.pack(side=BOTTOM)
         self.qui = Button(self.frame8,text="quit",command=self.des)
         self.qui.place(x=250, y =25, anchor="center")
+        global NetworkValues
+        NetworkValues.append(ID)
+        NetworkValues.append(self.iq)
 
     def des(self):
         global i
@@ -678,8 +689,10 @@ class dispdst:
         dstv = (uid,int(fscore),int(bscore),int(rawscore),ID,float(stdscore),float(dstper))
         mycursor.execute(dstq,dstv)
         mydb.commit()
-
-
+        global NetworkValues
+        NetworkValues.append(fscore)
+        NetworkValues.append(bscore)
+        NetworkValues.append(ID)
 
     def nexttest(self):
         global i
@@ -779,6 +792,9 @@ class GDT:
         GDTv= (uid,uid,int(result),int(ID))
         mycursor.execute(GDTq,GDTv)
         mydb.commit()
+        global NetworkValues
+        NetworkValues.append(result)
+        NetworkValues.append(ID)
 
     def nexttest(self):
         self.master.destroy()
@@ -1012,6 +1028,9 @@ def askQuestion():
         vlv = (uid,index_arr[78],index_arr[79],index_arr[80],index_arr[81])
         mycursor.execute(vlq,vlv)
         mydb.commit()
+        global NetworkValues
+        NetworkValues.append(ID)
+        NetworkValues.append(social_quotient)
         return
     button.pack_forget()
     label_des.pack_forget()
@@ -1127,5 +1146,7 @@ while i==6:
     button = Button(window, text="Start", command=askQuestion)
     button.pack()
     window.mainloop()
-
-#loaded_model.predict(Y.reshape(1,12))
+NetworkValues=np.array(NetworkValues)
+NetworkValues=NetworkValues.reshape(1,13)
+NetAns=loaded_model.predict(NetworkValues)
+print(NetAns)
