@@ -1,6 +1,7 @@
 import mysql.connector
 from tkinter import *
-from PIL import ImageTk,Image
+from PIL import Image
+from PIL import ImageTk
 import pandas as pd
 import random
 from tkinter import ttk
