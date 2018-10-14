@@ -3,7 +3,7 @@ from PIL import ImageTk,Image
 import pandas as pd
 import mysql.connector
 cage = 6.5
-mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="test")
+mydb = mysql.connector.connect(host="localhost",user="root",passwd="",database="test")
 mycursor = mydb.cursor()
 uid = 100
 name = "xyz"
