@@ -115,7 +115,7 @@ class testorstat:
         self.displabel.place(x=250,y=250,anchor="center")
         self.signup = Button(master,text="Test", command=self.test)
         self.login = Button(master,text="Statistics", command=self.stat)
-        self.signup.place(x=160,y=290)
+        self.signup.place(x=180,y=290)
         self.login.place(x=280,y=290)
 
     def stat(self):
@@ -152,11 +152,15 @@ class login:
             print(email)
             print(password)
             user = auth.sign_in_with_email_and_password(email,password)
-            global uid, i, rid
+            global uid, i, rid, mycursor
+            mycursor.execute("SELECT COUNT(*) FROM CHILD")
+            result = mycursor.fetchone()
             info=auth.get_account_info(user['idToken'])
-            uid=str(1) #TODO 
+            uid=result[0]
             rid=str(info['users'][0]['localId'])
             i=-5
+            global st
+            st =  2
             self.master.destroy()
             self.master.quit()
         except:
@@ -196,6 +200,7 @@ class signup:
             rid=str(info['users'][0]['localId'])
             uid=str(info['users'][0]['localId'])
             i=-5
+            st = 1
             self.master.destroy()
             self.master.quit()
         except:
@@ -216,7 +221,7 @@ class logorsign:
         self.signup = Button(master,text="Sign Up", command=self.signupb)
         self.login = Button(master,text="Log In", command=self.loginb)
         self.signup.place(x=180,y=290)
-        self.login.place(x=300,y=290)
+        self.login.place(x=280,y=290)
 
     def signupb(self):
         global i
@@ -265,7 +270,6 @@ class AN: #Finished
         global vlf
         global age_range
         global index_arr
-        st = 1
         vli = age_range[cage][0]
         vlf = age_range[cage][1]
         i = 0
@@ -914,7 +918,6 @@ class GDT:
         btn.place(y= 10, x =250, anchor = "center")
         self.ques = self.create_q(self.frame1, self.qn)
 
-
 class Question:
     def __init__(self, question, answers):
         self.question = question
@@ -1285,8 +1288,8 @@ while i==3:
     h = 500 # height for the Tk root
 
     # get screen width and height
-    ws = root.winfo_screenwidth() # width of the screen
-    hs = root.winfo_screenheight() # height of the screen
+    ws = rootdst.winfo_screenwidth() # width of the screen
+    hs = rootdst.winfo_screenheight() # height of the screen
 
     # calculate x and y coordinates for the Tk root window
     x = (ws/2) - (w/2)
@@ -1382,4 +1385,7 @@ if i==7:
         # and where it is placed
         root.geometry('%dx%d+%d+%d' % (w, h, x, y))
         singletestres = STR(root)
-        root.mainloop()   
+        root.mainloop()  
+
+if st==2 or i==-6:
+    print("OK") 
