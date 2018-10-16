@@ -7,8 +7,6 @@ import random
 from tkinter import ttk
 import pandas as pd
 from random import randint 
-from sklearn import preprocessing
-from sklearn.preprocessing import MinMaxScaler
 import keras
 from keras import backend as K
 from keras.models import Sequential
@@ -49,9 +47,10 @@ print("Loaded model from disk")
 #network and graph
 NetworkValues=[]
 plotres = []
+dataplot = []
 #change database name and password accordingly
 
-mydb = mysql.connector.connect(host="localhost",user="root",passwd="",database="ID") #TODO change before pushing
+mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="ID") #TODO change before pushing
 mycursor = mydb.cursor()
 uid = 0
 rid = 0
@@ -89,7 +88,7 @@ class STR:
         self.master=master
         frame1 = Frame(master,width=500,height=50)
         frame1.pack(side=TOP)
-        maxlabel = Label(frame1, text = "RPM min: 26| DST min: 26| BST min: 91| GDT min: 21",wraplength=500,justify="left")
+        maxlabel = Label(frame1, text = "RPM MAX: 60| DST min: 26| BST min: 91| GDT min: 21",wraplength=500,justify="left")
         maxlabel.pack()
         frame2 = Frame(master,width=500,height=400)
         frame2.pack(side=TOP)
@@ -195,7 +194,7 @@ class signup:
             print(email)
             print(password)
             user = auth.create_user_with_email_and_password(email,password)
-            global uid,rid,i
+            global uid,rid,i,st
             info=auth.get_account_info(user['idToken'])
             rid=str(info['users'][0]['localId'])
             uid=str(info['users'][0]['localId'])
@@ -270,11 +269,12 @@ class AN: #Finished
         global vlf
         global age_range
         global index_arr
-        vli = age_range[cage][0]
-        vlf = age_range[cage][1]
+        if cage>5 and cage<10:
+            vli = age_range[cage][0]
+            vlf = age_range[cage][1]
+            vli-=1
+            basal_age = (cage-3)*12.0
         i = 0
-        vli-=1
-        basal_age = (cage-3)*12.0
         self.master.destroy()
         self.master.quit()
 
@@ -647,7 +647,7 @@ class BST:
             ID = True
         else:
             ID = False
-        bstcmd = "update BST SET IDB=%s, IQ=%s,ID_Type=%s where UID=%s"
+        bstcmd = "update BST SET IDB=%s, IQ=%s,ID_Type=%s where UID='%s'"
         bstval =(ID,self.iq,strid,self.bid)
         self.mycursor.execute(bstcmd,bstval)
         self.mydb.commit()
@@ -1207,11 +1207,12 @@ while i==-1:
     an = AN(root)
     root.mainloop()
 
-childquery = "insert into Child(UID,Name,Age,ID,DateOfTest,RID,Gender) VALUES (%s,%s,%s,%s,%s,%s,%s)"
-dateoftest = datetime.datetime.today().strftime('%Y-%m-%d')
-childvalues = (uid,cname,cage,ID,dateoftest,rid,gender)
-mycursor.execute(childquery,childvalues)
-mydb.commit()
+if i!=-6:
+    childquery = "insert into Child(UID,Name,Age,ID,DateOfTest,RID,Gender) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+    dateoftest = datetime.datetime.today().strftime('%Y-%m-%d')
+    childvalues = (uid,cname,cage,ID,dateoftest,rid,gender)
+    mycursor.execute(childquery,childvalues)
+    mydb.commit()
 
 while i==0:
     root = Tk()
@@ -1297,9 +1298,9 @@ while i==3:
 
     # set the dimensions of the screen 
     # and where it is placed
-    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+    rootdst.geometry('%dx%d+%d+%d' % (w, h, x, y))
     Dispdst= dispdst(rootdst)
-    root.mainloop()
+    rootdst.mainloop()
 
 while i==4:
     root = Tk()
@@ -1388,4 +1389,38 @@ if i==7:
         root.mainloop()  
 
 if st==2 or i==-6:
-    print("OK") 
+    q = "SELECT UID FROM CHILD WHERE RID ='"+str(rid)+"'"
+    mycursor.execute(q)
+    result = mycursor.fetchall() #TODO input RPM percentile not score. Change all current scores to percentile,
+    for x in result:
+        p= "select score,Per_score,IQ,Percentile from child C NATURAL JOIN (RPM R NATURAL JOIN (DST D NATURAL JOIN (BST B NATURAL JOIN GDT))) where UID ='"+str(x[0])+"'"
+        mycursor.execute(p)
+        result1 = mycursor.fetchone()
+        trace = go.Bar(
+        x=['Ravens','DST','BST','Drawing test'],
+        y=list(result1),
+        )
+        dataplot.append(trace)
+
+    layout = go.Layout(
+        barmode='group'
+    )
+    fig = go.Figure(data=dataplot, layout=layout)
+    pio.write_image(fig, 'Report/'+str(uid)+'.png')
+    root = Tk()
+    w = 500 # width for the Tk root
+    h = 500 # height for the Tk root
+
+    # get screen width and height
+    ws = root.winfo_screenwidth() # width of the screen
+    hs = root.winfo_screenheight() # height of the screen
+
+        # calculate x and y coordinates for the Tk root window
+    x = (ws/2) - (w/2)
+    y = (hs/2) - (h/2)
+
+        # set the dimensions of the screen 
+        # and where it is placed
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+    singletestres = STR(root)
+    root.mainloop()  
