@@ -50,7 +50,7 @@ plotres = []
 dataplot = []
 #change database name and password accordingly
 
-mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="ID") #TODO change before pushing
+mydb = mysql.connector.connect(host="localhost",user="root",passwd="",database="ID") #TODO change before pushing
 mycursor = mydb.cursor()
 uid = 0
 rid = 0
