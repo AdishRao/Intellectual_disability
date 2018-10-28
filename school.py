@@ -24,7 +24,6 @@ config = {
 firebase = pyrebase.initialize_app(config)
 auth =firebase.auth()
 
-loaded_model = load_model("final.h5")
 #network and graph
 plotres = []
 dataplot = []
