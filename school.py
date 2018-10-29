@@ -29,7 +29,7 @@ plotres = []
 dataplot = []
 #TODO change database name and password accordingly
 
-mydb = mysql.connector.connect(host="localhost",user="root",passwd="",database="ID",auth_plugin='mysql_native_password') #TODO change before pushing
+mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="ID",auth_plugin='mysql_native_password') #TODO change before pushing
 mycursor = mydb.cursor()
 uid = 0
 rid = 0
@@ -327,7 +327,7 @@ class RPM:
         self.nexttest.place(x=250,y=490,anchor="center")
         global uid,mydb,mycursor
         rpmq = "insert into RPM(UID,Score,IDR) values (%s,%s,%s)"
-        rpmv = (uid,result,ID)
+        rpmv = (uid,int(result),ID)
         mycursor.execute(rpmq,rpmv)
         mydb.commit()
         global plotres
