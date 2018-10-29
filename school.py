@@ -29,7 +29,7 @@ plotres = []
 dataplot = []
 #TODO change database name and password accordingly
 
-mydb = mysql.connector.connect(host="localhost",user="root",passwd="",database="ID",auth_plugin='mysql_native_password') #TODO change before pushing
+mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="ID",auth_plugin='mysql_native_password') #TODO change before pushing
 mycursor = mydb.cursor()
 uid = 0
 rid = 0
@@ -67,7 +67,7 @@ class STR:
         self.master=master
         frame1 = Frame(master,width=500,height=50)
         frame1.pack(side=TOP)
-        maxlabel = Label(frame1, text = "RPM MAX: 60| DST min: 26| BST min: 91| GDT min: 21",wraplength=500,justify="left")
+        maxlabel = Label(frame1, text = "RPM min: 26| DST min: 26| BST min: 91| GDT min: 21",wraplength=500,justify="left")
         maxlabel.pack()
         frame2 = Frame(master,width=500,height=400)
         frame2.pack(side=TOP)
@@ -331,7 +331,7 @@ class RPM:
         mycursor.execute(rpmq,rpmv)
         mydb.commit()
         global plotres
-        plotres.append(self.result)
+        plotres.append(result)
 
 
     def next(self):
@@ -1310,8 +1310,8 @@ while i==6:
     w = 600
     h = 300
       # get screen width and height
-    ws = root.winfo_screenwidth() # width of the screen
-    hs = root.winfo_screenheight() # height of the screen
+    ws = window.winfo_screenwidth() # width of the screen
+    hs = window.winfo_screenheight() # height of the screen
 
         # calculate x and y coordinates for the Tk root window
     x = (ws/2) - (w/2)
