@@ -2,7 +2,6 @@ import mysql.connector
 from tkinter import *
 from PIL import Image
 from PIL import ImageTk
-import pandas as pd
 import random
 from tkinter import ttk
 import pandas as pd
@@ -14,12 +13,10 @@ from keras.layers import Activation
 from keras.layers.core import Dense
 from keras.optimizers import Adam
 from keras.metrics import categorical_crossentropy
-from keras.models import model_from_json
+from keras.models import load_model
 import numpy as np
-import os
 import datetime
 import pyrebase
-import json
 from plotly.offline import iplot, init_notebook_mode
 import plotly.graph_objs as go
 import plotly.io as pio
@@ -35,26 +32,19 @@ config = {
 firebase = pyrebase.initialize_app(config)
 auth =firebase.auth()
 
-# load json and create model
-json_file = open('model.json', 'r')
-loaded_model_json = json_file.read()
-json_file.close()
-loaded_model = model_from_json(loaded_model_json)
-
-# load weights into new model
-loaded_model.load_weights("model.h5")
-print("Loaded model from disk")
+loaded_model = load_model("final.h5")
 #network and graph
 NetworkValues=[]
 plotres = []
 dataplot = []
-#change database name and password accordingly
+#TODO change database name and password accordingly
 
-mydb = mysql.connector.connect(host="localhost",user="root",passwd="",database="ID") #TODO change before pushing
+mydb = mysql.connector.connect(host="localhost",user="root",passwd="",database="ID",auth_plugin='mysql_native_password') #TODO change before pushing
 mycursor = mydb.cursor()
 uid = 0
 rid = 0
 ID = True
+Sclass = ''
 cage = 0
 cname =""
 gender=""
@@ -88,11 +78,11 @@ class STR:
         self.master=master
         frame1 = Frame(master,width=500,height=50)
         frame1.pack(side=TOP)
-        maxlabel = Label(frame1, text = "RPM MAX: 60| DST min: 26| BST min: 91| GDT min: 21",wraplength=500,justify="left")
+        maxlabel = Label(frame1, text = "RPM min: 26| DST min: 26| BST min: 91| GDT min: 21| Vineland min: 91",wraplength=500,justify="left") #search
         maxlabel.pack()
         frame2 = Frame(master,width=500,height=400)
         frame2.pack(side=TOP)
-        photo = Image.open('Report/'+str(uid)+'.png')
+        photo = Image.open('Report/'+str(rid)+'.png')
         photo = photo.resize((500, 400), Image.ANTIALIAS)
         self.render = ImageTk.PhotoImage(photo)
         photolabel = Label(frame2,image=self.render)
@@ -179,18 +169,24 @@ class signup:
         self.email.place(x=200,y=195,anchor="center")
         self.password = Label(master,text="Enter Password:")
         self.password.place(x=135,y=225)
+        self.password = Label(master,text="Enter class:")
+        self.password.place(x=165,y=265)
         self.emailid= Entry(self.master)
         self.psswd= Entry(self.master)
         self.emailid.place(x=250,y=180)
         self.psswd.place(x=250,y=220)
+        self.classid= Entry(self.master)
+        self.classid.place(x=250,y=260)
         self.login = Button(master,text="Sign Up",command=self.signupb)
         self.login.place(x=250,y=450,anchor="center")
 
 
     def signupb(self):
         try:
+            global Sclass
             email = self.emailid.get()
             password = self.psswd.get()
+            Sclass = self.classid.get()
             print(email)
             print(password)
             user = auth.create_user_with_email_and_password(email,password)
@@ -353,11 +349,11 @@ class RPM:
         self.nexttest.place(x=250,y=490,anchor="center")
         global uid,mydb,mycursor
         rpmq = "insert into RPM(UID,Score,IDR) values (%s,%s,%s)"
-        rpmv = (uid,self.result,ID)
+        rpmv = (uid,int(result),ID)
         mycursor.execute(rpmq,rpmv)
         mydb.commit()
         global NetworkValues, plotres
-        plotres.append(self.result)
+        plotres.append(int(result))
         NetworkValues.append(self.result)
         NetworkValues.append(ID)
 
@@ -647,8 +643,9 @@ class BST:
             ID = True
         else:
             ID = False
-        bstcmd = "update BST SET IDB=%s, IQ=%s,ID_Type=%s where UID='%s'"
-        bstval =(ID,self.iq,strid,self.bid)
+        global uid
+        bstcmd = "update BST SET IDB=%s, IQ=%s,ID_Type=%s where UID='"+str(uid)+"'"
+        bstval =(ID,self.iq,strid)
         self.mycursor.execute(bstcmd,bstval)
         self.mydb.commit()
         frame = Frame(self.master,width = 500, height = 300)
@@ -1084,6 +1081,8 @@ def askQuestion():
         vlv = (uid,index_arr[78],index_arr[79],index_arr[80],index_arr[81])
         mycursor.execute(vlq,vlv)
         mydb.commit()
+        global plotres #search
+        plotres.append(social_quotient)
         global NetworkValues
         NetworkValues.append(ID)
         NetworkValues.append(social_quotient)
@@ -1208,9 +1207,9 @@ while i==-1:
     root.mainloop()
 
 if i!=-6:
-    childquery = "insert into Child(UID,Name,Age,ID,DateOfTest,RID,Gender) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+    childquery = "insert into Child(UID,Name,Age,ID,DateOfTest,RID,Gender,Class) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
     dateoftest = datetime.datetime.today().strftime('%Y-%m-%d')
-    childvalues = (uid,cname,cage,ID,dateoftest,rid,gender)
+    childvalues = (uid,cname,cage,ID,dateoftest,rid,gender,Sclass)
     mycursor.execute(childquery,childvalues)
     mydb.commit()
 
@@ -1343,7 +1342,19 @@ while i==5:
 
 while i==6:
     window = Tk()
-    window.geometry("600x300")
+    w = 600
+    h = 300
+      # get screen width and height
+    ws = window.winfo_screenwidth() # width of the screen
+    hs = window.winfo_screenheight() # height of the screen
+
+        # calculate x and y coordinates for the Tk root window
+    x = (ws/2) - (w/2)
+    y = (hs/2) - (h/2)
+
+        # set the dimensions of the screen 
+        # and where it is placed
+    window.geometry('%dx%d+%d+%d' % (w, h, x, y))
     label_heading = Label(window, text="VINELAND SOCIAL MATURITY TEST",bg="black",fg="white",font=('Helvetica', '20'))
     label_heading.pack()
     label_des = Label(window, text="\n\nThe Vineland Social Maturity Scale (VSMS) measures the differential social\ncapacities of an individual. It provides an estimate of Social Age (SA) and Social\nQuotient (SQ), and shows high correlation (0.80) with intelligence. It is designed to\nmeasure social maturation in eight social areas: Self-help General (SHG), Self-help\nEating (SHE), Self-help Dressing (SHD), Self direction (SD), Occupation (OCC),\nCommunication (COM), Locomotion (LOM), and Socialization (SOC).",fg="blue",font=('15'))
@@ -1355,21 +1366,24 @@ while i==6:
 if i==7:
     NetworkValues=np.array(NetworkValues)
     NetworkValues=NetworkValues.reshape(1,13)
-    NetAns=loaded_model.predict(NetworkValues)
+    NetAns=loaded_model.predict(NetworkValues, verbose=0)
     print(NetAns)
 
     if st == 1:
+        dateoftest = datetime.datetime.today().strftime('%Y-%m-%d')
         trace1 = go.Bar(
-        x=['Ravens','DST','BST','Drawing test'],
+        x=['Ravens','DST','BST','Drawing test','Vineland'], #search
         y=plotres,
-        name='Test on 23/08/97'
+        name='Test on '+str(dateoftest)
         )
         data = [trace1]
         layout = go.Layout(
             barmode='group'
         )
         fig = go.Figure(data=data, layout=layout)
-        pio.write_image(fig, 'Report/'+str(uid)+'.png')
+        pio.write_image(fig, 'Report/'+str(rid)+'.png')
+        storage = firebase.storage()
+        storage.child("report/"+str(rid)+".jpg").put('Report/'+str(rid)+'.png')
         root = Tk()
         w = 500 # width for the Tk root
         h = 500 # height for the Tk root
@@ -1389,16 +1403,17 @@ if i==7:
         root.mainloop()  
 
 if st==2 or i==-6:
-    q = "SELECT UID FROM CHILD WHERE RID ='"+str(rid)+"'"
+    q = "SELECT UID FROM CHILD WHERE RID ='"+str(rid)+"' order by DateOfTest"
     mycursor.execute(q)
     result = mycursor.fetchall() #TODO input RPM percentile not score. Change all current scores to percentile,
     for x in result:
-        p= "select score,Per_score,IQ,Percentile from child C NATURAL JOIN (RPM R NATURAL JOIN (DST D NATURAL JOIN (BST B NATURAL JOIN GDT))) where UID ='"+str(x[0])+"'"
+        p= "select score,Per_score,IQ,Percentile,IQV from child C NATURAL JOIN (RPM R NATURAL JOIN (DST D NATURAL JOIN (BST B NATURAL JOIN (GDT NATURAL JOIN Vineland)))) WHERE UID = '"+str(x[0])+"'"  #search
         mycursor.execute(p)
         result1 = mycursor.fetchone()
+        print(result1)
         trace = go.Bar(
-        x=['Ravens','DST','BST','Drawing test'],
-        y=list(result1),
+        x=['Ravens','DST','BST','Drawing test','Vineland'], #search
+        y=list(result1), 
         )
         dataplot.append(trace)
 
@@ -1406,7 +1421,9 @@ if st==2 or i==-6:
         barmode='group'
     )
     fig = go.Figure(data=dataplot, layout=layout)
-    pio.write_image(fig, 'Report/'+str(uid)+'.png')
+    pio.write_image(fig, 'Report/'+str(rid)+'.png')
+    storage = firebase.storage()
+    storage.child("report/"+str(rid)+".jpg").put('Report/'+str(rid)+'.png')
     root = Tk()
     w = 500 # width for the Tk root
     h = 500 # height for the Tk root
