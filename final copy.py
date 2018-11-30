@@ -16,6 +16,7 @@ import pyrebase
 from plotly.offline import iplot, init_notebook_mode
 import plotly.graph_objs as go
 import plotly.io as pio
+import smtplib
 
 #firebase config
 config = {
@@ -1435,7 +1436,7 @@ dbf.set(addtest)
 if st==2 or i==-6:
     q = "SELECT UID FROM CHILD WHERE RID ='"+str(rid)+"' order by DateOfTest"
     mycursor.execute(q)
-    result = mycursor.fetchall() #TODO input RPM percentile not score. Change all current scores to percentile,
+    result = mycursor.fetchall() 
     for x in result:
         p= "select score,Per_score,IQ,Percentile,IQV from child C NATURAL JOIN (RPM R NATURAL JOIN (DST D NATURAL JOIN (BST B NATURAL JOIN (GDT NATURAL JOIN Vineland)))) WHERE UID = '"+str(x[0])+"'"  #search
         mycursor.execute(p)
@@ -1456,7 +1457,20 @@ if st==2 or i==-6:
     storage.child("report/"+str(rid)+".jpg").put('Report/'+str(rid)+'.png')
     #put for doctor
     if sendtodoc():
-        pass #call notifier
+        SERVER_NAME='smtp.gmail.com'
+        SERVER_PORT=587
+        USER_NAME='dreams2reality2020@gmail.com'
+        PASSWORD='dreams2reality'
+        print('connecting')
+        server = smtplib.SMTP(SERVER_NAME, SERVER_PORT)
+        print('connected..')
+        server.ehlo()
+        server.starttls()
+        server.ehlo()
+        server.login(USER_NAME, PASSWORD)
+        text = 'User'+str(cname)+"may have drastic changes in results."
+        server.sendmail('dreams2reality202@gmail.com','adish.rao98@gmail.com', text)
+        server.quit()
 
     root = Tk()
     w = 500 # width for the Tk root
@@ -1490,7 +1504,7 @@ if st==2 or i==-6:
         ins = scores.pop()
         scores.insert(0,ins)
         for tests in range (5):
-            if ((scores[i-1][tests]-scores[i-2][tests])/(scores[i-2])*100) > 5:
+            if ((scores[i-1][tests]-scores[i-2][tests])/(scores[i-2])*100) <= -5:
                 count+=1
         if count > 2:
             return True
