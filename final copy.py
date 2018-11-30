@@ -70,6 +70,12 @@ index_arr = [0] * 90
 agetoadd = 0
 age_range = {6:[45,65],7:[51,70],8:[57,74],9:[62,77]}
 
+firestorerpm = 0
+firestoredst = 0
+firestorebst = 0
+firestoregdt = 0
+firestorevld = 0
+
 class STR:
     def __init__(self,master):
         self.master=master
@@ -363,6 +369,8 @@ class RPM:
         global NetworkValues, plotres
         plotres.append(int(result))
         NetworkValues.append(int(result))
+        global firestorerpm 
+        firestorerpm = result
 
     def next(self):
         global i
@@ -667,6 +675,8 @@ class BST:
         global NetworkValues, plotres
         NetworkValues.append(self.iq)
         plotres.append(self.iq)
+        global firestorebst
+        firestorebst = self.iq
 
     def des(self):
         global i
@@ -756,6 +766,8 @@ class dispdst:
         plotres.append(dstper)
         NetworkValues.append(float(stdscore))
         NetworkValues.append(float(dstper))
+        global firestoredst 
+        firestoredst = dstper        
 
     def nexttest(self):
         global i
@@ -857,6 +869,8 @@ class GDT:
         global NetworkValues, plotres
         NetworkValues.append(result)
         plotres.append(result)
+        global firestoregdt
+        firestoregdt = result
 
     def nexttest(self):
         self.master.destroy()
@@ -1089,6 +1103,8 @@ def askQuestion():
         plotres.append(social_quotient)
         global NetworkValues
         NetworkValues.append(social_quotient)
+        global firestorevld 
+        firestorevld = social_quotient
         return
     button.pack_forget()
     label_des.pack_forget()
@@ -1392,6 +1408,7 @@ if i==7:
         pio.write_image(fig, 'Report/'+str(rid)+'.png')
         storage = firebase.storage()
         storage.child("report/"+str(rid)+".jpg").put('Report/'+str(rid)+'.png')
+        storage.child("DoctorReport/"+str(rid)+".jpg").put('Report/'+str(rid)+'.png')        
         root = Tk()
         w = 500 # width for the Tk root
         h = 500 # height for the Tk root
@@ -1409,6 +1426,11 @@ if i==7:
         root.geometry('%dx%d+%d+%d' % (w, h, x, y))
         singletestres = STR(root)
         root.mainloop()
+
+dbf = firebase.database()
+dbf.child("Child").child(str(rid)).child(str(uid))
+addtest = {"RPM":int(firestorerpm),"DST":int(firestoredst),"BST":float(firestorebst),"GDT":int(firestoregdt),"VLD":float(firestorevld)}
+dbf.set(addtest)
 
 if st==2 or i==-6:
     q = "SELECT UID FROM CHILD WHERE RID ='"+str(rid)+"' order by DateOfTest"
@@ -1432,6 +1454,11 @@ if st==2 or i==-6:
     pio.write_image(fig, 'Report/'+str(rid)+'.png')
     storage = firebase.storage()
     storage.child("report/"+str(rid)+".jpg").put('Report/'+str(rid)+'.png')
+    #put for doctor
+
+    users = dbf.child("Child").child(rid).get()
+
+
     root = Tk()
     w = 500 # width for the Tk root
     h = 500 # height for the Tk root
@@ -1448,4 +1475,4 @@ if st==2 or i==-6:
         # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     singletestres = STR(root)
-    root.mainloop()
+    root.mainloop()  
