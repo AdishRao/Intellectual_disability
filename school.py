@@ -12,6 +12,9 @@ import pyrebase
 from plotly.offline import iplot, init_notebook_mode
 import plotly.graph_objs as go
 import plotly.io as pio
+
+#TODO Vineland and BST Basal age, starting question set, ending question set. Add vineland score to plot res.
+
 #firebase config
 config = {
     "apiKey": "AIzaSyDc3JTW47RqgD1oAtbar5n4HZ6nDEVBXt4",
@@ -27,9 +30,8 @@ auth =firebase.auth()
 #network and graph
 plotres = []
 dataplot = []
-#TODO change database name and password accordingly
 
-mydb = mysql.connector.connect(host="localhost",user="root",passwd="",database="ID",auth_plugin='mysql_native_password') #TODO change before pushing
+mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="ID",auth_plugin='mysql_native_password')
 mycursor = mydb.cursor()
 uid = 0
 rid = 0
@@ -1361,7 +1363,7 @@ if i==7:
         root.mainloop()  
 
 if st==2 or i==-6:
-    q = "SELECT UID FROM CHILD WHERE RID ='"+str(rid)+"'"
+    q = "SELECT UID FROM CHILD WHERE RID ='"+str(rid)+"' order by DateOfTest"
     mycursor.execute(q)
     result = mycursor.fetchall() #TODO input RPM percentile not score. Change all current scores to percentile,
     for x in result:

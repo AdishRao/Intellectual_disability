@@ -1,4 +1,5 @@
 import mysql.connector
+import sys 
 from tkinter import *
 from PIL import Image
 from PIL import ImageTk
@@ -8,11 +9,6 @@ import pandas as pd
 from random import randint 
 import keras
 from keras import backend as K
-from keras.models import Sequential
-from keras.layers import Activation
-from keras.layers.core import Dense
-from keras.optimizers import Adam
-from keras.metrics import categorical_crossentropy
 from keras.models import load_model
 import numpy as np
 import datetime
@@ -20,6 +16,7 @@ import pyrebase
 from plotly.offline import iplot, init_notebook_mode
 import plotly.graph_objs as go
 import plotly.io as pio
+
 #firebase config
 config = {
     "apiKey": "AIzaSyDc3JTW47RqgD1oAtbar5n4HZ6nDEVBXt4",
@@ -39,7 +36,7 @@ plotres = []
 dataplot = []
 #TODO change database name and password accordingly
 
-mydb = mysql.connector.connect(host="localhost",user="root",passwd="",database="ID",auth_plugin='mysql_native_password') #TODO change before pushing
+mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="ID",auth_plugin='mysql_native_password') #TODO change before pushing
 mycursor = mydb.cursor()
 uid = 0
 rid = 0
@@ -217,6 +214,17 @@ class logorsign:
         self.login = Button(master,text="Log In", command=self.loginb)
         self.signup.place(x=180,y=290)
         self.login.place(x=280,y=290)
+        self.userno = Button(master,text="Number of Users", command=self.dispno)
+        self.userno.place(x=250,y=450,anchor="center")
+
+    def dispno(self):
+        global mydb,mycursor
+        self.displabel.destroy()
+        self.signup.destroy()
+        self.login.destroy()
+        mycursor.callproc('fetch_no_users')
+        for result in mycursor.stored_results():
+            Label(self.master,text=result.fetchone()).pack()
 
     def signupb(self):
         global i
@@ -354,8 +362,7 @@ class RPM:
         mydb.commit()
         global NetworkValues, plotres
         plotres.append(int(result))
-        NetworkValues.append(self.result)
-        NetworkValues.append(ID)
+        NetworkValues.append(int(result))
 
     def next(self):
         global i
@@ -658,7 +665,6 @@ class BST:
         self.qui = Button(self.frame8,text="quit",command=self.des)
         self.qui.place(x=250, y =25, anchor="center")
         global NetworkValues, plotres
-        NetworkValues.append(ID)
         NetworkValues.append(self.iq)
         plotres.append(self.iq)
 
@@ -748,9 +754,8 @@ class dispdst:
         mydb.commit()
         global NetworkValues, plotres
         plotres.append(dstper)
-        NetworkValues.append(fscore)
-        NetworkValues.append(bscore)
-        NetworkValues.append(ID)
+        NetworkValues.append(float(stdscore))
+        NetworkValues.append(float(dstper))
 
     def nexttest(self):
         global i
@@ -851,7 +856,6 @@ class GDT:
         mydb.commit()
         global NetworkValues, plotres
         NetworkValues.append(result)
-        NetworkValues.append(ID)
         plotres.append(result)
 
     def nexttest(self):
@@ -1084,7 +1088,6 @@ def askQuestion():
         global plotres #search
         plotres.append(social_quotient)
         global NetworkValues
-        NetworkValues.append(ID)
         NetworkValues.append(social_quotient)
         return
     button.pack_forget()
@@ -1207,11 +1210,16 @@ while i==-1:
     root.mainloop()
 
 if i!=-6:
-    childquery = "insert into Child(UID,Name,Age,ID,DateOfTest,RID,Gender,Class) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
-    dateoftest = datetime.datetime.today().strftime('%Y-%m-%d')
-    childvalues = (uid,cname,cage,ID,dateoftest,rid,gender,Sclass)
-    mycursor.execute(childquery,childvalues)
-    mydb.commit()
+    try:
+        childquery = "insert into Child(UID,Name,Age,ID,DateOfTest,RID,Gender,Class) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
+        dateoftest = datetime.datetime.today().strftime('%Y-%m-%d')
+        childvalues = (uid,cname,cage,ID,dateoftest,rid,gender,Sclass)
+        mycursor.execute(childquery,childvalues)
+        mydb.commit()
+    except mysql.connector.Error as error:
+        print("Age out of bounds")
+    if cage<6 or cage>9:
+        sys.exit()
 
 while i==0:
     root = Tk()
@@ -1365,7 +1373,7 @@ while i==6:
 
 if i==7:
     NetworkValues=np.array(NetworkValues)
-    NetworkValues=NetworkValues.reshape(1,13)
+    NetworkValues=NetworkValues.reshape(1,8)
     NetAns=loaded_model.predict(NetworkValues, verbose=0)
     print(NetAns)
 

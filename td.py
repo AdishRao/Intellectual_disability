@@ -4,7 +4,7 @@ from PIL import ImageTk
 import pyrebase
 from tkinter import ttk
 import mysql.connector
-mydb = mysql.connector.connect(host="localhost",user="root",passwd="",database="ID",auth_plugin='mysql_native_password') #TODO change before pushing
+mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="ID",auth_plugin='mysql_native_password') #TODO change before pushing
 mycursor = mydb.cursor()
 
 config = {
@@ -163,7 +163,6 @@ class displayinfo:
         photolabel = Label(frame2,image=self.render)
         photolabel.image = self.render
         photolabel.pack()
-
     def __init__(self,master):
         self.master=master
         self.frame = Frame(master,width=500,height=500)
