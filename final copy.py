@@ -1,12 +1,12 @@
 import mysql.connector
-import sys 
+import sys
 from tkinter import *
 from PIL import Image
 from PIL import ImageTk
 import random
 from tkinter import ttk
 import pandas as pd
-from random import randint 
+from random import randint
 import keras
 from keras import backend as K
 from keras.models import load_model
@@ -36,7 +36,7 @@ plotres = []
 dataplot = []
 #TODO change database name and password accordingly
 
-mydb = mysql.connector.connect(host="localhost",user="root",passwd="Amazing96",database="ID",auth_plugin='mysql_native_password') #TODO change before pushing
+mydb = mysql.connector.connect(host="localhost",user="sidd",passwd="123",database="ID",auth_plugin='mysql_native_password') #TODO change before pushing
 mycursor = mydb.cursor()
 uid = 0
 rid = 0
@@ -1127,7 +1127,7 @@ while i==-4:
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
 
-    # set the dimensions of the screen 
+    # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     an = logorsign(root)
@@ -1146,7 +1146,7 @@ while i == -2:
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
 
-    # set the dimensions of the screen 
+    # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     an = signup(root)
@@ -1165,7 +1165,7 @@ while i == -3:
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
 
-    # set the dimensions of the screen 
+    # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     an = login(root)
@@ -1184,7 +1184,7 @@ while i==-5:
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
 
-    # set the dimensions of the screen 
+    # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     tos = testorstat(root)
@@ -1203,7 +1203,7 @@ while i==-1:
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
 
-    # set the dimensions of the screen 
+    # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     an = AN(root)
@@ -1234,7 +1234,7 @@ while i==0:
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
 
-    # set the dimensions of the screen 
+    # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     Rpm = RPM(root)
@@ -1253,7 +1253,7 @@ while i==1:
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
 
-    # set the dimensions of the screen 
+    # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     frame1 = Frame(root,width=500,height=100)
@@ -1278,7 +1278,7 @@ while i==2:
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
 
-    # set the dimensions of the screen 
+    # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     frame1 = Frame(root,width=500,height=100)
@@ -1303,7 +1303,7 @@ while i==3:
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
 
-    # set the dimensions of the screen 
+    # set the dimensions of the screen
     # and where it is placed
     rootdst.geometry('%dx%d+%d+%d' % (w, h, x, y))
     Dispdst= dispdst(rootdst)
@@ -1322,7 +1322,7 @@ while i==4:
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
 
-    # set the dimensions of the screen 
+    # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     root.title("Binet Simon Test")
@@ -1342,7 +1342,7 @@ while i==5:
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
 
-    # set the dimensions of the screen 
+    # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     Gdt = GDT(root)
@@ -1360,7 +1360,7 @@ while i==6:
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
 
-        # set the dimensions of the screen 
+        # set the dimensions of the screen
         # and where it is placed
     window.geometry('%dx%d+%d+%d' % (w, h, x, y))
     label_heading = Label(window, text="VINELAND SOCIAL MATURITY TEST",bg="black",fg="white",font=('Helvetica', '20'))
@@ -1404,11 +1404,11 @@ if i==7:
         x = (ws/2) - (w/2)
         y = (hs/2) - (h/2)
 
-        # set the dimensions of the screen 
+        # set the dimensions of the screen
         # and where it is placed
         root.geometry('%dx%d+%d+%d' % (w, h, x, y))
         singletestres = STR(root)
-        root.mainloop()  
+        root.mainloop()
 
 if st==2 or i==-6:
     q = "SELECT UID FROM CHILD WHERE RID ='"+str(rid)+"' order by DateOfTest"
@@ -1421,7 +1421,7 @@ if st==2 or i==-6:
         print(result1)
         trace = go.Bar(
         x=['Ravens','DST','BST','Drawing test','Vineland'], #search
-        y=list(result1), 
+        y=list(result1),
         )
         dataplot.append(trace)
 
@@ -1444,8 +1444,8 @@ if st==2 or i==-6:
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
 
-        # set the dimensions of the screen 
+        # set the dimensions of the screen
         # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     singletestres = STR(root)
-    root.mainloop()  
+    root.mainloop()
