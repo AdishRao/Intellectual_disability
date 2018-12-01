@@ -45,10 +45,10 @@ class login:
 
     def loginb(self):
         try:
-            #email = self.emailid.get()
-            #password = self.psswd.get()
-            email = "user2@gmail.com"
-            password = "admin123"
+            email = self.emailid.get()
+            password = self.psswd.get()
+            #email = "user2@gmail.com"
+            #password = "admin123"
             print(email)
             print(password)
             user = auth.sign_in_with_email_and_password(email,password)
