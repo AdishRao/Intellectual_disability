@@ -93,17 +93,23 @@ class login:
                currscore.append(myscore[uids][vals])
             scores.append(currscore)
         print(scores)
+        i = len(scores) #This is for the user
+        ins = scores.pop()
+        scores.insert(0,ins)
         child = db.child("Child").get().val()
-        compare = []
         for rids in child:
+            compare = []
             if rids!= rid :
                 for uids in child[rids]:
                     compareind = []
                     for rids1 in child[rids][uids]:
                         compareind.append(child[rids][uids][rids1])
                     compare.append(compareind)
-        if self.find_friend(compare,scores):
-            friends.append(rids)
+                print("Compare",compare)
+                print("scores",scores)
+                passscore = scores
+                if self.find_friend(compare,passscore):
+                    friends.append(rids)
         print(friends)
 
 
@@ -120,8 +126,6 @@ class login:
             varintest.append(indvar)
         print("var for all",varintest)
         i = len(scores) #This is for the user
-        ins = scores.pop()
-        scores.insert(0,ins)
         varintestforuser = []
         for testlist in range(i-1):
             indvar = []
@@ -136,7 +140,7 @@ class login:
             for i in range(5):
                 if abs(x[i]-y[i])<=5:
                     count+=1
-            if count>=3:
+            if count>=1:
                 truth.append(True)
             else:
                 return False

@@ -1147,6 +1147,7 @@ while i==-4:
     # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+    root.configure(background='misty rose')    
     an = logorsign(root)
     root.mainloop()
 
@@ -1162,7 +1163,7 @@ while i == -2:
     # calculate x and y coordinates for the Tk root window
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
-
+    root.configure(background='misty rose')
     # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
@@ -1181,7 +1182,7 @@ while i == -3:
     # calculate x and y coordinates for the Tk root window
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
-
+    root.configure(background='misty rose')
     # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
@@ -1200,7 +1201,7 @@ while i==-5:
     # calculate x and y coordinates for the Tk root window
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
-
+    root.configure(background='misty rose')
     # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
@@ -1219,7 +1220,7 @@ while i==-1:
     # calculate x and y coordinates for the Tk root window
     x = (ws/2) - (w/2)
     y = (hs/2) - (h/2)
-
+    root.configure(background='misty rose')
     # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
@@ -1421,7 +1422,7 @@ if i==7:
         # calculate x and y coordinates for the Tk root window
         x = (ws/2) - (w/2)
         y = (hs/2) - (h/2)
-
+        root.configure(background='misty rose')
         # set the dimensions of the screen
         # and where it is placed
         root.geometry('%dx%d+%d+%d' % (w, h, x, y))
@@ -1486,29 +1487,29 @@ if st==2 or i==-6:
 
         # set the dimensions of the screen
         # and where it is placed
+    root.configure(background='misty rose')
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     singletestres = STR(root)
     root.mainloop()  
 
-    def sendtodoc():
-        scores = []
-        count = 0
-        dbf = firebase.database()
-        myscore = dbf.child("Child").child(str(rid)).get().val()
-        for uids in myscore:
-            currscore = []
-            for vals in myscore[uids]:
-               currscore.append(myscore[uids][vals])
-            scores.append(currscore)
-        i = len(scores) #This is for the user
-        ins = scores.pop()
-        scores.insert(0,ins)
-        for tests in range (5):
-            if ((scores[i-1][tests]-scores[i-2][tests])/(scores[i-2])*100) <= -5:
-                count+=1
-        if count > 2:
-            return True
-        else:
-            return False
-
+def sendtodoc():
+    scores = []
+    count = 0
+    dbf = firebase.database()
+    myscore = dbf.child("Child").child(str(rid)).get().val()
+    for uids in myscore:
+        currscore = []
+        for vals in myscore[uids]:
+            currscore.append(myscore[uids][vals])
+        scores.append(currscore)
+    i = len(scores) #This is for the user
+    ins = scores.pop()
+    scores.insert(0,ins)
+    for tests in range (5):
+        if ((scores[i-1][tests]-scores[i-2][tests])/(scores[i-2])*100) <= -5:
+            count+=1
+    if count > 2:
+        return True
+    else:
+        return False
         
