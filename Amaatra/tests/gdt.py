@@ -40,11 +40,11 @@ class GDT:
         self.opts9 = self.create_options(self.frame1,8)
         self.opts10 = self.create_options(self.frame1,9)
         self.createq()
-        self.q = [ "GDT/GDT1.png", "GDT/GDT2.png", "GDT/GDT3.png", "GDT/GDT4.png", "GDT/GDT5.png", "GDT/GDT6.png", "GDT/GDT7.png", "GDT/GDT8.png", "GDT/GDT9.png", "GDT/GDT10.png", "GDT/GDT11.png", "GDT/GDT12.png", "GDT/GDT13.png", "GDT/GDT14.png", "GDT/GDT15.png", "GDT/GDT16.png", "GDT/GDT17.png", "GDT/GDT18.png", "GDT/GDT19.png", "GDT/GDT20.png", "GDT/GDT21.png", "GDT/GDT22.png", "GDT/GDT23.png", "GDT/GDT24.png"  ]
-        self.q = [filepath+ "/" + x for x in self.q]
+        self.q = [filepath+"/GDT/GDT1.png", filepath+"/GDT/GDT2.png", filepath+"/GDT/GDT3.png", filepath+"/GDT/GDT4.png", filepath+"/GDT/GDT5.png", filepath+"/GDT/GDT6.png", filepath+"/GDT/GDT7.png", filepath+"/GDT/GDT8.png", filepath+"/GDT/GDT9.png", filepath+"/GDT/GDT10.png", filepath+"/GDT/GDT11.png", filepath+"/GDT/GDT12.png", filepath+"/GDT/GDT13.png", filepath+"/GDT/GDT14.png", filepath+"/GDT/GDT15.png", filepath+"/GDT/GDT16.png", filepath+"/GDT/GDT17.png", filepath+"/GDT/GDT18.png", filepath+"/GDT/GDT19.png", filepath+"/GDT/GDT20.png", filepath+"/GDT/GDT21.png", filepath+"/GDT/GDT22.png", filepath+"/GDT/GDT23.png", filepath+"/GDT/GDT24.png"  ]
         self.qn =0
         self.age = cage
         self.agegroup = [3,6,8,11,13,17,20,24]
+
 
 
 
@@ -100,12 +100,12 @@ class GDT:
         labelid.place(x= 250, y =225, anchor = "center" )
         self.nextbtn['command'] = self.nexttest
         
-        self.returnval = int(result) #TODO: Create a function to return value
+        self.returnval = int(result) 
 
 
     def nexttest(self):
-        pass
-        #Todo: Call next test
+        self.master.destroy()
+        self.master.quit()
 
     def createq(self):
         n = 0
@@ -162,18 +162,22 @@ class GDT:
         btn.place(y= 10, x =250, anchor = "center")
         self.ques = self.create_q(self.frame1, self.qn)
 
+    def getresult(self):
+        return self.returnval
 
+'''
 root = Tk()
 w = 500 # width for the Tk root
 h = 500 # height for the Tk root
-# get screen width and height
+    # get screen width and height
 ws = root.winfo_screenwidth() # width of the screen
 hs = root.winfo_screenheight() # height of the screen
-# calculate x and y coordinates for the Tk root window
+    # calculate x and y coordinates for the Tk root window
 x = (ws/2) - (w/2)
 y = (hs/2) - (h/2)
-# set the dimensions of the screen
-# and where it is placed
+    # set the dimensions of the screen
+    # and where it is placed
 root.geometry('%dx%d+%d+%d' % (w, h, x, y))
-Rpm = GDT(root,6)
+GDTcall = GDT(root,6)
 root.mainloop()
+'''

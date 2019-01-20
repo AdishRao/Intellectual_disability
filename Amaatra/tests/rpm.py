@@ -36,6 +36,7 @@ class RPM:
         self.button1.pack(side=BOTTOM)
         self.button = Button(self.frame3,text="Next", command=self.next_btn)
         self.button.pack(side=LEFT)
+        self.returnval=0
 
     def next_btn(self):
         if self.check_q(self.qn):
@@ -68,14 +69,14 @@ class RPM:
         df = pd.read_csv(filepath+'/RPM/rpmresult.csv')
         X = df.iloc[:,1:6]
         self.mapvalue()
-        result = X.iloc[self.result+1,self.map] 
+        result = X.iloc[self.result,self.map] 
         print(result)
         self.frame1.destroy()
         self.frame2.destroy()
         self.frame3.destroy()
         self.frame1 = Frame(self.master, width=500, height=500)
         self.frame1.pack()
-        printresult = Label(self.frame1, text="Score is "+str(self.result))
+        printresult = Label(self.frame1, text="Score is "+str(result))
         printresult.place(x=250,y=240,anchor="center")
         if(result<26):
             self.frame1.configure(background='firebrick2') 
@@ -87,13 +88,11 @@ class RPM:
             printid.place(x=250,y=260,anchor="center")
         self.nexttest = Button(self.frame1,text="Next Test",command=self.next)
         self.nexttest.place(x=250,y=490,anchor="center")
-
         self.returnval = int(result) #return to calling function #TODO:create a function to return value
 
     def next(self):
-        #redefine.
-        #TODO: Call next test
-        pass
+        self.master.destroy()
+        self.master.quit()
 
     def check_q(self,qn):
         if self.opt_selected.get() == a[qn] :
@@ -140,19 +139,8 @@ class RPM:
             b_val=b_val+1
         return b
 
+    def getresult(self):
+        return self.returnval
+
 
 #TODO: remove call
-root = Tk()
-w = 500 # width for the Tk root
-h = 500 # height for the Tk root
-# get screen width and height
-ws = root.winfo_screenwidth() # width of the screen
-hs = root.winfo_screenheight() # height of the screen
-# calculate x and y coordinates for the Tk root window
-x = (ws/2) - (w/2)
-y = (hs/2) - (h/2)
-# set the dimensions of the screen
-# and where it is placed
-root.geometry('%dx%d+%d+%d' % (w, h, x, y))
-Rpm = RPM(root,6)
-root.mainloop()

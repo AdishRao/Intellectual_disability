@@ -164,7 +164,7 @@ number_of_questions = len(questions)
 
 window = Tk()
 w = 600
-h = 300
+h = 500
 # get screen width and height
 ws = window.winfo_screenwidth() # width of the screen
 hs = window.winfo_screenheight() # height of the screen
