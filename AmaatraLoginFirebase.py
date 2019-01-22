@@ -6,13 +6,13 @@ import pyrebase
 import datetime
 
 config = {
-    "apiKey": "AIzaSyCvpPBVuvkQd2D4RYOutvbDvmC_od8U3_M",
-    "authDomain": "example1-92a61.firebaseapp.com",
-    "databaseURL": "https://example1-92a61.firebaseio.com",
-    "projectId": "example1-92a61",
-    "storageBucket": "example1-92a61.appspot.com",
-    "messagingSenderId": "235374803572"
-}
+    "apiKey": "AIzaSyATuQBI1JJ9sI4jyLjvKbLQX6pzPeGfOMA",
+    "authDomain": "amaatraid.firebaseapp.com",
+    "databaseURL": "https://amaatraid.firebaseio.com",
+    "projectId": "amaatraid",
+    "storageBucket": "amaatraid.appspot.com",
+    "messagingSenderId": "829220285103"
+  }
 
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
@@ -38,7 +38,7 @@ class LoginTeacher:
         self.entry_2 = Entry(f, textvar=self.Password)
         self.entry_2.place(x=240,y=180)
 
-        self.btn = Button(f, text='Submit',width=20,bg='dark blue',fg='white', anchor="center", command=self.insertlogin)
+        self.btn = Button(f, text='Submit',width=20, anchor="center", command=self.insertlogin)
         self.btn.place(x=180,y=300)
 
     def insertlogin(self):
@@ -69,9 +69,9 @@ class Page1: #Intermediate window to choose new student, previous student or ret
         self.f=f
         self.label_0 = Label(f, text="Choose Activity",width=20,font=("bold", 20))
         self.label_0.place(x=90,y=53)
-        self.btn1 = Button(self.f, text='New Student',width=20,bg='red',fg='white', anchor="center",command=self.newstudent)
+        self.btn1 = Button(self.f, text='New Student',width=20, anchor="center",command=self.newstudent)
         self.btn1.place(x=160,y=310)
-        self.btn2 = Button(self.f, text='Student Details',width=20,bg='red',fg='white', anchor="center", command=self.prevstudent)
+        self.btn2 = Button(self.f, text='Student Details',width=20, anchor="center", command=self.prevstudent)
         self.btn2.place(x=160,y=410)
 
     def newstudent(self):
@@ -122,7 +122,7 @@ class NewStudent:
         self.entry_4 = Entry(f, textvar=self.Gender)
         self.entry_4.place(x=240,y=280)
 
-        self.btn = Button(f, text='Submit',width=20,bg='dark blue',fg='white', anchor="center", command=self.insertnew)
+        self.btn = Button(f, text='Submit',width=20, anchor="center", command=self.insertnew)
         self.btn.place(x=180,y=320)
 
     def insertnew(self):
@@ -170,13 +170,14 @@ class PrevStudent:
         self.entry_2.place(x=240,y=180)
 
 
-        self.btn = Button(f, text='Submit',width=20,bg='dark blue',fg='white', anchor="center", command=self.checkprev)
+        self.btn = Button(f, text='Submit',width=20, anchor="center", command=self.checkprev)
         self.btn.place(x=180,y=320)
 
     def checkprev(self):
         fname=self.Fname.get()
         lname=self.Lname.get()
         fullname = fname + " " + lname
+        fullname=fullname.lower()
         db = firebase.database()
         results = db.child("Student").child(fullname).get()
         print("\n")
