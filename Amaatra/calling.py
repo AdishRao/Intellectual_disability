@@ -11,6 +11,7 @@ from AmaatraLoginFirebase import *
 #results to store on cloud
 RPMresult = BSTresult = GDTresult = VLresult = 0
 Name = ""
+Age = 0
 
 def RPMCALL():
     root = Tk()
@@ -66,6 +67,11 @@ def GDTCALL():
     global GDTresult
     GDTresult=GDTcall.getresult()
 
+def TAKETEST():
+    RPMCALL()
+    BSTCALL()
+    GDTCALL()
+
 def FIREBASECALL():
     root = Tk()
     root.geometry('500x500')
@@ -74,12 +80,17 @@ def FIREBASECALL():
     f.pack()
     login = LoginTeacher(f,root)
     root.mainloop()
-    global Name
-    Name = login.returntocalling()
-    print("HEEELLLOOO"+Name)
+    global Name,Age
+    Name = login.returnnametocalling()
+    Age = login.returnagetocalling()
+    choice = login.returnchoice()
+    if choice == 1:
+        TAKETEST()
+    if choice == 2:
+        #SHOWRESULTS()
+        pass
+
 
 
 FIREBASECALL()
-RPMCALL()
-BSTCALL()
-GDTCALL()
+

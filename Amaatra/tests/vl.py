@@ -6,8 +6,6 @@ import pandas as pd
 import os
 import sys
 
-
-
 #global for vinelad
 yes =0
 no=0
@@ -17,7 +15,7 @@ vli=0
 index_arr = [0] * 90
 agetoadd = 0
 age_range = {6:[45,65],7:[51,70],8:[57,74],9:[62,77]}
-cage = 6
+cage = 6 #TODO Get value through some passing
 vlf = age_range[cage][1]
 
 
@@ -154,13 +152,11 @@ while(line != ""):
     answers = []
     for vli in range (3):
         answers.append(file.readline())
-
     questions.append(Question(questionString, answers))
     line = file.readline()
 file.close()
 
 number_of_questions = len(questions)
-
 
 window = Tk()
 w = 600
@@ -168,7 +164,6 @@ h = 500
 # get screen width and height
 ws = window.winfo_screenwidth() # width of the screen
 hs = window.winfo_screenheight() # height of the screen
-
 # calculate x and y coordinates for the Tk root window
 x = (ws/2) - (w/2)
 y = (hs/2) - (h/2)

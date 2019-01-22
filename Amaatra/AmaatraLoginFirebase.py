@@ -19,9 +19,10 @@ auth = firebase.auth()
 
 ReturnName = ""
 Age = 0
+Choice =-1
 
 class LoginTeacher:
-    def __init__(self, f,master):
+    def __init__(self,f,master):
         self.f=f
         self.master = master
         self.Password=StringVar()
@@ -69,9 +70,17 @@ class LoginTeacher:
         except:
             tkinter.messagebox.showinfo("No access", "Invalid email or password")
         
-    def returntocalling(self):
+    def returnnametocalling(self):
         global ReturnName
         return ReturnName
+    
+    def returnagetocalling(self):
+        global Age
+        return Age
+
+    def returnchoice(self):
+        global Choice
+        return Choice
 
 class Page1: #Intermediate window to choose new student, previous student or retake of test
     def __init__(self, f,master):
@@ -85,12 +94,16 @@ class Page1: #Intermediate window to choose new student, previous student or ret
         self.btn2.place(x=160,y=410)
 
     def newstudent(self):
+        global Choice
+        Choice = 1
         self.f.destroy()
         f1 = Frame(self.master,width=500,height=500)
         f1.pack()
         page2 = NewStudent(f1,self.master)
 
     def prevstudent(self):
+        global Choice
+        Choice = 2        
         self.f.destroy()
         f2 = Frame(self.master,width=500,height=500)
         f2.pack()
@@ -167,6 +180,7 @@ class NewStudent:
         #global root#self.f1.title("RESTAURANT DETAILS AND CUISINE")
         self.f.quit()
         self.master.destroy()
+        self.master.quit()
 
 class PrevStudent:
     def __init__(self, f,master):
@@ -214,6 +228,7 @@ class PrevStudent:
         #TODO GET AGE FROM ORDERED DICT
         #Display stats or move to the statistics page created earlier for tests taken by a student
         print(results.val())
+        Age = results.val()['age']
         str = results.val()
         if(str==None):
             tkinter.messagebox.showinfo("Invalid", "No such student")
@@ -222,3 +237,4 @@ class PrevStudent:
             #global root#self.f1.title("RESTAURANT DETAILS AND CUISINE")
             self.f.quit()
             self.master.destroy()
+            self.master.quit()
