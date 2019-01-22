@@ -63,7 +63,7 @@ class LoginTeacher:
             print(info)
             self.f.destroy()
 
-            #global root#self.f1.title("RESTAURANT DETAILS AND CUISINE")
+            #global root
             f1 = Frame(self.master,width=500,height=500)
             f1.pack()
             page1 = Page1(f1,self.master)
