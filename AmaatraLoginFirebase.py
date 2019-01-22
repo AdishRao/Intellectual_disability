@@ -132,7 +132,7 @@ class NewStudent:
         gender=self.Gender.get()
         global user1
         global info1
-        fullname = fname + " " + lname
+        fullname = fname + " " + lname + " " + age
         fullname = fullname.lower()
         #Check entered details with existing details on firebase to verify staff or not
         print(self.Fname.get())
