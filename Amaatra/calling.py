@@ -6,9 +6,11 @@ from tkinter import ttk
 from tests.rpm import *
 from tests.bst import *
 from tests.gdt import *
+from AmaatraLoginFirebase import *
 
 #results to store on cloud
 RPMresult = BSTresult = GDTresult = VLresult = 0
+Name = ""
 
 def RPMCALL():
     root = Tk()
@@ -64,6 +66,20 @@ def GDTCALL():
     global GDTresult
     GDTresult=GDTcall.getresult()
 
+def FIREBASECALL():
+    root = Tk()
+    root.geometry('500x500')
+    root.title("Amaatra-Login")
+    f = Frame(root,width=750,height=750)
+    f.pack()
+    login = LoginTeacher(f,root)
+    root.mainloop()
+    global Name
+    Name = login.returntocalling()
+    print("HEEELLLOOO"+Name)
+
+
+FIREBASECALL()
 RPMCALL()
 BSTCALL()
 GDTCALL()

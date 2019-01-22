@@ -18,10 +18,12 @@ firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
 
 ReturnName = ""
+Age = 0
 
 class LoginTeacher:
-    def __init__(self, f):
+    def __init__(self, f,master):
         self.f=f
+        self.master = master
         self.Password=StringVar()
         self.Email = StringVar()
 
@@ -59,10 +61,11 @@ class LoginTeacher:
             info1 = info
             print(info)
             self.f.destroy()
+
             #global root#self.f1.title("RESTAURANT DETAILS AND CUISINE")
-            f1 = Frame(root,width=500,height=500)
+            f1 = Frame(self.master,width=500,height=500)
             f1.pack()
-            page1 = Page1(f1)
+            page1 = Page1(f1,self.master)
         except:
             tkinter.messagebox.showinfo("No access", "Invalid email or password")
         
@@ -71,8 +74,9 @@ class LoginTeacher:
         return ReturnName
 
 class Page1: #Intermediate window to choose new student, previous student or retake of test
-    def __init__(self, f):
+    def __init__(self, f,master):
         self.f=f
+        self.master=master
         self.label_0 = Label(f, text="Choose Activity",width=20,font=("bold", 20))
         self.label_0.place(x=90,y=53)
         self.btn1 = Button(self.f, text='New Student',width=20, anchor="center",command=self.newstudent)
@@ -82,20 +86,21 @@ class Page1: #Intermediate window to choose new student, previous student or ret
 
     def newstudent(self):
         self.f.destroy()
-        f1 = Frame(root,width=500,height=500)
+        f1 = Frame(self.master,width=500,height=500)
         f1.pack()
-        page2 = NewStudent(f1)
+        page2 = NewStudent(f1,self.master)
 
     def prevstudent(self):
         self.f.destroy()
-        f2 = Frame(root,width=500,height=500)
+        f2 = Frame(self.master,width=500,height=500)
         f2.pack()
-        page3 = PrevStudent(f2)
+        page3 = PrevStudent(f2,self.master)
 
 
 class NewStudent:
-    def __init__(self, f):
+    def __init__(self, f,master):
         self.f=f
+        self.master=master
         self.Fname=StringVar()
         self.Lname = StringVar()
         self.Gender=StringVar()
@@ -139,7 +144,7 @@ class NewStudent:
         self.btn.place(x=180,y=370)
 
     def insertnew(self):
-        global ReturnName
+        global ReturnName,Age
         fname=self.Fname.get()
         lname=self.Lname.get()
         age=self.Age.get()
@@ -150,6 +155,7 @@ class NewStudent:
         self.fullname = fname + " " + lname + " " + str(dob)
         self.fullname = self.fullname.lower()
         ReturnName = self.fullname
+        Age = age
         #Check entered details with existing details on firebase to verify staff or not
         print(self.Fname.get())
         db = firebase.database()
@@ -157,15 +163,14 @@ class NewStudent:
         results = db.child("Student").child(self.fullname).set(data)
         print(results)
         #to check if primary key aready EXISTS
-
         self.f.destroy()
         #global root#self.f1.title("RESTAURANT DETAILS AND CUISINE")
-        f1 = Frame(root,width=500,height=500)
-        f1.pack()
-        page10 = Page1(f1) #TODO
+        self.f.quit()
+        self.master.destroy()
 
 class PrevStudent:
-    def __init__(self, f):
+    def __init__(self, f,master):
+        self.master=master
         self.f=f
         self.Fname = StringVar()
         self.Lname = StringVar()
@@ -196,7 +201,7 @@ class PrevStudent:
         self.btn.place(x=180,y=320)
 
     def checkprev(self):
-        global ReturnName
+        global ReturnName,Age
         fname=self.Fname.get()
         lname=self.Lname.get()
         dob=self.Dob.get()
@@ -206,6 +211,7 @@ class PrevStudent:
         db = firebase.database()
         results = db.child("Student").child(self.fullname).get()
         print("\n")
+        #TODO GET AGE FROM ORDERED DICT
         #Display stats or move to the statistics page created earlier for tests taken by a student
         print(results.val())
         str = results.val()
@@ -214,15 +220,5 @@ class PrevStudent:
         else:
             self.f.destroy()
             #global root#self.f1.title("RESTAURANT DETAILS AND CUISINE")
-            f1 = Frame(root,width=500,height=500)
-            f1.pack()
-            page11 = Page1(f1) #TODO
-
-
-root = Tk()
-root.geometry('500x500')
-root.title("Amaatra-Login")
-f = Frame(root,width=750,height=750)
-f.pack()
-login = LoginTeacher(f)
-root.mainloop()
+            self.f.quit()
+            self.master.destroy()
