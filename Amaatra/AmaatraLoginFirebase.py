@@ -63,17 +63,17 @@ class LoginTeacher:
             print(info)
             self.f.destroy()
 
-            #global root#self.f1.title("RESTAURANT DETAILS AND CUISINE")
+            #global root
             f1 = Frame(self.master,width=500,height=500)
             f1.pack()
             page1 = Page1(f1,self.master)
         except:
             tkinter.messagebox.showinfo("No access", "Invalid email or password")
-        
+
     def returnnametocalling(self):
         global ReturnName
         return ReturnName
-    
+
     def returnagetocalling(self):
         global Age
         return Age
@@ -103,7 +103,7 @@ class Page1: #Intermediate window to choose new student, previous student or ret
 
     def prevstudent(self):
         global Choice
-        Choice = 2        
+        Choice = 2
         self.f.destroy()
         f2 = Frame(self.master,width=500,height=500)
         f2.pack()
@@ -177,7 +177,7 @@ class NewStudent:
         print(results)
         #to check if primary key aready EXISTS
         self.f.destroy()
-        #global root#self.f1.title("RESTAURANT DETAILS AND CUISINE")
+        #global root
         self.f.quit()
         self.master.destroy()
         self.master.quit()
@@ -234,7 +234,7 @@ class PrevStudent:
             tkinter.messagebox.showinfo("Invalid", "No such student")
         else:
             self.f.destroy()
-            #global root#self.f1.title("RESTAURANT DETAILS AND CUISINE")
+            #global root
             self.f.quit()
             self.master.destroy()
             self.master.quit()
