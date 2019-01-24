@@ -6,12 +6,14 @@ from tkinter import ttk
 from tests.rpm import *
 from tests.bst import *
 from tests.gdt import *
+from tests.vl import *
 from AmaatraLoginFirebase import *
 
 #results to store on cloud
 RPMresult = BSTresult = GDTresult = VLresult = 0
 Name = ""
 Age = 0
+test_number = 0
 
 def RPMCALL():
     root = Tk()
@@ -68,9 +70,12 @@ def GDTCALL():
     GDTresult=GDTcall.getresult()
 
 def TAKETEST():
+    global test_number
+    test_number = 1
     RPMCALL()
     BSTCALL()
     GDTCALL()
+    #VLCALL()
 
 def FIREBASECALL():
     root = Tk()
@@ -89,8 +94,10 @@ def FIREBASECALL():
     if choice == 2:
         #SHOWRESULTS()
         pass
-
+    if choice == 3:
+        #RETAKETEST()
+        pass
 
 
 FIREBASECALL()
-
+print(test_number)

@@ -106,6 +106,25 @@ class Question:
         view.pack_forget()
         askQuestion()
 
+def quitf():
+    pass
+    #TODO: Call result display.
+
+questions = []
+filepath=os.path.dirname(os.path.abspath(__file__))
+file = open(filepath+"/VL/vineland2questions.txt", "r",encoding='windows-1252')
+line = file.readline()
+while(line != ""):
+    questionString = line
+    answers = []
+    for vli in range (3):
+        answers.append(file.readline())
+    questions.append(Question(questionString, answers))
+    line = file.readline()
+file.close()
+
+number_of_questions = len(questions)
+
 def askQuestion():
     global questions, window, button, yes, no,might, number_of_questions,social_quotient,index_arr,vlf,vli
     if(vli == vlf):
@@ -139,36 +158,18 @@ def askQuestion():
     label_des.pack_forget()
     questions[vli].getView(window).pack()
 
-def quitf():
-    pass
-    #TODO: Call result display.
-
-questions = []
-filepath=os.path.dirname(os.path.abspath(__file__))
-file = open(filepath+"/VL/vineland2questions.txt", "r",encoding='windows-1252')
-line = file.readline()
-while(line != ""):
-    questionString = line
-    answers = []
-    for vli in range (3):
-        answers.append(file.readline())
-    questions.append(Question(questionString, answers))
-    line = file.readline()
-file.close()
-
-number_of_questions = len(questions)
 
 window = Tk()
 w = 600
 h = 500
-# get screen width and height
+    # get screen width and height
 ws = window.winfo_screenwidth() # width of the screen
 hs = window.winfo_screenheight() # height of the screen
-# calculate x and y coordinates for the Tk root window
+    # calculate x and y coordinates for the Tk root window
 x = (ws/2) - (w/2)
 y = (hs/2) - (h/2)
-# set the dimensions of the screen
-# and where it is placed
+    # set the dimensions of the screen
+    # and where it is placed
 window.geometry('%dx%d+%d+%d' % (w, h, x, y))
 label_heading = Label(window, text="VINELAND SOCIAL MATURITY TEST",bg="black",fg="white",font=('Helvetica', '20'))
 label_heading.pack()
