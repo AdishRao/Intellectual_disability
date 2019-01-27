@@ -3,11 +3,12 @@ from PIL import Image
 from PIL import ImageTk
 from tkinter import ttk
 #import all classes
-from tests.rpm import *
-from tests.bst import *
-from tests.gdt import *
-from tests.vl import *
+from .tests.rpm import *
+from .tests.bst import *
+from .tests.gdt import *
+from .tests.vl import *
 from AmaatraLoginFirebase import *
+from .graph import Plot
 
 #results to store on cloud
 RPMresult = BSTresult = GDTresult = VLresult = 0
@@ -65,7 +66,7 @@ def GDTCALL():
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     GDTcall = GDT(root,6)
-    root.mainloop()
+    root.mainloop() 
     global GDTresult
     GDTresult=GDTcall.getresult()
 
@@ -100,4 +101,8 @@ def FIREBASECALL():
 
 
 FIREBASECALL()
+
+def gph():
+    plt = Plot(root)
+    plt.plot(BSTresult,GDTresult,RPMresult,VLresult)
 print(test_number)
