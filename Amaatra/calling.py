@@ -69,13 +69,18 @@ def GDTCALL():
     global GDTresult
     GDTresult=GDTcall.getresult()
 
+def VLCALL():
+    c = Caller()
+    global VLresult
+    VLresult = c.getresult()
+
 def TAKETEST():
     global test_number
     test_number = 1
     RPMCALL()
     BSTCALL()
     GDTCALL()
-    #VLCALL()
+    VLCALL()
 
 def FIREBASECALL():
     root = Tk()
@@ -97,7 +102,6 @@ def FIREBASECALL():
     if choice == 3:
         #RETAKETEST()
         pass
-
 
 FIREBASECALL()
 print(test_number)

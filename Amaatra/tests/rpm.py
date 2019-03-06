@@ -142,5 +142,3 @@ class RPM:
     def getresult(self):
         return self.returnval
 
-
-#TODO: remove call
