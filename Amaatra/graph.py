@@ -19,40 +19,42 @@ class Plot:
         maxlabel = Label(frame1, text = "BST min: 91| GDT min: 21| RPM min: 26| Vineland min: 91",wraplength=500,justify="left") #search
         maxlabel.pack()
 
-    def plot(self,*bst):
+    def plot(self,bst=[],gdt=[],rpm=[],vi = []):
         i = 1
-        y = []
+        y1 = []
         
-        for x in list(bst) :
+        for x1 in bst :
             y.append(i)
             i = i+1
-
-        trace1 = go.Bar(list(bst), y)
+        t1 = dict(x=y1,y=bst)
+        trace1 = go.Bar(t1)
 
         i = 1
-        y = []
+        y1 = []
         
-        for x in list(bst) :
-            y.append(i)
+        for x1 in gdt :
+            y1.append(i)
             i = i+1
-
-        trace2 = go.Bar(list(bst), y)
+        t1 = dict(x=y1,y=gdt)
+        trace2 = go.Bar(t1)
         i = 1
-        y = []
+        y1 = []
         
-        for x in list(bst) :
-            y.append(i)
+        for x1 in rpm :
+            y1.append(i)
             i = i+1
+        t1 = dict(x=y1,y=rpm)
 
-        trace3 = go.Bar(list(bst), y)
+
+        trace3 = go.Bar(t1)
         i = 1
-        y = []
+        y1 = []
         
-        for x in list(bst) :
-            y.append(i)
+        for x1 in vi :
+            y1.append(i)
             i = i+1
-
-        trace4 = go.Bar(list(bst), y)
+        t1 = dict(x=y1,y=vi)
+        trace4 = go.Bar(t1)
 
         fig = py.tools.make_subplots(rows=2, cols=2, subplot_titles=('BST', 'GDT','RPM', 'Vinelands'))
 
@@ -62,7 +64,7 @@ class Plot:
         fig.append_trace(trace4, 2, 2)
 
         fig['layout'].update(height=600, width=600, title='Test results comparison')
-        pio.write_image(fig, 'Report.png')
+        #pio.write_image(fig, 'Report.png')
         #py.offline.plot(fig, filename='results.html')
         #webbrowser.open('file://' + os.path.realpath('results.html'))
         frame2 = Frame(self.master,width=500,height=400)
