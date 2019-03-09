@@ -19,12 +19,14 @@ class Plot:
         maxlabel = Label(frame1, text = "BST min: 91| GDT min: 21| RPM min: 26| Vineland min: 91",wraplength=500,justify="left") #search
         maxlabel.pack()
 
-    def plot(self,bst=[],gdt=[],rpm=[],vi = []):
+    def plot(self,bst,rpm,gdt,vi):
+        print(bst)
+
         i = 1
         y1 = []
         print(f'bst {bst} gdt {gdt} rpm {rpm} vi {vi}')
         for x1 in bst :
-            y.append(i)
+            y1.append(i)
             i = i+1
         t1 = dict(x=y1,y=bst)
         trace1 = go.Bar(t1)
@@ -78,7 +80,7 @@ class Plot:
         endb = Button(self.master,text="Finish",command = self.quitb)
         endb.pack(side=BOTTOM)
         print('Plot successful')
-
+    
     def quitb(self):
         self.master.destroy()
         self.master.quit()

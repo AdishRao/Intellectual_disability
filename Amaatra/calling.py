@@ -12,10 +12,6 @@ from graph import Plot
 
 #results to store on cloud
 RPMresult = BSTresult = GDTresult = VLresult = 0
-RPMresultl = list() 
-BSTresultl = list()
-GDTresultl = list()
-VLresultl = list()
 
 Name = ""
 Age = 0
@@ -95,12 +91,26 @@ def gph():
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     plt = Plot(root)
-    plt.plot(BSTresultl.append(BSTresult),GDTresultl.append(GDTresult),RPMresultl.append(RPMresult),VLresultl.append(VLresult))
+    print("Passing to graph:")
+    print(BSTresult)
+    BSTresultl.append(BSTresult)
+    RPMresultl.append(RPMresult)
+    VLresultl.append(VLresult)
+    GDTresultl.append(GDTresult)
+    plt.plot(BSTresultl,RPMresultl,GDTresultl,VLresultl)
     root.mainloop() 
 
 
 def TAKETEST():
     global test_number,BSTresult,GDTresult,VLresult,RPMresult
+    global RPMresultl  
+    global BSTresultl 
+    global GDTresultl 
+    global VLresultl 
+    RPMresultl = []
+    BSTresultl  = []
+    GDTresultl = []
+    VLresultl  = []
     test_number = 1
     RPMCALL()
     BSTCALL()
