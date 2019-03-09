@@ -64,8 +64,8 @@ class Plot:
         fig.append_trace(trace4, 2, 2)
 
         fig['layout'].update(height=600, width=600, title='Test results comparison')
-        #pio.write_image(fig, 'Report.png')
-        #py.offline.plot(fig, filename='results.html')
+        pio.write_image(fig, 'Report.png')
+        py.offline.plot(fig, filename='results.html')
         #webbrowser.open('file://' + os.path.realpath('results.html'))
         frame2 = Frame(self.master,width=500,height=400)
         frame2.pack(side=TOP)
