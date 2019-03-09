@@ -22,7 +22,7 @@ class Plot:
     def plot(self,bst=[],gdt=[],rpm=[],vi = []):
         i = 1
         y1 = []
-        
+        print(f'bst {bst} gdt {gdt} rpm {rpm} vi {vi}')
         for x1 in bst :
             y.append(i)
             i = i+1

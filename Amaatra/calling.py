@@ -95,17 +95,18 @@ def gph():
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     plt = Plot(root)
-    plt.plot(RPMresultl)
+    plt.plot(BSTresultl.append(BSTresult),GDTresultl.append(GDTresult),RPMresultl.append(RPMresult),VLresultl.append(VLresult))
     root.mainloop() 
 
 
 def TAKETEST():
-    global test_number
+    global test_number,BSTresult,GDTresult,VLresult,RPMresult
     test_number = 1
     RPMCALL()
     BSTCALL()
     GDTCALL()
     VLCALL()
+    print(f'BST {BSTresult} GDT {GDTresult} VL {VLresult} RPM {RPMresult}' )
     gph()
 
 def FIREBASECALL():
@@ -131,4 +132,4 @@ def FIREBASECALL():
 
 FIREBASECALL()
 
-print(test_number)
+print("Test Number",test_number)
