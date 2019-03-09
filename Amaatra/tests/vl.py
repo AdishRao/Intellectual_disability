@@ -107,9 +107,6 @@ class Question:
         view.pack_forget()
         self.REF.askQuestion()
 
-def quitf():
-    pass
-    #TODO: Call result display.
 
 questions = []
 filepath=os.path.dirname(os.path.abspath(__file__))
@@ -176,15 +173,18 @@ class Caller:
                 window.configure(background='spring green')
             if ID==True:
                 window.configure(background='firebrick2')
-            buttonn = Button(window,text="Next",command=quitf)
+            buttonn = Button(window,text="Next",command=self.quitf)
             buttonn.pack(side=BOTTOM)
-            self.returnval = float(social_quotient) #TODO: create func to return the val
+            self.returnval = float(social_quotient) 
             return
-
-        def getresult(self):
-            return self.returnval
-
         self.button.pack_forget()
         self.label_des.pack_forget()
-        questions[vli].getView(window,self).pack()    
+        questions[vli].getView(window,self).pack() 
+        
+    def quitf(self):
+        self.window.destroy()
+        self.window.quit()
+
+    def getresult(self):
+        return self.returnval   
 

@@ -1,4 +1,3 @@
-
 import plotly as py
 import webbrowser, os
 import plotly.graph_objs as go
@@ -17,43 +16,43 @@ class Plot:
         self.master=master
         frame1 = Frame(master,width=500,height=50)
         frame1.pack(side=TOP)
-        maxlabel = Label(frame1, text = "RPM min: 26| DST min: 26| BST min: 91| GDT min: 21| Vineland min: 91",wraplength=500,justify="left") #search
+        maxlabel = Label(frame1, text = "BST min: 91| GDT min: 21| RPM min: 26| Vineland min: 91",wraplength=500,justify="left") #search
         maxlabel.pack()
 
-    def plot(self,bst,gdt,rpm,vi):
+    def plot(self,*bst):
         i = 1
         y = []
         
-        for x in bst :
+        for x in list(bst) :
             y.append(i)
             i = i+1
 
-        trace1 = go.Bar(bst, y)
+        trace1 = go.Bar(list(bst), y)
 
         i = 1
         y = []
         
-        for x in gdt :
+        for x in list(bst) :
             y.append(i)
             i = i+1
 
-        trace2 = go.Bar(gdt, y)
+        trace2 = go.Bar(list(bst), y)
         i = 1
         y = []
         
-        for x in rpm :
+        for x in list(bst) :
             y.append(i)
             i = i+1
 
-        trace3 = go.Bar(rpm, y)
+        trace3 = go.Bar(list(bst), y)
         i = 1
         y = []
         
-        for x in vi :
+        for x in list(bst) :
             y.append(i)
             i = i+1
 
-        trace4 = go.Bar(vi, y)
+        trace4 = go.Bar(list(bst), y)
 
         fig = py.tools.make_subplots(rows=2, cols=2, subplot_titles=('BST', 'GDT','RPM', 'Vinelands'))
 
@@ -76,12 +75,13 @@ class Plot:
         photolabel.pack()
         endb = Button(self.master,text="Finish",command = self.quitb)
         endb.pack(side=BOTTOM)
+        print('Plot successful')
 
     def quitb(self):
         self.master.destroy()
         self.master.quit()
         
-print('Plot successful')
+
 
 
         
