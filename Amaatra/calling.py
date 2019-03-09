@@ -81,6 +81,7 @@ def VLCALL():
     VLresult = c.getresult()
 
 def gph():
+    global RPMresult,BSTresult,GDTresult,VLresult,RPMresultl,BSTresultl,GDTresultl,VLresultl
     print("In Graph")
     root = Tk()
     w = 500 # width for the Tk root
@@ -93,6 +94,9 @@ def gph():
     y = (hs/2) - (h/2)
     # set the dimensions of the screen
     # and where it is placed
+    print(RPMresult)
+    RPMresultl.append(RPMresult)
+    print(RPMresultl)
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     plt = Plot(root)
     plt.plot(BSTresultl.append(BSTresult),GDTresultl.append(GDTresult),RPMresultl.append(RPMresult),VLresultl.append(VLresult))
