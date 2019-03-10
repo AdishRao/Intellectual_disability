@@ -29,7 +29,7 @@ class Plot:
             y1.append(i)
             i = i+1
         t1 = dict(x=y1,y=bst)
-        trace1 = go.Bar(t1)
+        BST = go.Bar(t1)
 
         i = 1
         y1 = []
@@ -38,7 +38,7 @@ class Plot:
             y1.append(i)
             i = i+1
         t1 = dict(x=y1,y=gdt)
-        trace2 = go.Bar(t1)
+        GDT = go.Bar(t1)
         i = 1
         y1 = []
         
@@ -48,7 +48,7 @@ class Plot:
         t1 = dict(x=y1,y=rpm)
 
 
-        trace3 = go.Bar(t1)
+        RPM = go.Bar(t1)
         i = 1
         y1 = []
         
@@ -56,18 +56,18 @@ class Plot:
             y1.append(i)
             i = i+1
         t1 = dict(x=y1,y=vi)
-        trace4 = go.Bar(t1)
+        VI = go.Bar(t1)
 
         fig = py.tools.make_subplots(rows=2, cols=2, subplot_titles=('BST', 'GDT','RPM', 'Vinelands'))
 
-        fig.append_trace(trace1, 1, 1)
-        fig.append_trace(trace2, 1, 2)
-        fig.append_trace(trace3, 2, 1)
-        fig.append_trace(trace4, 2, 2)
+        fig.append_trace(BST, 1, 1)
+        fig.append_trace(GDT, 1, 2)
+        fig.append_trace(RPM, 2, 1)
+        fig.append_trace(VI, 2, 2)
 
         fig['layout'].update(height=600, width=600, title='Test results comparison')
         pio.write_image(fig, 'Report.png')
-        py.offline.plot(fig, filename='results.html')
+        #py.offline.plot(fig, filename='results.html')
         #webbrowser.open('file://' + os.path.realpath('results.html'))
         frame2 = Frame(self.master,width=500,height=400)
         frame2.pack(side=TOP)
