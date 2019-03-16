@@ -90,20 +90,15 @@ def gph():
     y = (hs/2) - (h/2)
     # set the dimensions of the screen
     # and where it is placed
-    print(RPMresult)
-    RPMresultl.append(RPMresult)
-    print(RPMresultl)
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     plt = Plot(root)
     print("Passing to graph:")
-    print(BSTresult)
     BSTresultl.append(BSTresult)
     RPMresultl.append(RPMresult)
     VLresultl.append(VLresult)
     GDTresultl.append(GDTresult)
     plt.plot(BSTresultl,RPMresultl,GDTresultl,VLresultl)
     root.mainloop() 
-
 
 def TAKETEST():
     global test_number,BSTresult,GDTresult,VLresult,RPMresult
