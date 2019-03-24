@@ -4,6 +4,7 @@ import os
 import tkinter.messagebox
 import pyrebase
 import datetime
+from Student_details import *
 
 config = {
     "apiKey": "AIzaSyATuQBI1JJ9sI4jyLjvKbLQX6pzPeGfOMA",
@@ -219,22 +220,7 @@ class PrevStudent:
         fname=self.Fname.get()
         lname=self.Lname.get()
         dob=self.Dob.get()
-        self.fullname = fname + " " + lname + " " + dob
-        self.fullname=self.fullname.lower()
-        ReturnName = self.fullname
-        db = firebase.database()
-        results = db.child("Student").child(self.fullname).get()
-        print("\n")
-        #TODO GET AGE FROM ORDERED DICT
-        #Display stats or move to the statistics page created earlier for tests taken by a student
-        print(results.val())
-        Age = results.val()['age']
-        str = results.val()
-        if(str==None):
-            tkinter.messagebox.showinfo("Invalid", "No such student")
-        else:
-            self.f.destroy()
-            #global root
-            self.f.quit()
-            self.master.destroy()
-            self.master.quit()
+        self.master.destroy()
+        dt = Details(self.master)
+        dt.details(fname,lname,dob)
+       
