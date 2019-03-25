@@ -115,9 +115,9 @@ def TAKETEST():
     GDTresultl = []
     VLresultl  = []
     test_number = 1
-    #RPMCALL()
-    #BSTCALL()
-    #GDTCALL()
+    RPMCALL()
+    BSTCALL()
+    GDTCALL()
     VLCALL()
     print(f'BST {BSTresult} GDT {GDTresult} VL {VLresult} RPM {RPMresult}' )
     gph()
