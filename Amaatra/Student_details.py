@@ -19,16 +19,16 @@ from graph import *
 from AmaatraLoginFirebase import *
 
 config = {
-    "apiKey": "AIzaSyD4wM9H9d_UFKofaaSqj4xFAIyghQ25Kj0",
-    "authDomain": "ssrvm-ac446.firebaseapp.com",
-    "databaseURL": "https://ssrvm-ac446.firebaseio.com",
-    "projectId": "ssrvm-ac446",
-    "storageBucket": "ssrvm-ac446.appspot.com",
-    "messagingSenderId": "755548400219"
-}
+    "apiKey": "AIzaSyATuQBI1JJ9sI4jyLjvKbLQX6pzPeGfOMA",
+    "authDomain": "amaatraid.firebaseapp.com",
+    "databaseURL": "https://amaatraid.firebaseio.com",
+    "projectId": "amaatraid",
+    "storageBucket": "amaatraid.appspot.com",
+    "messagingSenderId": "829220285103"
+  }
 
-firebase = firebase.FirebaseApplication("https://ssrvm-ac446.firebaseio.com")
-res = firebase.put('/StudentDetails/Ag16-05-1998','BST','30/40')
+firebase = firebase.FirebaseApplication("https://amaatraid.firebaseio.com")
+res = firebase.put('/Student/Ag16-05-1998','BST','30/40')
 print(res)
 res = firebase.get('/StudentDetails/Ag16-05-1998',None)
 print(res)

@@ -79,7 +79,7 @@ class Plot:
     
     def quitb(self):
         self.master.destroy()
-        
+        self.master.quit()        
 
 
 

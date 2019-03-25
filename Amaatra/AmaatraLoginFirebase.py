@@ -4,7 +4,7 @@ import os
 import tkinter.messagebox
 import pyrebase
 import datetime
-from Student_details import *
+#from Student_details import *
 
 config = {
     "apiKey": "AIzaSyATuQBI1JJ9sI4jyLjvKbLQX6pzPeGfOMA",
@@ -22,13 +22,14 @@ ReturnName = ""
 Age = 0
 Choice =-1
 
+
 class LoginTeacher:
-    def __init__(self,f,master):
+    def __init__(self,f,master,numb):
         self.f=f
         self.master = master
         self.Password=StringVar()
         self.Email = StringVar()
-
+        self.numb = numb
         self.label_0 = Label(f, text="Staff Login Verification",width=20,font=("bold", 20))
         self.label_0.place(x=90,y=53)
 
@@ -46,6 +47,8 @@ class LoginTeacher:
 
         self.btn = Button(f, text='Submit',width=20, anchor="center", command=self.insertlogin)
         self.btn.place(x=180,y=300)
+        if numb >0:
+            self.insertlogin()
 
     def insertlogin(self):
         email=self.Email.get()
@@ -55,8 +58,11 @@ class LoginTeacher:
         print(self.Email.get())
         #to check if primary key aready EXISTS
         try:
-            global user1
-            user = auth.sign_in_with_email_and_password(email,password)
+            if self.numb>0:
+                user = auth.sign_in_with_email_and_password("adishr@gmail.com","admin123")
+            else:
+                global user1
+                user = auth.sign_in_with_email_and_password(email,password)
             user1 = user
             global info1
             info=auth.get_account_info(user['idToken'])
@@ -221,6 +227,6 @@ class PrevStudent:
         lname=self.Lname.get()
         dob=self.Dob.get()
         self.master.destroy()
-        dt = Details(self.master)
-        dt.details(fname,lname,dob)
+       # dt = Details(self.master)
+        #dt.details(fname,lname,dob)
        

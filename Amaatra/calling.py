@@ -104,6 +104,7 @@ def gph():
     plt.plot(BSTresultl,RPMresultl,GDTresultl,VLresultl)
     root.mainloop() 
 
+
 def TAKETEST():
     global test_number,BSTresult,GDTresult,VLresult,RPMresult
     global RPMresultl  
@@ -114,7 +115,7 @@ def TAKETEST():
     BSTresultl  = []
     GDTresultl = []
     VLresultl  = []
-    test_number = 1
+    test_number += 1
     RPMCALL()
     BSTCALL()
     GDTCALL()
@@ -138,7 +139,7 @@ def FIREBASECALL():
     root.title("Amaatra-Login")
     f = Frame(root,width=750,height=750)
     f.pack()
-    login = LoginTeacher(f,root)
+    login = LoginTeacher(f,root,test_number)
     root.mainloop()
     global Name,Age
     Name = login.returnnametocalling()
@@ -146,13 +147,8 @@ def FIREBASECALL():
     choice = login.returnchoice()
     if choice == 1:
         TAKETEST()
-    if choice == 2:
-        #SHOWRESULTS()
-        pass
-    if choice == 3:
-        #RETAKETEST()
-        pass
 
+FIREBASECALL()
 FIREBASECALL()
 
 print("Test Number",test_number)
