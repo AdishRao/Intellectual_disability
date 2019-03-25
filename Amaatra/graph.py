@@ -27,7 +27,7 @@ class Plot:
             y1.append(i)
             i = i+1
         t1 = dict(x=y1,y=bst)
-        BST = go.Bar(t1)
+        BST = go.Bar(t1,name='Binet Simon Test')
 
         i = 1
         y1 = []
@@ -36,7 +36,7 @@ class Plot:
             y1.append(i)
             i = i+1
         t1 = dict(x=y1,y=gdt)
-        GDT = go.Bar(t1)
+        GDT = go.Bar(t1,name="Gessel's Drawing Test")
         i = 1
         y1 = []
         
@@ -46,7 +46,7 @@ class Plot:
         t1 = dict(x=y1,y=rpm)
 
 
-        RPM = go.Bar(t1)
+        RPM = go.Bar(t1,name="Reaven's Progressive Matrix")
         i = 1
         y1 = []
         
@@ -54,7 +54,7 @@ class Plot:
             y1.append(i)
             i = i+1
         t1 = dict(x=y1,y=vi)
-        VI = go.Bar(t1)
+        VI = go.Bar(t1,name='Vineland Social Maturity Scale')
 
         fig = py.tools.make_subplots(rows=2, cols=2, subplot_titles=('BST', 'GDT','RPM', 'Vinelands'))
 
@@ -79,7 +79,6 @@ class Plot:
     
     def quitb(self):
         self.master.destroy()
-        self.master.quit()
         
 
 

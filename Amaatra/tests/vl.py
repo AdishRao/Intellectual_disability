@@ -15,7 +15,7 @@ vli=0
 index_arr = [0] * 90
 agetoadd = 0
 age_range = {6:[45,65],7:[51,70],8:[57,74],9:[62,77]}
-cage = 6 #TODO Get value through some passing
+cage = 6
 vlf = age_range[cage][1]
 
 
@@ -43,7 +43,9 @@ class Question:
         if(letter == "A"):
             label = Label(view, text="Yes")
             yes += 1
-            basal_age+=agetoadd
+            if(vli==15 or vli==32):
+                basal_age=round(basal_age+0.1,2)
+            basal_age=round(basal_age+agetoadd,2)
             vli += 1
             index_arr[vli] = 1
         elif(letter == "B"):
@@ -126,7 +128,10 @@ number_of_questions = len(questions)
 
 
 class Caller:
-    def __init__(self):
+    def __init__(self,age):
+        global cage,vlf
+        cage = age
+        vlf = age_range[cage][1]
         self.window = Tk()
         w = 600
         h = 500
@@ -151,7 +156,7 @@ class Caller:
         global questions, button, yes, no,might, number_of_questions,social_quotient,index_arr,vlf,vli
         window = self.window
         if(vli == vlf):
-            Label(window,text="Thank you for answering the questions.\n basal_age = " + str(basal_age)).pack()
+            Label(window,text="Thank you for answering the questions.\n basal age = " + str(basal_age)).pack()
             global cage
             social_quotient=(basal_age/(cage*12))*100#chrono age taken as 10 as all question included are till 9-10 yearsold
             Label(window, text="social quotient = " + str(social_quotient)).pack()
