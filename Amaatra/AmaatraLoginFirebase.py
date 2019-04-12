@@ -17,6 +17,8 @@ config = {
 
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
+database = firebase.database()
+path = ""
 
 ReturnName = ""
 Age = 0
@@ -29,7 +31,6 @@ class LoginTeacher:
         self.master = master
         self.Password=StringVar()
         self.Email = StringVar()
-        self.numb = numb
         self.label_0 = Label(f, text="Staff Login Verification",width=20,font=("bold", 20))
         self.label_0.place(x=90,y=53)
 
@@ -47,8 +48,7 @@ class LoginTeacher:
 
         self.btn = Button(f, text='Submit',width=20, anchor="center", command=self.insertlogin)
         self.btn.place(x=180,y=300)
-        if numb >0:
-            self.insertlogin()
+
 
     def insertlogin(self):
         email=self.Email.get()
@@ -58,28 +58,22 @@ class LoginTeacher:
         print(self.Email.get())
         #to check if primary key aready EXISTS
         try:
-            if self.numb>0:
-                user = auth.sign_in_with_email_and_password("adishr@gmail.com","admin123")
-            else:
-                global user1
-                user = auth.sign_in_with_email_and_password(email,password)
-            user1 = user
-            global info1
+            user = auth.sign_in_with_email_and_password(email,password)
             info=auth.get_account_info(user['idToken'])
-            info1 = info
             print(info)
             self.f.destroy()
 
             #global root
             f1 = Frame(self.master,width=500,height=500)
+            f1.configure(background='peach puff')
             f1.pack()
             page1 = Page1(f1,self.master)
         except:
             tkinter.messagebox.showinfo("No access", "Invalid email or password")
 
     def returnnametocalling(self):
-        global ReturnName
-        return ReturnName
+        global ReturnName,path
+        return ReturnName,path
 
     def returnagetocalling(self):
         global Age
@@ -105,6 +99,7 @@ class Page1: #Intermediate window to choose new student, previous student or ret
         Choice = 1
         self.f.destroy()
         f1 = Frame(self.master,width=500,height=500)
+        f1.configure(background='peach puff')
         f1.pack()
         page2 = NewStudent(f1,self.master)
 
@@ -113,6 +108,7 @@ class Page1: #Intermediate window to choose new student, previous student or ret
         Choice = 2
         self.f.destroy()
         f2 = Frame(self.master,width=500,height=500)
+        f2.configure(background='peach puff')
         f2.pack()
         page3 = PrevStudent(f2,self.master)
 
@@ -164,16 +160,15 @@ class NewStudent:
         self.btn.place(x=180,y=370)
 
     def insertnew(self):
-        global ReturnName,Age
+        global ReturnName,Age,path
         fname=self.Fname.get()
         lname=self.Lname.get()
         age=self.Age.get()
         gender=self.Gender.get()
         dob=self.Dob.get()
-        global user1
-        global info1
         self.fullname = fname + " " + lname + " " + str(dob)
         self.fullname = self.fullname.lower()
+        path = self.fullname
         ReturnName = self.fullname
         Age = age
         #Check entered details with existing details on firebase to verify staff or not

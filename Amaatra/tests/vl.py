@@ -144,6 +144,7 @@ class Caller:
             # set the dimensions of the screen
             # and where it is placed
         self.window.geometry('%dx%d+%d+%d' % (w, h, x, y))
+        self.window.title("Vineland Social Maturity Test")
         label_heading = Label(self.window, text="VINELAND SOCIAL MATURITY TEST",bg="black",fg="white",font=('Helvetica', '20'))
         label_heading.pack()
         self.label_des = Label(self.window, text="\n\nThe Vineland Social Maturity Scale (VSMS) measures the differential social\ncapacities of an individual. It provides an estimate of Social Age (SA) and Social\nQuotient (SQ), and shows high correlation (0.80) with intelligence. It is designed to\nmeasure social maturation in eight social areas: Self-help General (SHG), Self-help\nEating (SHE), Self-help Dressing (SHD), Self direction (SD), Occupation (OCC),\nCommunication (COM), Locomotion (LOM), and Socialization (SOC).",fg="blue",font=('15'))
@@ -175,9 +176,7 @@ class Caller:
             else:
                 ID = False
                 Label(window, text="Normal IQ").pack()
-                window.configure(background='spring green')
-            if ID==True:
-                window.configure(background='firebrick2')
+            window.configure(background='peach puff')
             buttonn = Button(window,text="Next",command=self.quitf)
             buttonn.pack(side=BOTTOM)
             self.returnval = float(social_quotient) 

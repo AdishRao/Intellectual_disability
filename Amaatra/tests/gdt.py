@@ -92,10 +92,7 @@ class GDT:
         self.frame1.destroy()
         self.frame1 = Frame(self.master,width=500,height=450)
         self.frame1.pack(side=TOP)
-        if ID == True:
-            self.frame1.configure(background='firebrick2') 
-        else:
-            self.frame1.configure(background='spring green') 
+        self.frame1.configure(background='peach puff')  
         labelid = Label(self.frame1, text = strid)
         labelid.place(x= 250, y =225, anchor = "center" )
         self.nextbtn['command'] = self.nexttest

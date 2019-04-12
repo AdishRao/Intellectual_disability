@@ -137,10 +137,7 @@ class BST:
             strid = "Not Intellectual Disability"
         frame = Frame(self.master,width = 500, height = 300)
         frame.pack(side=TOP)
-        if self.iq<90:
-            frame.configure(background='firebrick2')
-        else:
-            frame.configure(background='spring green') 
+        frame.configure(background='peach puff')
         label = Label(frame,text=strid)
         label.place(x=250,y=150,anchor='center')
         self.returnval = self.iq #TODO: create a function to return the result to main function

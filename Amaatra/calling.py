@@ -12,6 +12,7 @@ from graph import Plot
 
 #results to store on cloud
 RPMresult = BSTresult = GDTresult = VLresult = 0
+pathdir = ""
 
 Name = ""
 Age = 0
@@ -31,6 +32,7 @@ def RPMCALL():
     # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+    root.title("Ravens Progressive Matrix")
     RPMcall = RPM(root,Age)
     root.mainloop()
     global RPMresult
@@ -50,6 +52,7 @@ def BSTCALL():
     # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+    root.title("Binet Simon Test")
     BSTcall = BST(root,Age)
     root.mainloop()
     global BSTresult
@@ -69,6 +72,7 @@ def GDTCALL():
     # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+    root.title("Gessel's Drawing Test")
     GDTcall = GDT(root,Age)
     root.mainloop() 
     global GDTresult
@@ -104,13 +108,9 @@ def gph():
     plt.plot(BSTresultl,RPMresultl,GDTresultl,VLresultl)
     root.mainloop() 
 
-
 def TAKETEST():
-    global test_number,BSTresult,GDTresult,VLresult,RPMresult
-    global RPMresultl  
-    global BSTresultl 
-    global GDTresultl 
-    global VLresultl 
+    global test_number,BSTresult,GDTresult,VLresult,RPMresult,pathdir
+    global RPMresultl,BSTresultl,GDTresultl,VLresultl 
     RPMresultl = []
     BSTresultl  = []
     GDTresultl = []
@@ -120,7 +120,10 @@ def TAKETEST():
     BSTCALL()
     GDTCALL()
     VLCALL()
-    print(f'BST {BSTresult} GDT {GDTresult} VL {VLresult} RPM {RPMresult}' )
+    print(f'BST {BSTresult} GDT {GDTresult} VL {VLresult} RPM {RPMresult}')
+    resulttodb = {"RPM":RPMresult, "BST":BSTresult,"VL":VLresult,"GDT":GDTresult}
+    database.child("Student").child(pathdir).update(resulttodb)
+    print(database.child("Student").child(pathdir).get().val())
     gph()
 
 def FIREBASECALL():
@@ -136,19 +139,19 @@ def FIREBASECALL():
     # set the dimensions of the screen
     # and where it is placed
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
-    root.title("Amaatra-Login")
+    root.title("Login")
+    root.configure(background='peach puff')
     f = Frame(root,width=750,height=750)
+    f.configure(background='peach puff')
     f.pack()
     login = LoginTeacher(f,root,test_number)
     root.mainloop()
-    global Name,Age
-    Name = login.returnnametocalling()
+    global Name,Age,pathdir
+    Name,pathdir = login.returnnametocalling()
     Age = login.returnagetocalling()
     choice = login.returnchoice()
     if choice == 1:
         TAKETEST()
 
 FIREBASECALL()
-FIREBASECALL()
-
 print("Test Number",test_number)
