@@ -19,10 +19,9 @@ class RPM:
         self.cage = cage 
         self.master=master
         self.result = 0
-        self.frame1= Frame(master,width=500, height=300)
+        self.frame1= Frame(master,width=500, height=400)
         self.frame1.pack(side=TOP)
-        self.frame3= Frame(master, width=500,height=100)
-        self.frame3.pack(side=BOTTOM)
+
         self.frame2= Frame(master,width=500, height=100)
         self.frame2.pack(side=BOTTOM)
         self.opt_selected = IntVar()
@@ -30,15 +29,13 @@ class RPM:
         self.ques = self.create_q(self.frame1,self.qn)
         self.opts = self.create_options(self.frame2,6)
         self.display_q(self.qn)
-        labelempty= Label(self.frame3,text="")
-        labelempty.pack(side=TOP)
-        self.button1 = Button(self.frame3,text="Skip", command=self.print_result)
-        self.button1.pack(side=BOTTOM)
-        self.button = Button(self.frame3,text="Next", command=self.next_btn)
-        self.button.pack(side=LEFT)
+        
+       
         self.returnval=0
 
-    def next_btn(self):
+    def next_btn(self, value):
+        print(value)
+        self.opt_selected = value
         if self.check_q(self.qn):
             self.result+=1
             print("correct "+str(self.qn+1))
@@ -73,18 +70,19 @@ class RPM:
         print(result)
         self.frame1.destroy()
         self.frame2.destroy()
-        self.frame3.destroy()
+        
         self.frame1 = Frame(self.master, width=500, height=500)
         self.frame1.pack()
         printresult = Label(self.frame1, text="Score is "+str(result))
         printresult.place(x=250,y=240,anchor="center")
         if(result<26):
+            self.frame1.configure(background='firebrick2') 
             printid = Label(self.frame1, text="Test FAILED: Intellectual Disability")
             printid.place(x=250,y=260,anchor="center")
         else:
+            self.frame1.configure(background='spring green') 
             printid = Label(self.frame1, text="Test PASSED: Normal")
             printid.place(x=250,y=260,anchor="center")
-        self.frame1.configure(background='peach puff') 
         self.nexttest = Button(self.frame1,text="Next Test",command=self.next)
         self.nexttest.place(x=250,y=490,anchor="center")
         self.returnval = int(result) #return to calling function #TODO:create a function to return value
@@ -94,7 +92,8 @@ class RPM:
         self.master.quit()
 
     def check_q(self,qn):
-        if self.opt_selected.get() == a[qn] :
+        print(self.opt_selected)
+        if self.opt_selected == a[qn] :
             return True
         return False
 
@@ -103,9 +102,9 @@ class RPM:
         b_val = 0
         num = 0
         photo = Image.open(filepath+"/RPM/"+q[qn])
-        photo = photo.resize((500, 300), Image.ANTIALIAS)
+        photo = photo.resize((500, 400), Image.ANTIALIAS)
         self.render = ImageTk.PhotoImage(photo)
-        self.opt_selected.set(0)
+        self.opt_selected = 0 
         self.ques['image'] = self.render
         if (qn>=24):
             num = 1
@@ -120,7 +119,6 @@ class RPM:
 
     def create_q(self,frame1,qn):
        filepath=os.path.dirname(os.path.abspath(__file__))
-       print("RPM FP ",filepath)
        photo = Image.open(filepath+"/RPM/"+q[qn])
        photo = photo.resize((500, 300), Image.ANTIALIAS)
        self.render = ImageTk.PhotoImage(photo)
@@ -133,7 +131,8 @@ class RPM:
         b_val = 0
         b = []
         while b_val<n:
-            btn = Radiobutton(frame2, text="",variable=self.opt_selected,value=b_val+1)
+            print(b_val)
+            btn = Button(frame2, text= str(b_val+1), command = lambda i = b_val+ 1 :self.next_btn(i), width = 5, height = 3)
             b.append(btn)
             btn.pack(side=LEFT,anchor="w")
             b_val=b_val+1
