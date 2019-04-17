@@ -1434,6 +1434,27 @@ dbf.child("Child").child(str(rid)).child(str(uid))
 addtest = {"RPM":int(firestorerpm),"DST":int(firestoredst),"BST":float(firestorebst),"GDT":int(firestoregdt),"VLD":float(firestorevld)}
 dbf.set(addtest)
 
+def sendtodoc():
+    scores = []
+    count = 0
+    dbf = firebase.database()
+    myscore = dbf.child("Child").child(str(rid)).get().val()
+    for uids in myscore:
+        currscore = []
+        for vals in myscore[uids]:
+            currscore.append(myscore[uids][vals])
+        scores.append(currscore)
+    i = len(scores) #This is for the user
+    ins = scores.pop()
+    scores.insert(0,ins)
+    for tests in range (5):
+        if ((scores[i-1][tests]-scores[i-2][tests])/(scores[i-2])*100) <= -5:
+            count+=1
+    if count > 2:
+        return True
+    else:
+        return False
+
 if st==2 or i==-6:
     q = "SELECT UID FROM CHILD WHERE RID ='"+str(rid)+"' order by DateOfTest"
     mycursor.execute(q)
@@ -1492,24 +1513,4 @@ if st==2 or i==-6:
     singletestres = STR(root)
     root.mainloop()  
 
-def sendtodoc():
-    scores = []
-    count = 0
-    dbf = firebase.database()
-    myscore = dbf.child("Child").child(str(rid)).get().val()
-    for uids in myscore:
-        currscore = []
-        for vals in myscore[uids]:
-            currscore.append(myscore[uids][vals])
-        scores.append(currscore)
-    i = len(scores) #This is for the user
-    ins = scores.pop()
-    scores.insert(0,ins)
-    for tests in range (5):
-        if ((scores[i-1][tests]-scores[i-2][tests])/(scores[i-2])*100) <= -5:
-            count+=1
-    if count > 2:
-        return True
-    else:
-        return False
         

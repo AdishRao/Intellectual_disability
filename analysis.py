@@ -6,7 +6,7 @@ import pandas as pd
 from random import randint
 import numpy as np
 import pyrebase
-
+import tkinter.messagebox
 
 #firebase config
 config = {
@@ -29,8 +29,9 @@ cname =""
 gender=""
 
 class login:
-    def __init__(self,master):
+    def __init__(self,master,root):
         self.master = master
+        self.root=root
         self.email = Label(master,text="Enter Email:")
         self.email.place(x=200,y=195,anchor="center")
         self.password = Label(master,text="Enter Password:")
@@ -62,11 +63,10 @@ class login:
             #global st
             #st =  2
             
-            self.analysismain(self)
+            self.analysismain()
             
         except:
-            self.errorlabel = Label(self.master, text = "Wrong email or password, try again!")
-            self.errorlabel.pack(side=BOTTOM)
+            tkinter.messagebox.showinfo("Error", "Invalid Email")
             self.emailid.destroy()
             self.psswd.destroy()
             self.emailid= Entry(self.master)
@@ -74,7 +74,7 @@ class login:
             self.emailid.place(x=250,y=180)
             self.psswd.place(x=250,y=220)
 
-    def analysismain(self, master):
+    def analysismain(self):
         global rid
         self.email.destroy()
         self.password.destroy()
@@ -111,7 +111,17 @@ class login:
                 if self.find_friend(compare,passscore):
                     friends.append(rids)
         print(friends)
-
+        self.master.destroy()
+        rowcount=3
+        frame1 = Frame(self.root,width=500,height=50)
+        frame1.pack()
+        frame2 = Frame(self.root,width=500,height=450)
+        frame2.pack()
+        Label(frame1,text="SIMILAR PERFORMANCES").place(x=250,y=25,anchor="center")
+        for i in friends:
+            lab = Label(frame2,text=i)
+            lab.grid(row=rowcount,column=0)
+            Button(frame2,text="Contact", fg="Red").grid(row=rowcount,column=1)
 
     def find_friend(self,compare,scores):
         print("-------")
@@ -159,5 +169,7 @@ y = (hs/2) - (h/2)
 # set the dimensions of the screen
 # and where it is placed
 root.geometry('%dx%d+%d+%d' % (w, h, x, y))
-login = login(root)
+frame1 = Frame(root,width=500,height=500)
+frame1.pack()
+login = login(frame1,root)
 root.mainloop()

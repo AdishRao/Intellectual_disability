@@ -120,10 +120,9 @@ def TAKETEST():
     BSTCALL()
     GDTCALL()
     VLCALL()
-    print(f'BST {BSTresult} GDT {GDTresult} VL {VLresult} RPM {RPMresult}')
     resulttodb = {"RPM":RPMresult, "BST":BSTresult,"VL":VLresult,"GDT":GDTresult}
     database.child("Student").child(pathdir).update(resulttodb)
-    print(database.child("Student").child(pathdir).get().val())
+    database.child(today).child(pathdir).update(resulttodb)
     gph()
 
 def FIREBASECALL():
@@ -147,10 +146,10 @@ def FIREBASECALL():
     login = LoginTeacher(f,root,test_number)
     root.mainloop()
     global Name,Age,pathdir
-    Name,pathdir = login.returnnametocalling()
-    Age = login.returnagetocalling()
     choice = login.returnchoice()
     if choice == 1:
+        Name,pathdir = login.returnnametocalling()
+        Age = login.returnagetocalling()
         TAKETEST()
 
 FIREBASECALL()

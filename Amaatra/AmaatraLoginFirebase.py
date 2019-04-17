@@ -3,7 +3,7 @@ from PIL import ImageTk, Image
 import os
 import tkinter.messagebox
 import pyrebase
-import datetime
+from datetime import date
 #from Student_details import *
 
 config = {
@@ -19,6 +19,7 @@ firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
 database = firebase.database()
 path = ""
+today = str(date.today())
 
 ReturnName = ""
 Age = 0
@@ -91,7 +92,7 @@ class Page1: #Intermediate window to choose new student, previous student or ret
         self.label_0.place(x=90,y=53)
         self.btn1 = Button(self.f, text='New Student',width=20, anchor="center",command=self.newstudent)
         self.btn1.place(x=160,y=310)
-        self.btn2 = Button(self.f, text='Student Details',width=20, anchor="center", command=self.prevstudent)
+        self.btn2 = Button(self.f, text='Todays report',width=20, anchor="center", command=self.report)
         self.btn2.place(x=160,y=410)
 
     def newstudent(self):
@@ -103,14 +104,14 @@ class Page1: #Intermediate window to choose new student, previous student or ret
         f1.pack()
         page2 = NewStudent(f1,self.master)
 
-    def prevstudent(self):
+    def report(self):
         global Choice
         Choice = 2
         self.f.destroy()
         f2 = Frame(self.master,width=500,height=500)
         f2.configure(background='peach puff')
         f2.pack()
-        page3 = PrevStudent(f2,self.master)
+        page3 = Report(f2,self.master)
 
 
 class NewStudent:
@@ -166,6 +167,7 @@ class NewStudent:
         age=self.Age.get()
         gender=self.Gender.get()
         dob=self.Dob.get()
+        dob=dob.replace("/","-")
         self.fullname = fname + " " + lname + " " + str(dob)
         self.fullname = self.fullname.lower()
         path = self.fullname
@@ -175,7 +177,9 @@ class NewStudent:
         print(self.Fname.get())
         db = firebase.database()
         data = {"fname": fname, "lname": lname, "age": age, "gender": gender}
+        today = date.today()
         results = db.child("Student").child(self.fullname).set(data)
+        db.child(str(today)).child(self.fullname).set(data)
         print(results)
         #to check if primary key aready EXISTS
         self.f.destroy()
@@ -184,43 +188,25 @@ class NewStudent:
         self.master.destroy()
         self.master.quit()
 
-class PrevStudent:
+class Report:
     def __init__(self, f,master):
         self.master=master
         self.f=f
-        self.Fname = StringVar()
-        self.Lname = StringVar()
-        self.Dob = StringVar()
-
-        self.label_0 = Label(f, text="Previous Student Details",width=20,font=("bold", 15))
-        self.label_0.place(x=140,y=53)
-
-        self.label_1 = Label(f, text="First Name",width=20,font=("bold", 10))
-        self.label_1.place(x=80,y=130)
-
-        self.entry_1 = Entry(f, textvar=self.Fname)
-        self.entry_1.place(x=240,y=130)
-
-        self.label_2 = Label(f, text="Last Name",width=20,font=("bold", 10))
-        self.label_2.place(x=79,y=180)
-
-        self.entry_2 = Entry(f, textvar=self.Lname)
-        self.entry_2.place(x=240,y=180)
-
-        self.label_3 = Label(f, text="DOB",width=20,font=("bold", 10))
-        self.label_3.place(x=79,y=230)
-
-        self.entry_3 = Entry(f, textvar=self.Dob)
-        self.entry_3.place(x=240,y=230)
-
-        self.btn = Button(f, text='Submit',width=20, anchor="center", command=self.checkprev)
-        self.btn.place(x=180,y=320)
-
-    def checkprev(self):
-        global ReturnName,Age
-        fname=self.Fname.get()
-        lname=self.Lname.get()
-        dob=self.Dob.get()
+        today = str(date.today())
+        nameswithdob = database.child(today).get().val()
+        print(nameswithdob)
+        print('*'*10)
+        lineslist = []
+        for items in nameswithdob.keys():
+            resdict = database.child(today).child(items).get().val()
+            lineslist.append(str(resdict['fname'])+','+str(resdict['lname'])+','+str(resdict['age'])+','+str(resdict['RPM'])+','+str(resdict['BST'])+','+str(resdict['GDT'])+','+str(resdict['VL']))
+        print(lineslist)  
+        with open(today+'_IDreport.csv','w') as file:
+            file.write('First Name,Last Name,Age,RPM,BST,GDT,Vineland')
+            file.write('\n')
+            for line in lineslist:
+                file.write(line)
+                file.write('\n')
         self.master.destroy()
        # dt = Details(self.master)
         #dt.details(fname,lname,dob)
