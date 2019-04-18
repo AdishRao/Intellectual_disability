@@ -50,7 +50,7 @@ class Report:
         self.pdf.image(path, x = 15, y = 150, w = 200, h =100)
 
         #Data list to plot the data
-        self.data = [['Name of the test','Expected Score','Score Obtaanied','Remark']]
+        self.data = [['Name of the test','Expected Score','Score Obtained','Remark']]
 
         #Adding the scores to data lsit
         #RPM
@@ -110,7 +110,7 @@ class Report:
 
 #Run this to get a simple demo of the reoprt 
 
-'''
+
 pdf = FPDF()
 pdf.add_page()
 text = 'Final report' 
@@ -146,11 +146,11 @@ pdf.image(path, x = 15, y = 150, w = 200, h =100)
 col_width = pdf.w / 4.5
 row_height = pdf.font_size+2
 spacing = 2
-data = [['Name of the test','Expected Score','Score Obtaanied','Remark'],['RPM','60','40','ID'],['BST','75','90','Not ID'],['GDT','50','40','MILD ID'],['VI','100','60','ID']]
+data = [['Name of the test','Expected Score','Score Obtained','Remark'],['RPM','60','40','ID'],['BST','75','90','Not ID'],['GDT','50','40','MILD ID'],['VI','100','60','ID']]
 for row in data:
     for item in row:
         pdf.cell(col_width, row_height*spacing,txt=item, border=1)
     pdf.ln(row_height*spacing)
 
 pdf.output("Reports/simple_demo.pdf")
-'''
+
