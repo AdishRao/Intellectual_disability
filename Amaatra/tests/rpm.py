@@ -75,16 +75,16 @@ class RPM:
         printresult = Label(self.frame1, text="Score is "+str(result))
         printresult.place(x=250,y=240,anchor="center")
         if(result<26):
-            self.frame1.configure(background='firebrick2') 
+            self.frame1.configure(background='peach puff')  
             printid = Label(self.frame1, text="Test FAILED: Intellectual Disability")
             printid.place(x=250,y=260,anchor="center")
         else:
-            self.frame1.configure(background='spring green') 
+            self.frame1.configure(background='peach puff')   
             printid = Label(self.frame1, text="Test PASSED: Normal")
             printid.place(x=250,y=260,anchor="center")
         self.nexttest = Button(self.frame1,text="Next Test",command=self.next)
         self.nexttest.place(x=250,y=490,anchor="center")
-        self.returnval = int(result) #return to calling function #TODO:create a function to return value
+        self.returnval = int(result) #return to calling function 
 
     def next(self):
         self.master.destroy()

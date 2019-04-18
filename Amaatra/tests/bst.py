@@ -140,7 +140,7 @@ class BST:
         frame.configure(background='peach puff')
         label = Label(frame,text=strid)
         label.place(x=250,y=150,anchor='center')
-        self.returnval = self.iq #TODO: create a function to return the result to main function
+        self.returnval = self.iq 
         self.frame7.destroy()
         self.frame8 = Frame(self.master, width=500, height=75)
         self.frame8.pack(side=BOTTOM)
