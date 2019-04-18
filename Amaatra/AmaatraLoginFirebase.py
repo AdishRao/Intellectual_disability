@@ -199,7 +199,7 @@ class Report:
         lineslist = []
         for items in nameswithdob.keys():
             resdict = database.child(today).child(items).get().val()
-            lineslist.append(str(resdict['fname'])+','+str(resdict['lname'])+','+str(resdict['age'])+','+str(resdict['RPM'])+','+str(resdict['BST'])+','+str(resdict['GDT'])+','+str(resdict['VL']))
+            lineslist.append(str(resdict['fname'])+','+str(resdict['lname'])+','+str(resdict['age'])+','+str(resdict['RPM'])+','+str(round(resdict['BST'],3))+','+str(resdict['GDT'])+','+str(round(resdict['VL'],3)))
         print(lineslist)  
         with open('dailytest/'+today+'_IDreport.csv','w') as file:
             file.write('First Name,Last Name,Age,RPM,BST,GDT,Vineland')

@@ -37,7 +37,7 @@ class Report:
         self.pdf.cell(60,7,txt="Name:"+self.name,ln = 1,align="L")
         #Age
         self.pdf.set_font("Arial",size=14)
-        self.pdf.cell(60, 7,txt="Age:"+self.age,ln = 1,align="L")
+        self.pdf.cell(60, 7,txt="Age:"+str(self.age),ln = 1,align="L")
         #School
         self.pdf.set_font("Arial",size=14)
         self.pdf.cell(60, 7,txt="School:"+self.sch,ln = 1,align="L")
@@ -56,8 +56,8 @@ class Report:
         #RPM
         self.temp = []
         self.temp.append("RPM")
-        self.temp.append(self.rpmv)
-        self.temp.append(self.rpm)
+        self.temp.append(str(self.rpmv))
+        self.temp.append(str(self.rpm))
         if self.rpm < self.rpmv:
             self.temp.append("Intellectual Disability")
         else:
@@ -67,8 +67,8 @@ class Report:
         #GDT
         self.temp = []
         self.temp.append("GDT")
-        self.temp.append(self.gdtv)
-        self.temp.append(self.gdt)
+        self.temp.append(str(self.gdtv))
+        self.temp.append(str(self.gdt))
         if self.gdt < self.gdtv:
             self.temp.append("Intellectual Disability")
         else:
@@ -78,8 +78,8 @@ class Report:
         #BST
         self.temp = []        
         self.temp.append("BST")
-        self.temp.append(self.bstv)
-        self.temp.append(self.bst)
+        self.temp.append(str(self.bstv))
+        self.temp.append(str(round(self.bst,3)))
         if self.bst < self.bstv:
             self.temp.append("Intellectual Disability")
         else:
@@ -89,8 +89,8 @@ class Report:
         #VI
         self.temp = []        
         self.temp.append("VI")
-        self.temp.append(self.viv)
-        self.temp.append(self.vi)
+        self.temp.append(str(self.viv))
+        self.temp.append(str(round(self.vi,3)))
         if self.vi < self.viv:
             self.temp.append("Intellectual Disability")
         else:
