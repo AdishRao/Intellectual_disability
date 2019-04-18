@@ -1,5 +1,5 @@
 from fpdf import FPDF
-
+import os
 class Report:
     def __init__(self):
         self.pdf = FPDF() 
@@ -46,7 +46,8 @@ class Report:
         self.pdf.set_line_width(0.5)
         self.pdf.line(0, 40, 500, 40)
         #Report Image
-        self.path = 'Images/Report.png'
+        filepath=os.path.dirname(os.path.abspath(__file__))
+        self.path = filepath+'/Images/Report.png'
         self.pdf.image(self.path, x = 15, y = 150, w = 200, h =100)
 
         #Data list to plot the data
@@ -106,51 +107,6 @@ class Report:
             for item in row:
                 self.pdf.cell(self.col_width, self.row_height*self.spacing,txt=item, border=1)
             self.pdf.ln(self.row_height*self.spacing)
-        self.pdf.output("Reports/"+self.name+".pdf")
+        self.pdf.output(filepath+"/Reports/"+self.name+".pdf")
 
 #Run this to get a simple demo of the reoprt 
-
-'''
-pdf = FPDF()
-pdf.add_page()
-text = 'Final report' 
-pdf.set_font("Arial",size=24)
-pdf.cell(60, 10,txt=text,ln = 50,align="L")
-
-pdf.set_draw_color(0, 0, 0)
-pdf.set_line_width(0.5)
-pdf.line(0, 20, 500, 20)
-
-pdf.set_draw_color(0, 0, 0)
-pdf.set_line_width(0.5)
-pdf.line(7, 0, 7, 1000)
-
-
-pdf.set_font("Arial",size=14)
-pdf.cell(60,7,txt="Name:Abhi",ln = 1,align="L")
-pdf.set_font("Arial",size=14)
-pdf.cell(60, 7,txt="Age:6",ln = 1,align="L")
-
-pdf.set_font("Arial",size=14)
-pdf.cell(60, 7,txt="School:SSRVM",ln = 1,align="L")
-
-pdf.set_draw_color(0, 0, 0)
-pdf.set_line_width(0.5)
-pdf.line(0, 40, 500, 40)
-
-#Report Image
-pdf.set_font("Arial",size=14)
-pdf.cell(60, 7,txt="",ln = 1,align="L")
-path = 'Images/Report.png'
-pdf.image(path, x = 15, y = 150, w = 200, h =100)
-col_width = pdf.w / 4.5
-row_height = pdf.font_size+2
-spacing = 2
-data = [['Name of the test','Expected Score','Score Obtained','Remark'],['RPM','60','40','ID'],['BST','75','90','Not ID'],['GDT','50','40','MILD ID'],['VI','100','60','ID']]
-for row in data:
-    for item in row:
-        pdf.cell(col_width, row_height*spacing,txt=item, border=1)
-    pdf.ln(row_height*spacing)
-
-pdf.output("Reports/simple_demo.pdf")
-'''

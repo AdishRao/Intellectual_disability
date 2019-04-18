@@ -6,6 +6,7 @@ from PIL import Image
 from PIL import ImageTk
 from tkinter import ttk
 import sys
+import os
 
 class Plot:
     def __init__(self,master):
@@ -65,10 +66,11 @@ class Plot:
         fig.append_trace(VI, 2, 2)
 
         fig['layout'].update(height=600, width=600, title='Test results comparison')
-        pio.write_image(fig, 'Images/Report.png')
+        filepath=os.path.dirname(os.path.abspath(__file__))
+        pio.write_image(fig,filepath+'/Images/Report.png')
         frame2 = Frame(self.master,width=500,height=400)
         frame2.pack(side=TOP)
-        photo = Image.open('Images/Report.png')
+        photo = Image.open(filepath+'/Images/Report.png')
         photo = photo.resize((500, 400), Image.ANTIALIAS)
         self.render = ImageTk.PhotoImage(photo)
         photolabel = Label(frame2,image=self.render)

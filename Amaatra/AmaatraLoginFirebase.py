@@ -190,6 +190,7 @@ class NewStudent:
 
 class Report:
     def __init__(self, f,master):
+        filepath=os.path.dirname(os.path.abspath(__file__))
         self.master=master
         self.f=f
         today = str(date.today())
@@ -201,7 +202,7 @@ class Report:
             resdict = database.child(today).child(items).get().val()
             lineslist.append(str(resdict['fname'])+','+str(resdict['lname'])+','+str(resdict['age'])+','+str(resdict['RPM'])+','+str(round(resdict['BST'],3))+','+str(resdict['GDT'])+','+str(round(resdict['VL'],3)))
         print(lineslist)  
-        with open('dailytest/'+today+'_IDreport.csv','w') as file:
+        with open(filepath+'/dailytest/'+today+'_IDreport.csv','w') as file:
             file.write('First Name,Last Name,Age,RPM,BST,GDT,Vineland')
             file.write('\n')
             for line in lineslist:
