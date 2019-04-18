@@ -70,7 +70,6 @@ class RPM:
         print(result)
         self.frame1.destroy()
         self.frame2.destroy()
-        
         self.frame1 = Frame(self.master, width=500, height=500)
         self.frame1.pack()
         printresult = Label(self.frame1, text="Score is "+str(result))

@@ -9,6 +9,7 @@ from tests.gdt import *
 from tests.vl import *
 from AmaatraLoginFirebase import *
 from graph import Plot
+from document import Report
 
 #results to store on cloud
 RPMresult = BSTresult = GDTresult = VLresult = 0
@@ -111,11 +112,12 @@ def gph():
 def TAKETEST():
     global test_number,BSTresult,GDTresult,VLresult,RPMresult,pathdir
     global RPMresultl,BSTresultl,GDTresultl,VLresultl 
+    global Name,Age
     RPMresultl = []
-    BSTresultl  = []
+    BSTresultl = []
     GDTresultl = []
-    VLresultl  = []
-    test_number += 1
+    VLresultl = []
+    test_number+=1
     RPMCALL()
     BSTCALL()
     GDTCALL()
@@ -124,6 +126,9 @@ def TAKETEST():
     database.child("Student").child(pathdir).update(resulttodb)
     database.child(today).child(pathdir).update(resulttodb)
     gph()
+    r = Report()
+    r.genrep(Name,Age,"SSRVM BANGALORE EAST",RPMresult,GDTresult,BSTresult,VLresult)
+
 
 def FIREBASECALL():
     root = Tk()

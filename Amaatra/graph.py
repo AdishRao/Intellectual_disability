@@ -14,7 +14,7 @@ class Plot:
         self.master=master
         frame1 = Frame(master,width=500,height=50)
         frame1.pack(side=TOP)
-        maxlabel = Label(frame1, text = "BST min: 91| GDT min: 21| RPM min: 26| Vineland min: 91",wraplength=500,justify="left") #search
+        maxlabel = Label(frame1, text = "BST min: 90| GDT min: 21| RPM min: 26| Vineland min: 90",wraplength=500,justify="left") #search
         maxlabel.pack()
 
     def plot(self,bst,rpm,gdt,vi):

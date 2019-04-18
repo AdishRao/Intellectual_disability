@@ -173,6 +173,9 @@ class Caller:
             elif((social_quotient>=50) and (social_quotient<70)):
                 ID = True
                 Label(window, text="Mild Intelletual disability").pack()
+            elif ((social_quotient>=70) and (social_quotient<90)):
+                ID = True
+                Label(window, text="Boderline Intellectual Disability").pack()
             else:
                 ID = False
                 Label(window, text="Normal IQ").pack()

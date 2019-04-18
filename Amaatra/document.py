@@ -15,13 +15,13 @@ class Report:
         self.sch = sch
 
         #Setting the threshold values for each test
-        self.rpmv  = 0
-        self.gdtv =0
-        self.bstv =0
-        self.viv =0
+        self.rpmv =26
+        self.gdtv =20
+        self.bstv =90
+        self.viv =90
         #Final report text
         self.pdf.set_font("Arial",size=24)
-        self.pdf.cell(60, 10,txt=text,ln = 50,align="L")
+        self.pdf.cell(60, 10,txt=self.text,ln = 50,align="L")
         #First Sep line
         self.pdf.set_draw_color(0, 0, 0)
         self.pdf.set_line_width(0.5)
@@ -47,7 +47,7 @@ class Report:
         self.pdf.line(0, 40, 500, 40)
         #Report Image
         self.path = 'Images/Report.png'
-        self.pdf.image(path, x = 15, y = 150, w = 200, h =100)
+        self.pdf.image(self.path, x = 15, y = 150, w = 200, h =100)
 
         #Data list to plot the data
         self.data = [['Name of the test','Expected Score','Score Obtained','Remark']]
@@ -98,14 +98,14 @@ class Report:
         self.data.append(self.temp)
         
         #Setting table parameters
-        self.col_width = pdf.w / 4.5
-        self.row_height = pdf.font_size+2
+        self.col_width = self.pdf.w / 4.5
+        self.row_height = self.pdf.font_size+2
         self.spacing = 2
         #Drawing the table
         for row in self.data:
             for item in row:
-                pdf.cell(self.col_width, self.row_height*self.spacing,txt=item, border=1)
-            pdf.ln(row_height*spacing)
+                self.pdf.cell(self.col_width, self.row_height*self.spacing,txt=item, border=1)
+            self.pdf.ln(self.row_height*self.spacing)
         self.pdf.output("Reports/"+self.name+".pdf")
 
 #Run this to get a simple demo of the reoprt 
