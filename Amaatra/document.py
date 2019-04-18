@@ -110,7 +110,7 @@ class Report:
 
 #Run this to get a simple demo of the reoprt 
 
-
+'''
 pdf = FPDF()
 pdf.add_page()
 text = 'Final report' 
@@ -153,4 +153,4 @@ for row in data:
     pdf.ln(row_height*spacing)
 
 pdf.output("Reports/simple_demo.pdf")
-
+'''
