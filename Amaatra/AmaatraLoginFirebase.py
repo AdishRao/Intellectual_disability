@@ -201,7 +201,7 @@ class Report:
             resdict = database.child(today).child(items).get().val()
             lineslist.append(str(resdict['fname'])+','+str(resdict['lname'])+','+str(resdict['age'])+','+str(resdict['RPM'])+','+str(resdict['BST'])+','+str(resdict['GDT'])+','+str(resdict['VL']))
         print(lineslist)  
-        with open(today+'_IDreport.csv','w') as file:
+        with open('dailytest/'+today+'_IDreport.csv','w') as file:
             file.write('First Name,Last Name,Age,RPM,BST,GDT,Vineland')
             file.write('\n')
             for line in lineslist:

@@ -65,10 +65,10 @@ class Plot:
         fig.append_trace(VI, 2, 2)
 
         fig['layout'].update(height=600, width=600, title='Test results comparison')
-        pio.write_image(fig, 'images/',z,'.png')
+        pio.write_image(fig, 'Images/Report.png')
         frame2 = Frame(self.master,width=500,height=400)
         frame2.pack(side=TOP)
-        photo = Image.open('Report.png')
+        photo = Image.open('Images/Report.png')
         photo = photo.resize((500, 400), Image.ANTIALIAS)
         self.render = ImageTk.PhotoImage(photo)
         photolabel = Label(frame2,image=self.render)
