@@ -18,6 +18,7 @@ class Plot:
         maxlabel.pack()
 
     def plot(self,bst,rpm,gdt,vi):
+        self.z = 0
         print(bst)
 
         i = 1
@@ -64,7 +65,7 @@ class Plot:
         fig.append_trace(VI, 2, 2)
 
         fig['layout'].update(height=600, width=600, title='Test results comparison')
-        pio.write_image(fig, 'Report.png')
+        pio.write_image(fig, 'images/',z,'.png')
         frame2 = Frame(self.master,width=500,height=400)
         frame2.pack(side=TOP)
         photo = Image.open('Report.png')
