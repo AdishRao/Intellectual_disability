@@ -1,11 +1,9 @@
 from tkinter import *
 from PIL import ImageTk, Image
 import os
-import sys
 import tkinter.messagebox
 import pyrebase
 from datetime import date
-from login import *
 
 config = {
     "apiKey": "AIzaSyATuQBI1JJ9sI4jyLjvKbLQX6pzPeGfOMA",
@@ -55,12 +53,6 @@ class LoginTeacher:
     def insertlogin(self):
         email=self.Email.get()
         password=self.Password.get()
-        
-        #Use imported login.py script - TODO - use check function
-        logincheck = control()
-        # if ( check ) ==> True ? Login else Don't Login - TODO
-
-
 
         #Check entered details with existing details on firebase to verify staff or not
         print(self.Email.get())
@@ -99,7 +91,7 @@ class Page1: #Intermediate window to choose new student, previous student or ret
         self.label_0.place(x=90,y=53)
         self.btn1 = Button(self.f, text='New Student',width=20, anchor="center",command=self.newstudent)
         self.btn1.place(x=160,y=310)
-        self.btn2 = Button(self.f, text='Today\'s report',width=20, anchor="center", command=self.report)
+        self.btn2 = Button(self.f, text='Todays report',width=20, anchor="center", command=self.report)
         self.btn2.place(x=160,y=410)
 
     def newstudent(self):
@@ -172,6 +164,9 @@ class NewStudent:
         fname=self.Fname.get()
         lname=self.Lname.get()
         age=self.Age.get()
+        if(age<6 or age>9):
+            tkinter.messagebox.showinfo("Error", "Age out of bounds")
+            exit()
         gender=self.Gender.get()
         dob=self.Dob.get()
         dob=dob.replace("/","-")
@@ -201,14 +196,24 @@ class Report:
         self.master=master
         self.f=f
         today = str(date.today())
-        nameswithdob = database.child(today).get().val()
+        try:
+            nameswithdob = database.child(today).get().val()
+        except:
+            pass
         print(nameswithdob)
         print('*'*10)
         lineslist = []
-        for items in nameswithdob.keys():
-            resdict = database.child(today).child(items).get().val()
-            lineslist.append(str(resdict['fname'])+','+str(resdict['lname'])+','+str(resdict['age'])+','+str(resdict['RPM'])+','+str(round(resdict['BST'],3))+','+str(resdict['GDT'])+','+str(round(resdict['VL'],3)))
-        print(lineslist)
+        try:
+            for items in nameswithdob.keys():
+                try:
+                    resdict = database.child(today).child(items).get().val()
+                    lineslist.append(str(resdict['fname'])+','+str(resdict['lname'])+','+str(resdict['age'])+','+str(resdict['RPM'])+','+str(round(resdict['BST'],3))+','+str(resdict['GDT'])+','+str(round(resdict['VL'],3)))
+                except:
+                    pass
+        except:
+            tkinter.messagebox.showinfo("Error", "No tests were taken today!")
+            exit()
+        print(lineslist)  
         with open(filepath+'/dailytest/'+today+'_IDreport.csv','w') as file:
             file.write('First Name,Last Name,Age,RPM,BST,GDT,Vineland')
             file.write('\n')
@@ -216,5 +221,4 @@ class Report:
                 file.write(line)
                 file.write('\n')
         self.master.destroy()
-       # dt = Details(self.master)
-        #dt.details(fname,lname,dob)
+       
