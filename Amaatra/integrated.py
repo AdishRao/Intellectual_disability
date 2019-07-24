@@ -249,9 +249,9 @@ class NewStudent:
         age=self.Age.get()
         gender=self.Gender.get()
         dob=self.Dob.get()
-        if(age<6 or age>9):
-            tkinter.messagebox.showinfo("Error", "Age out of bounds, only 6 to 9")
-            exit()
+        #if(age<6 or age>9):
+        #    tkinter.messagebox.showinfo("Error", "Age out of bounds, only 6 to 9")
+        #    exit()
         dob=dob.replace("/","-")
         self.fullname = fname + " " + lname + " " + str(dob)
         self.fullname = self.fullname.lower()
@@ -356,7 +356,6 @@ class BST:
         self.opts5 = self.create_options(self.frame6,4)
         self.ques = self.create_q()
 
-
     def create_q(self):
         for i in range(0,5):
             self.opt_selected[i].set(0)
@@ -376,7 +375,6 @@ class BST:
         if self.count==5:
             self.frame6.pack(side=TOP)
         agecase[self.count](self.q)
-
 
     def bs(self,i):
         X = self.df.iloc[:,i]
@@ -408,8 +406,6 @@ class BST:
         photolabel.pack()
         self.q+=1
 
-
-
     def finish(self,i):
         while self.additive_age >= 12:
             self.basalage+=1
@@ -425,18 +421,18 @@ class BST:
             self.frame[i].destroy()
         self.agelabel['text'] = "IQ is: "+str(self.iq)
         strid = ""
-        if self.iq <20:
+        if self.iq <24:
             strid = "Profound Intellectual Disability"
-        elif self.iq <34:
+        elif self.iq <40:
             strid = "Severe Intellectual Disability"
-        elif self.iq <49:
+        elif self.iq <55:
             strid = "Moderate Intellectual Disability"
-        elif self.iq < 69:
+        elif self.iq < 70:
             strid = "Mild Intellectual Disability"
-        elif self.iq <90:
-            strid = "Boderline Intellectual Disability"
         else:
             strid = "Not Intellectual Disability"
+        if self.basalage//12 < 3:
+            self.iq = 0
         frame = Frame(self.master,width = 500, height = 300)
         frame.pack(side=TOP)
         frame.configure(background='peach puff')
@@ -449,11 +445,9 @@ class BST:
         self.qui = Button(self.frame8,text="next",command=self.des)
         self.qui.place(x=250, y =25, anchor="center")
 
-
     def des(self):
         self.master.destroy()
         self.master.quit()
-
 
     def create_options(self,frame,n):
         b_val = 0
@@ -661,6 +655,7 @@ class RPM:
         self.cage = cage 
         self.master=master
         self.result = 0
+        self.result_wrong_counter = 0
         self.frame1= Frame(master,width=500, height=400)
         self.frame1.pack(side=TOP)
         self.frame2= Frame(master,width=500, height=100)
@@ -680,12 +675,27 @@ class RPM:
             print("correct "+str(self.qn+1))
         else:
             print('wrong '+str(self.qn+1))
+        if self.result_wrong_counter == 3:
+            self.nextsection()
         self.qn+=1
         if self.qn >= len(q):
             self.print_result()
 
         else:
             self.display_q(self.qn)
+
+    def nextsection(self):
+        if self.qn < 12:
+            self.qn = 11
+        elif self.qn < 24:
+            self.qn = 23
+        elif self.qn < 36:
+            self.qn = 35
+        elif self.qn < 48:
+            self.qn = 47
+        else:
+            self.qn = 59
+        self.result_wrong_counter = 0
 
     def mapvalue(self):
         if self.cage>=6 and self.cage<7:
@@ -698,7 +708,7 @@ class RPM:
             self.map=3
         elif self.cage>=10 and self.cage<11:
             self.map = 4
-
+        
     def print_result(self):
         filepath=os.path.dirname(os.path.abspath(__file__))+"/tests"
         df = pd.read_csv(filepath+'/RPM/rpmresult.csv')
@@ -731,7 +741,9 @@ class RPM:
     def check_q(self,qn):
         print(self.opt_selected)
         if self.opt_selected == a[qn] :
+            self.result_wrong_counter = 0
             return True
+        self.result_wrong_counter+=1
         return False
 
     def display_q(self,qn):
@@ -785,7 +797,7 @@ basal_age=0
 vli=0
 index_arr = [0] * 90
 agetoadd = 0
-age_range = {6:[45,65],7:[51,70],8:[57,74],9:[62,77]}
+age_range = {0:[1,17],1:[18,34],2:[35,44],3:[45,50],4:[51,56],5:[57,61],6:[45,65],7:[51,70],8:[57,74],9:[62,77]}
 cage = 6
 vlf = age_range[cage][1]
 
@@ -863,8 +875,6 @@ class Question:
         elif vli<81:
             return 77
 
-
-
     def getView(self, window,REF):
         view = Frame(window)
         Label(view, text=self.question).pack()
@@ -911,8 +921,8 @@ class Report:
         #Setting the threshold values for each test
         self.rpmv =26
         self.gdtv =20
-        self.bstv =90
-        self.viv =90
+        self.bstv =70
+        self.viv =70
         #Final report text
         self.pdf.set_font("Arial",size=24)
         self.pdf.cell(60, 10,txt=self.text,ln = 50,align="L")
@@ -953,8 +963,12 @@ class Report:
         self.temp.append("RPM")
         self.temp.append(str(self.rpmv))
         self.temp.append(str(self.rpm))
-        if self.rpm < self.rpmv:
-            self.temp.append("Intellectual Disability")
+        if self.rpm < 6:
+            self.temp.append("Severe Intellectual Disability")
+        elif self.rpm < 11:
+            self.temp.append("Moderate Intellectual Disability")
+        elif self.rpm < 26:
+            self.temp.append("Mild Intellectual Disability")
         else:
             self.temp.append("Normal Score")
         self.data.append(self.temp)
@@ -964,8 +978,12 @@ class Report:
         self.temp.append("GDT")
         self.temp.append(str(self.gdtv))
         self.temp.append(str(self.gdt))
-        if self.gdt < self.gdtv:
-            self.temp.append("Intellectual Disability")
+        if self.gdt < 6:
+            self.temp.append("Severe Intellectual Disability")
+        elif self.gdt < 11:
+            self.temp.append("Moderate Intellectual Disability")
+        elif self.gdt < 26:
+            self.temp.append("Mild Intellectual Disability")
         else:
             self.temp.append("Normal Score")
         self.data.append(self.temp)
@@ -975,8 +993,16 @@ class Report:
         self.temp.append("BST")
         self.temp.append(str(self.bstv))
         self.temp.append(str(round(self.bst,3)))
-        if self.bst < self.bstv:
-            self.temp.append("Intellectual Disability")
+        if self.bst == 0:
+            self.temp.append("N/A")
+        elif self.bst < 20:
+            self.temp.append("Profound Intellectual Disability")
+        elif self.bst < 36:
+            self.temp.append("Severe Intellectual Disability")
+        elif self.bst < 52:
+            self.temp.append("Moderate Intellectual Disability")
+        elif self.bst < 70:
+            self.temp.append("Mild Intellectual Disability")
         else:
             self.temp.append("Normal Score")
         self.data.append(self.temp)
@@ -986,8 +1012,14 @@ class Report:
         self.temp.append("VI")
         self.temp.append(str(self.viv))
         self.temp.append(str(round(self.vi,3)))
-        if self.vi < self.viv:
-            self.temp.append("Intellectual Disability")
+        if self.vi < 20:
+            self.temp.append("Profound Intellectual Disability")
+        elif self.vi < 36:
+            self.temp.append("Severe Intellectual Disability")
+        elif self.vi < 52:
+            self.temp.append("Moderate Intellectual Disability")
+        elif self.vi < 70:
+            self.temp.append("Mild Intellectual Disability")
         else:
             self.temp.append("Normal Score")
         self.data.append(self.temp)
@@ -1037,21 +1069,18 @@ class Caller:
             global cage
             social_quotient=(basal_age/(cage*12))*100#chrono age taken as 10 as all question included are till 9-10 yearsold
             Label(window, text="social quotient = " + str(social_quotient)).pack()
-            if(social_quotient<20):
+            if(social_quotient<25):
                 ID = True
                 Label(window, text="Profound Intelletual disability").pack()
-            elif((social_quotient>=20) and(social_quotient<35)):
+            elif((social_quotient>=25) and(social_quotient<40)):
                 ID = True
                 Label(window, text="Severe Intelletual disability").pack()
-            elif((social_quotient>=35) and (social_quotient<50)):
+            elif((social_quotient>=40) and (social_quotient<55)):
                 ID = True
                 Label(window, text="Moderate Intelletual disability").pack()
-            elif((social_quotient>=50) and (social_quotient<70)):
+            elif((social_quotient>=55) and (social_quotient<70)):
                 ID = True
                 Label(window, text="Mild Intelletual disability").pack()
-            elif ((social_quotient>=70) and (social_quotient<90)):
-                ID = True
-                Label(window, text="Boderline Intellectual Disability").pack()
             else:
                 ID = False
                 Label(window, text="Normal IQ").pack()
@@ -1170,9 +1199,9 @@ def TAKETEST():
     GDTresultl = []
     VLresultl = []
     test_number+=1
-    RPMCALL()
-    BSTCALL()
-    GDTCALL()
+    #RPMCALL()
+    #BSTCALL()
+    #GDTCALL()
     VLCALL()
     resulttodb = {"RPM":RPMresult, "BST":BSTresult,"VL":VLresult,"GDT":GDTresult}
     database.child("Student").child(pathdir).update(resulttodb)
