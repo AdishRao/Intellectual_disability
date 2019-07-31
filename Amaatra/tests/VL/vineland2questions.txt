@@ -1,4 +1,4 @@
-1.“Crows”, Laugh
+1."Crows", Laugh
 yes
 no
 could have passed the item if the opportunity was present
@@ -34,7 +34,7 @@ could have passed the item if the opportunity was present
 yes
 no
 could have passed the item if the opportunity was present
-10. “Talks”, imitates sounds
+10. "Talks", imitates sounds
 yes
 no
 could have passed the item if the opportunity was present
@@ -190,7 +190,7 @@ could have passed the item if the opportunity was present
 yes
 no
 could have passed the item if the opportunity was present
-49. “Performs” for others
+49. "Performs" for others
 yes
 no
 could have passed the item if the opportunity was present
@@ -242,7 +242,7 @@ could have passed the item if the opportunity was present
 yes
 no
 could have passed the item if the opportunity was present
-62. Mixes rice “properly" unassisted
+62. Mixes rice "properly" unassisted
 yes
 no
 could have passed the item if the opportunity was present
@@ -303,6 +303,54 @@ yes
 no
 could have passed the item if the opportunity was present
 77. Goes around hometown freely
+yes
+no
+could have passed the item if the opportunity was present
+78. Distinguishes between friends any playmates
+yes 
+no
+could have passed the item if the opportunity was present
+79.  Makes independent choice of shops
+yes
+no
+could have passed the item if the opportunity was present
+80. Does small remunerative work; makes articles
+yes
+no
+could have passed the item if the opportunity was present
+81. Follows local current events
+yes
+no
+could have passed the item if the opportunity was present
+82. Does simple creative work
+yes
+no
+could have passed the item if the opportunity was present
+83. Is left to care for self or others
+yes
+no
+could have passed the item if the opportunity was present
+84.  Enjoys reading books, newspapers and magazines
+yes
+no
+could have passed the item if the opportunity was present
+85.  Plays difficult games
+yes
+no
+could have passed the item if the opportunity was present
+86. Exercises complete care of dress
+yes
+no
+could have passed the item if the opportunity was present
+87. Buys own clothing accessories
+yes
+no
+could have passed the item if the opportunity was present
+88.  Engages of adolescent group activities
+yes
+no
+could have passed the item if the opportunity was present
+89. Performs responsible routine chores
 yes
 no
 could have passed the item if the opportunity was present
